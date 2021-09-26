@@ -1,13 +1,11 @@
-# Vienna (experimental, still in development)
+# Vienna (very alpha, still in development)
 ## Because small code is also nice
 
-Vienna is a small JS framework that is still under active development. The idea is to create a tiny framework that may help other developers to create webapps with ease. Vienna relies heavily on decorators.
+Vienna is a small framework under active development and, for me, just a way to discover how frameworks like Angular actually work under the hood. Vienna is based on some core fundamentals of Angular.
 
-For me, it is just a way to discover how frameworks like Angular actually work under the hood. Some core ideas are based on Angular.
+This is just one big WIP. Please, forgive my ugly code, lack of unit tests and documentation, and so on.
 
-Currently, I am working on variable binding, dependency injection and more. There is already a basic routing. Also, I've implemented basic variable binding.
-
-Just some snippets (may not be up to date). I will improve the documentation later.
+Just some snippets to illustrate what the idea is (may not be up to date). Documentation will be improved later.
 
 ```
 import {HelloWorldComponent} from "./components/hello-world.component";
