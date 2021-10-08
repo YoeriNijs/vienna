@@ -12,7 +12,7 @@ export class VRouter {
 
 	constructor(private routeNotFoundStrategy?: VRouteNotFoundStrategy) {
 		window.addEventListener('hashchange', () => this.navigate());
-		window.location.href = '#';
+		window.location.href = `#/${window.location.hash.slice(1)}` || '#';
 	}
 
 	addRoute(route: VRoute): VRouter {

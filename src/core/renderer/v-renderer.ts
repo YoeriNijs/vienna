@@ -31,11 +31,11 @@ export class VRenderer {
 
 	constructor(private options: VRendererOptions) {
 		this._view = document.createElement(this.options.selector);
-		const bodies = document.getElementsByTagName('body');
-		if (!bodies || bodies.length < 1) {
-			VLogger.error('No body tag found');
+		const body = document.querySelector('body');
+		if (body) {
+			body.appendChild(this._view);
 		} else {
-			bodies[0].appendChild(this._view);
+			VLogger.error('No body tag found');
 		}
 	}
 

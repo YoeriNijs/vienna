@@ -79,3 +79,4 @@ export class MainComponent implements VInit {
 - Implement input bindings
 - Add unit tests
 - Add demo html page
+- Render nested components
