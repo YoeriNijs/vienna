@@ -5,6 +5,8 @@ import {VComponentType} from "../router/v-route";
 import {VLogger} from "../internal/v-logger";
 import {VRenderError} from "./v-render-exception";
 import {VSanitizer} from "./v-sanitizer";
+import { VCallException } from "./v-call-exception";
+import { isEmpty } from 'pincet';
 
 interface VDomEvent {
 	publicDataName: string;
@@ -90,9 +92,18 @@ export class VRenderer {
 			throw new VRenderError('Template parsing error: unknown variable name');
 		}
 
+		// Replace template reference by actual value
+		const refWithBrackets = html.substring(start, end + 2);
+		const actualValue = this.getObjectValueForTemplateReference(component, templateReference);
+		html = html.replace(refWithBrackets, actualValue);
+
+		return this.convertBrackets(component, html);
+	}
+
+	private getObjectValueForTemplateReference(component: unknown & VComponentType, templateReference: string) {
 		const key = Object.keys(component).find(key => templateReference.startsWith(key));
 		if (!key) {
-			return html;
+			throw new VRenderError(`Template parsing error: cannot find value for template reference '${templateReference}'`)
 		}
 
 		// Find actual value for reference
@@ -101,13 +112,8 @@ export class VRenderer {
 			const prop = templateReference.substring(templateReference.indexOf('.') + 1, templateReference.length);
 			prop.split('.').forEach(nestedProp => value = value[nestedProp]); // To the nested prop we go
 		}
-		value = typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
 
-		// Teplace template reference by actual value
-		const templateReferenceWithBrachets = html.substring(start, end + 2);
-		html = html.replace(templateReferenceWithBrachets, value);
-
-		return this.convertBrackets(component, html);
+		return typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
 	}
 
 	public clear(): void {
@@ -133,17 +139,33 @@ export class VRenderer {
 			return;
 		}
 
-		// Strip of any parenthesis in order to map it to the right method name
+		const methodVariables: any[] = [];
+
 		const indexOfFirstParenthesis = methodName.indexOf('(');
-		if (indexOfFirstParenthesis !== -1) {
+		const indexOfLastParenthesis = methodName.indexOf(')');
+		if (indexOfFirstParenthesis !== -1 && indexOfLastParenthesis !== -1) {
+			// First, we find the actual values for the variables that we have some references for
+			const variablesString = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis);
+			const variables = variablesString
+				.split(',')
+				.map(variableName => this.getObjectValueForTemplateReference(component, variableName))
+				.forEach(value => methodVariables.push(value));
+
+			// Then, just replace the method name by the name without arguments
 			methodName = methodName.substring(0, indexOfFirstParenthesis);
 		}
 
 		const methodIndex = methods.indexOf(methodName);
-		if (methodIndex !== -1) {
+		if (methodIndex === -1) {
+			throw new VCallException(`Invalid method name: '${methodName}'. This probably means that the method does not exist`)
+		} else {
+
+			// Let's call the method
 			const method = Object.getPrototypeOf(componentPrototype)[methods[methodIndex]].bind(component);
-			if (htmlElement) {
+			if (isEmpty(methodVariables) && htmlElement) {
 				method(htmlElement);
+			} else if (!isEmpty(methodVariables)) {
+				method(methodVariables);
 			} else {
 				method();
 			}

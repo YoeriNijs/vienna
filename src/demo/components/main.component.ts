@@ -19,7 +19,7 @@ interface User {
 		<div class="welcome">
 			{{ welcomeMsg }}, {{ user.name }} ({{ user.contact.email }})
 		</div>
-		<div data-v-click="testHelloWorld($this)">fire hello world method</div>
+		<div data-v-click="alert(user.name)">Who am i?</div>
 		<a href="#/hello">navigate to hello world</a>
 	`
 })
@@ -36,9 +36,9 @@ export class MainComponent implements VInit {
 		console.log('In init lifecycle hook');
 	}
 
-	testHelloWorld(target: HTMLElement): void {
+	alert(name: string): void {
 		// Todo: implement variables, so we are able to pass more
-		console.log('a click handler', target);
+		alert(`Hello there, ${name}!`);
 	}
 
 	navigateToHelloWorldComponent(): void {

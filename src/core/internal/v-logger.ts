@@ -1,8 +1,5 @@
 import {VInternalComponent} from "./v-internal-component";
 
-@VInternalComponent({
-	name: 'VLogger'
-})
 export class VLogger {
 	public static debug(obj: any, ...msg: any[]) {
 		msg.map(v => this.createLog(obj, v))
@@ -29,5 +26,9 @@ export class VLogger {
 			? `${obj.vInternalName}: ${m}`
 			: m
 		);
+	}
+
+	private constructor() {
+		// Do not instantiate
 	}
 }

@@ -1,5 +1,7 @@
 import {VInternalComponent} from "../internal/v-internal-component";
+import { VNoRouteException } from "./v-no-route-exception";
 import {VRoute} from "./v-route";
+import { VRouteNotFoundStrategy } from "./v-route-not-found-strategy";
 import {VRouterEvents, VRouterNavigatedEvent} from "./v-router-event";
 
 @VInternalComponent({
@@ -8,8 +10,8 @@ import {VRouterEvents, VRouterNavigatedEvent} from "./v-router-event";
 export class VRouter {
 	private _routes: VRoute[] = [];
 
-	constructor() {
-		window.addEventListener('hashchange', (e) => this.navigate());
+	constructor(private routeNotFoundStrategy?: VRouteNotFoundStrategy) {
+		window.addEventListener('hashchange', () => this.navigate());
 		window.location.href = '#';
 	}
 
@@ -21,7 +23,15 @@ export class VRouter {
 	navigate(): void {
 		const url = window.location.hash.slice(1) || "/";
 		const route = this.findRoute(url);
-		this.dispatchNavigationAction(route);
+		if (route === null) {
+			if (this.routeNotFoundStrategy === VRouteNotFoundStrategy.ROOT) {
+				window.location.href = '#';
+			} else {
+				throw new VNoRouteException(`No route found for url '${url}'`);
+			}
+		} else {
+			this.dispatchNavigationAction(route);
+		}
 	}
 
 	private findRoute(url: string): VRoute {
@@ -29,7 +39,7 @@ export class VRouter {
 		if (resolvedRoute) {
 			return resolvedRoute;
 		} else {
-			return { path: '', component: {} }
+			return null;
 		}
 	}
 
