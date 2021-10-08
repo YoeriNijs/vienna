@@ -80,3 +80,4 @@ export class MainComponent implements VInit {
 - Add unit tests
 - Add demo html page
 - Render nested components
+- Work with global styling somehow
