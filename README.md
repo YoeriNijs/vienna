@@ -72,3 +72,10 @@ export class MainComponent implements VInit {
 }
 
 ```
+
+# Todo
+- Implement dependency injection
+- Pass variables with template method calls
+- Implement input bindings
+- Add unit tests
+- Add demo html page

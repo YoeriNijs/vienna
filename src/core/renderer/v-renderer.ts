@@ -89,44 +89,25 @@ export class VRenderer {
 		if (!templateReference) {
 			throw new VRenderError('Template parsing error: unknown variable name');
 		}
-		const descriptors = Object.getOwnPropertyDescriptors(component);
-		const rawValue = this.findValueInDescriptors(descriptors, descriptors, templateReference);
-		const value = typeof rawValue === 'string' ? VSanitizer.sanitizeHtml(rawValue) : rawValue;
 
-		// TODO: find more elegant way to replace variable
-		html = html.replace(`{{ ${templateReference} }}`, value);
-		html = html.replace(`{{${templateReference}}}`, value);
+		const key = Object.keys(component).find(key => templateReference.startsWith(key));
+		if (!key) {
+			return html;
+		}
+
+		// Find actual value for reference
+		let value = (component as any)[key];
+		if (templateReference.indexOf('.') !== -1 && typeof value === 'object') {
+			const prop = templateReference.substring(templateReference.indexOf('.') + 1, templateReference.length);
+			prop.split('.').forEach(nestedProp => value = value[nestedProp]); // To the nested prop we go
+		}
+		value = typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
+
+		// Teplace template reference by actual value
+		const templateReferenceWithBrachets = html.substring(start, end + 2);
+		html = html.replace(templateReferenceWithBrachets, value);
 
 		return this.convertBrackets(component, html);
-	}
-
-	private findValueInDescriptors(originalDescriptors: any, newDescriptors: any, templateReference: string): string {
-		if (originalDescriptors && originalDescriptors[templateReference] && originalDescriptors[templateReference].value) {
-			return originalDescriptors[templateReference].value;
-		}
-		const indexOfDot = templateReference.indexOf('.');
-		if (indexOfDot === -1) {
-			if (originalDescriptors && originalDescriptors[newDescriptors]
-				&& originalDescriptors[newDescriptors].value && originalDescriptors[newDescriptors].value[templateReference]) {
-				return originalDescriptors[newDescriptors].value[templateReference];
-			} else if (originalDescriptors && originalDescriptors.value
-				&& originalDescriptors.value[newDescriptors] && originalDescriptors.value[newDescriptors][templateReference]) {
-				return originalDescriptors.value[newDescriptors][templateReference];
-			} else if (originalDescriptors.value && originalDescriptors.value[templateReference]) {
-				return originalDescriptors.value[templateReference];
-			} else {
-				throw new VRenderError(`Cannot find value for template reference '${templateReference}' and object '${newDescriptors}'`);
-			}
-		} else {
-			const nestedDescriptor = templateReference.substring(0, indexOfDot);
-			const nestedField = templateReference.replace(nestedDescriptor + '.', '');
-			const parentDescriptor = Object.getOwnPropertyDescriptor(originalDescriptors, nestedDescriptor);
-			if (parentDescriptor && parentDescriptor.value) {
-				return this.findValueInDescriptors(parentDescriptor.value, nestedDescriptor, nestedField);
-			} else {
-				return this.findValueInDescriptors(originalDescriptors, nestedDescriptor, nestedField);
-			}
-		}
 	}
 
 	public clear(): void {
