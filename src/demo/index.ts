@@ -1,12 +1,11 @@
+import {VApplication, VRouteNotFoundStrategy } from "../core";
 import {HelloWorldComponent} from "./components/hello-world.component";
 import {MainComponent} from "./components/main.component";
-import {VApplication} from "../core/application/v-application";
-import { VRouteNotFoundStrategy } from "../core/router/v-route-not-found-strategy";
 
 @VApplication({
 	declarations: [
-		new MainComponent(),
-		new HelloWorldComponent()
+		MainComponent,
+		HelloWorldComponent
 	],
 	routes: [
 		{ path: '/', component: MainComponent },

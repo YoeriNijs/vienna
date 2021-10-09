@@ -1,5 +1,4 @@
-import {VComponent} from "../../core/component/v-component";
-import {VInit} from "../../core/router/hooks/v-init";
+import {VComponent, VInit } from "../../core";
 
 @VComponent({
 	selector: 'hello-world',
@@ -19,14 +18,13 @@ import {VInit} from "../../core/router/hooks/v-init";
 		<div class="container">
 			<div class="msg">Welcome in my world</div>
 		<div>
-<!--		Todo: this does not work (nested nodes do not work either!)-->
-<!--		<div data-v-click="navigateBack()"><< back</div>-->
+		<div data-v-click="navigateBack()"><< back</div>
+		<main></main>
 	`
 })
 export class HelloWorldComponent implements VInit {
 	vInit(): void {
 		console.log('hello world component');
-		setTimeout(() => this.navigateBack(), 2000);
 	}
 
 	navigateBack(): void {

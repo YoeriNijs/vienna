@@ -7,28 +7,28 @@ This is just one big WIP. Please, forgive my ugly code, lack of unit tests and d
 
 Just some snippets to illustrate what the idea is (may not be up to date). Documentation will be improved later.
 
+Application:
 ```
-import {HelloWorldComponent} from "./components/hello-world.component";
-import {MainComponent} from "./components/main.component";
-import {VApplication} from "../core/application/v-application";
-
 @VApplication({
 	declarations: [
-		new MainComponent(),
-		new HelloWorldComponent()
+		MainComponent,
+		HelloWorldComponent
 	],
 	routes: [
 		{ path: '/', component: MainComponent },
 		{ path: '/hello', component: HelloWorldComponent }
-	]
+	],
+	routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT
 })
-export class DemoApplication {}
+export class DemoApplication {
+	constructor() {
+		console.log('Initialize demo application...');
+	}
+}
 ```
 
+Component:
 ```
-import {VComponent} from "../../core/component/v-component";
-import {VInit} from "../../core/router/hooks/v-init";
-
 interface ContactInformation {
 	email: string;
 }
@@ -41,20 +41,47 @@ interface User {
 @VComponent({
 	selector: 'main',
 	styles: [`
-		.welcome { 
-		    background-color: red; 
-		    padding: 10px; 
-		    border-radius: 8px; 
-        }
+		.header {
+			display: flex;
+			justify-content: space-between;
+			border: 1px solid black;
+			border-radius: 8px;
+			padding: 10px;
+		}
+		
+		.body {
+			background-color: red; 
+			padding: 10px;
+			
+			.status {
+				display: flex;
+				flex-direction: column;
+			}
+		}
 	`],
 	html: `
-		<div class="welcome">{{ welcomeMsg }}, {{ user.name }} ({{ user.contact.email }})</div>
-		<div data-v-click="sayHi()">Say hi!</div>
-		<a href="#/hello">navigate to hello world</a>
+		<section class="header">
+			<div class="title">My fancy app</div>
+			<div class="nav">
+				<span>Logged in: {{ loginService.isLoggedIn }}</span>
+			</div>
+		</section>
+		
+		<section class="body">
+			<div data-v-if="isLoggedIn()" class="status">
+				<span>Hi there, {{ user.name }}!</span>
+				<ul>
+					<li data-v-for="calculateMenuItems()">
+						<a href="#/hello">navigate to hello world</a>
+					</li>
+				</ul>
+				<button data-v-click="logoff(user.name)">Log off</button>
+			</div>
+			<button data-v-if-not="isLoggedIn()" data-v-click="login(user.name)">Login</button>
+		</section>
 	`
 })
 export class MainComponent implements VInit {
-	welcomeMsg = 'Hi there';
 	user: User = {
 		name: 'Young padawan',
 		contact: {
@@ -62,20 +89,31 @@ export class MainComponent implements VInit {
 		}
 	};
 
+	constructor(protected loginService: LoginService) {}
+
 	vInit(): void {
-		console.log('This is fired when the component is initialized');
+		this.user.name = 'Piet';
 	}
 
-	sayHi(): void {
-		alert('hi!');
+	login(name: string): void {
+		this.loginService.login(name);
+	}
+
+	logoff(name: string): void {
+		this.loginService.logoff(name);
+	}
+
+	isLoggedIn(): boolean {
+		return this.loginService.isLoggedIn;
+	}
+
+	calculateMenuItems() {
+		return 2;
 	}
 }
-
 ```
 
 # Todo
-- Implement dependency injection
-- Pass variables with template method calls
 - Implement input bindings
 - Add unit tests
 - Add demo html page

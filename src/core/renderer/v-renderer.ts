@@ -7,16 +7,30 @@ import {VRenderError} from "./v-render-exception";
 import {VSanitizer} from "./v-sanitizer";
 import { VCallException } from "./v-call-exception";
 import { isEmpty } from 'pincet';
+import { VHtmlParser } from "./v-html-parser";
+import { VRendererUtil } from "./v-renderer-util";
+import { Type } from "../injector/v-component-injector";
 
-interface VDomEvent {
+interface VElement {
 	publicDataName: string;
 	internalDataName: string;
+}
+
+interface VDomEvent extends VElement {
 	domEvent: string;
 }
+
+interface VAttributeDirective extends VElement {}
 
 const SUPPORTED_DOM_EVENTS: VDomEvent[] = [
 	{ publicDataName: 'v-click', internalDataName: 'vClick', domEvent: 'click' }
 ];
+
+const SUPPORTED_ATTRIBUTE_DIRECTIVES: VAttributeDirective[] = [
+	{ publicDataName: 'v-if', internalDataName: 'vIf' },
+	{ publicDataName: 'v-if-not', internalDataName: 'vIfNot' },
+	{ publicDataName: 'v-for', internalDataName: 'vFor' }
+]
 
 enum InternalLifeCycleHook {
 	INIT,
@@ -39,9 +53,13 @@ export class VRenderer {
 		}
 	}
 
-	public render(component: unknown & VComponentType) {
+	public render(component: unknown & VComponentType, declarations: VComponentType[]) {
 		this.clear();
+		const element = this.createElement(component, declarations);
+		this._view.appendChild(element)
+	}
 
+	public createElement(component: unknown & VComponentType, declarations: VComponentType[]): HTMLElement {
 		if (component.vComponentOptions) {
 			const options: VComponentOptions = JSON.parse(component.vComponentOptions);
 
@@ -57,63 +75,34 @@ export class VRenderer {
 
 			// Attach html
 			const inner = document.createElement('div');
-			const html = this.convertBrackets(component, options.html);
+			const html = VHtmlParser.parse(component, options.html);
 
 			const parser = new DOMParser();
 			let dom = parser.parseFromString(html, 'text/html');
+
+			// Todo: work on a way to render nested elements (we cannot just call this method since we do not want to override the document itself)
+			// const componentSelectors = declarations.forEach(d => {
+			// 	const options: VComponentOptions = JSON.parse(d.vComponentOptions);
+			// 	const components = dom.querySelectorAll(options.selector);
+			// 	components.forEach(c => c.innerHTML = this.createElement(c, declarations).innerHTML);
+			// });
+
+			// Attach supported attribute directives
+			SUPPORTED_ATTRIBUTE_DIRECTIVES.forEach(vAttributeDirective =>
+				this.attachAttributeDirective(vAttributeDirective, shadow, component, dom));
 
 			inner.innerHTML = dom.documentElement.innerHTML;
 			shadow.appendChild(inner);
 
 			// Attach supported dom events
 			SUPPORTED_DOM_EVENTS.forEach(vDomEvent =>
-				this.attachDomEvents(vDomEvent, shadow, component, dom));
-
-			// Build
-			this._view.appendChild(element);
+				this.attachDomEvents(vDomEvent, shadow, component, dom, declarations));
 
 			// Call init lifecycle hook
 			this.callLifeCycleHook(InternalLifeCycleHook.INIT, component);
-		}
-	}
 
-	private convertBrackets(component: unknown & VComponentType, html: string): string {
-		const start = html.indexOf('{{');
-		if (start <= 0) {
-			return html;
+			return element;
 		}
-		const end = html.indexOf('}}');
-		if (end <= 0) {
-			throw new VRenderError('Template parsing error: no closing brackets found');
-		}
-		const rawVariablePart = html.substring(start + 2, end);
-		const templateReference = rawVariablePart.trim();
-		if (!templateReference) {
-			throw new VRenderError('Template parsing error: unknown variable name');
-		}
-
-		// Replace template reference by actual value
-		const refWithBrackets = html.substring(start, end + 2);
-		const actualValue = this.getObjectValueForTemplateReference(component, templateReference);
-		html = html.replace(refWithBrackets, actualValue);
-
-		return this.convertBrackets(component, html);
-	}
-
-	private getObjectValueForTemplateReference(component: unknown & VComponentType, templateReference: string) {
-		const key = Object.keys(component).find(key => templateReference.startsWith(key));
-		if (!key) {
-			throw new VRenderError(`Template parsing error: cannot find value for template reference '${templateReference}'`)
-		}
-
-		// Find actual value for reference
-		let value = (component as any)[key];
-		if (templateReference.indexOf('.') !== -1 && typeof value === 'object') {
-			const prop = templateReference.substring(templateReference.indexOf('.') + 1, templateReference.length);
-			prop.split('.').forEach(nestedProp => value = value[nestedProp]); // To the nested prop we go
-		}
-
-		return typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
 	}
 
 	public clear(): void {
@@ -131,7 +120,7 @@ export class VRenderer {
 		}
 	}
 
-	private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement): void {
+	private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement) {
 		const componentPrototype = Object.getPrototypeOf(component) || {};
 		const componentPrototypePrototype = Object.getPrototypeOf(componentPrototype) || {}
 		const methods = Object.getOwnPropertyNames(componentPrototypePrototype);
@@ -146,10 +135,12 @@ export class VRenderer {
 		if (indexOfFirstParenthesis !== -1 && indexOfLastParenthesis !== -1) {
 			// First, we find the actual values for the variables that we have some references for
 			const variablesString = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis);
-			const variables = variablesString
-				.split(',')
-				.map(variableName => this.getObjectValueForTemplateReference(component, variableName))
-				.forEach(value => methodVariables.push(value));
+			if (variablesString.length > 0) {
+				const variables = variablesString
+					.split(',')
+					.map(variableName => VRendererUtil.getObjectValueForTemplateReference(component, variableName))
+					.forEach(value => methodVariables.push(value));
+			}
 
 			// Then, just replace the method name by the name without arguments
 			methodName = methodName.substring(0, indexOfFirstParenthesis);
@@ -163,16 +154,16 @@ export class VRenderer {
 			// Let's call the method
 			const method = Object.getPrototypeOf(componentPrototype)[methods[methodIndex]].bind(component);
 			if (isEmpty(methodVariables) && htmlElement) {
-				method(htmlElement);
+				return method(htmlElement);
 			} else if (!isEmpty(methodVariables)) {
-				method(methodVariables);
+				return method(methodVariables);
 			} else {
-				method();
+				return method();
 			}
 		}
 	}
 
-	private attachDomEvents(vDomEvent: VDomEvent, shadow: ShadowRoot, component: VComponentType, dom: Document): void {
+	private attachDomEvents(vDomEvent: VDomEvent, shadow: ShadowRoot, component: VComponentType, dom: Document, declarations: VComponentType[]): void {
 		if (!shadow.children) {
 			return;
 		}
@@ -186,11 +177,72 @@ export class VRenderer {
 			const methodName = el.dataset[vDomEvent.internalDataName];
 			Array.from(shadow.children)
 				.filter(shadowEl => shadowEl.nodeName !== 'STYLE')
-				.map(shadowEl => Array.from(shadowEl.children)
-					.find((shadowEl: HTMLElement) => shadowEl.dataset[vDomEvent.internalDataName] === methodName))
-				.forEach((shadowEl: HTMLElement) =>
-					shadowEl.addEventListener(vDomEvent.domEvent, () =>
-						this.callInternalMethod(component, methodName, shadowEl)));
+				.map((shadowEl: HTMLElement) => this.findMethodNameInElement(shadowEl, vDomEvent, methodName))
+				.filter(shadowEl => shadowEl)
+				.forEach((shadowEl: HTMLElement) => {
+					shadowEl.addEventListener(vDomEvent.domEvent, () => {
+						this.callInternalMethod(component, methodName, shadowEl);
+						this.render(component, declarations); // Re-render since change may have changed
+					});
+				});
 		});
+	}
+
+	attachAttributeDirective(directive: VAttributeDirective, shadow: ShadowRoot, component: VComponentType, dom: Document): void {
+		if (!shadow.children) {
+			return;
+		}
+
+		const elements = dom.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
+		if (!elements) {
+			return;
+		}
+
+		Array.from(elements).forEach((el: HTMLElement) => {
+			const methodName = el.dataset[directive.internalDataName];
+			switch (directive.internalDataName) {
+				case 'vIf':
+					const shouldRender = this.callInternalMethod(component, methodName, el);
+					if (!shouldRender) {
+						el.parentNode.removeChild(el);
+					}
+					break;
+				case 'vIfNot':
+					const shouldNotRender = this.callInternalMethod(component, methodName, el);
+					if (shouldNotRender) {
+						el.parentNode.removeChild(el);
+					}
+					break;
+				case 'vFor':
+					const number = this.callInternalMethod(component, methodName, el);
+					for (let i = 0; i < number; i++) {
+						const clone = el.cloneNode(true);
+						el.parentNode.insertBefore(clone, el);
+					}
+					break;
+				default:
+					// Not implemented
+			}
+		});
+	}
+
+	private findMethodNameInElement(element: HTMLElement, vElement: VElement, methodName: string): HTMLElement | undefined {
+		const inCurrent = element.dataset[vElement.internalDataName] === methodName;
+		if (inCurrent) {
+			return element;
+		}
+
+		if (element.hasChildNodes()) {
+			const children = Array.from(element.children);
+			for (let i = 0; i < children.length; i++) {
+				const child = children[i] as HTMLElement;
+				const inChild = this.findMethodNameInElement(child, vElement, methodName);
+				if (inChild) {
+					return child;
+				}
+			}
+		}
+
+		return undefined;
 	}
 }

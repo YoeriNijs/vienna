@@ -20,7 +20,7 @@ export class VRouter {
 		return this;
 	}
 
-	navigate(): void {
+	private navigate(): void {
 		const url = window.location.hash.slice(1) || "/";
 		const route = this.findRoute(url);
 		if (route === null) {
