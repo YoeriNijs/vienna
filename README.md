@@ -119,3 +119,4 @@ export class MainComponent implements VInit {
 - Add demo html page
 - Render nested components
 - Work with global styling somehow
+- Fix events that are fired multiple times

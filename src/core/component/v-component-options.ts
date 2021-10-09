@@ -1,4 +1,4 @@
-import {VComponentEncapsulationMode} from "./v-component-encapsulation";
+import { VComponentEncapsulationMode } from './v-component-encapsulation';
 
 export interface VComponentOptions {
 	selector: string;

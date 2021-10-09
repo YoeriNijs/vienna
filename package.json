@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "demo": "webpack serve --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "eslint src/**",
+    "lint:fix": "eslint src/** --fix"
   },
   "keywords": [],
   "author": "",

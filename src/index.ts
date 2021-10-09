@@ -1,3 +1,3 @@
-import {DemoApplication} from "./demo";
+import { DemoApplication } from './demo';
 
 new DemoApplication();
