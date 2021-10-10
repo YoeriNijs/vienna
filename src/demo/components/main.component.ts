@@ -1,18 +1,18 @@
-import { VComponent, VInit } from '../../core';
-import { LoginService } from './login.service';
+import {VComponent, VInit} from '../../core';
+import {LoginService} from './login.service';
 
 interface ContactInformation {
-	email: string;
+    email: string;
 }
 
 interface User {
-	name: string;
-	contact: ContactInformation;
+    name: string;
+    contact: ContactInformation;
 }
 
 @VComponent({
-  selector: 'main',
-  styles: [`
+    selector: 'app-main',
+    styles: [`
 		.header {
 			display: flex;
 			justify-content: space-between;
@@ -31,7 +31,7 @@ interface User {
 			}
 		}
 	`],
-  html: `
+    html: `
 		<section class="header">
 			<div class="title">My fancy app</div>
 			<div class="nav">
@@ -51,35 +51,37 @@ interface User {
 			</div>
 			<button data-v-if-not="isLoggedIn()" data-v-click="login(user.name)">Login</button>
 		</section>
+		<hello-world></hello-world>
 	`,
 })
 export class MainComponent implements VInit {
-	user: User = {
-	  name: 'Young padawan',
-	  contact: {
-	    email: 'young@padawan.com',
-	  },
-	};
+    user: User = {
+        name: 'Young padawan',
+        contact: {
+            email: 'young@padawan.com',
+        },
+    };
 
-	constructor(protected loginService: LoginService) {}
+    constructor(protected loginService: LoginService) {
+    }
 
-	vInit(): void {
-	  this.user.name = 'Piet';
-	}
+    vInit(): void {
+        this.user.name = 'Piet';
+    }
 
-	login(name: string): void {
-	  this.loginService.login(name);
-	}
+    login(name: string): void {
+        this.loginService.login(name);
+    }
 
-	logoff(name: string): void {
-	  this.loginService.logoff(name);
-	}
+    logoff(name: string): void {
+        this.loginService.logoff(name);
+    }
 
-	isLoggedIn(): boolean {
-	  return this.loginService.isLoggedIn;
-	}
+    isLoggedIn(): boolean {
+        return this.loginService.isLoggedIn;
+    }
 
-	calculateMenuItems() {
-	  return 2;
-	}
+    calculateMenuItems() {
+        return 2;
+    }
 }
