@@ -5,6 +5,8 @@ import {VComponentType, VRoute} from '../router/v-route';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VApplicationConfig} from './v-application-config';
 import {Type, VComponentInjector} from '../injector/v-component-injector';
+import {VRenderEvents} from "../renderer/v-render-events";
+import {VRenderError} from "../renderer/v-render-error";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -23,8 +25,13 @@ export function VApplication(config: VApplicationConfig) {
 
             constructor() {
                 document.addEventListener(VRouterEvents.NAVIGATED, (event: VRouterNavigatedEvent<VRoute>) => {
-                    this._declarations.filter((declaredComponent) => declaredComponent instanceof event.detail.component)
-                        .forEach((component) => this._mainRenderer.renderRoot(component, this._declarations));
+                    const root = this._declarations.find((declaredComponent) => declaredComponent instanceof event.detail.component);
+                    if (root) {
+                        this._mainRenderer.renderRoot(root, this._declarations);
+                        document.addEventListener(VRenderEvents.RENDER, () => this._mainRenderer.renderRoot(root, this._declarations));
+                    } else {
+                        throw new VRenderError(`Cannot find declaration for path '${event.detail.path}'. Declare a class for this path in your Vienna application configuration.`);
+                    }
                 });
 
                 const router = new VRouter(config.routeNotFoundStrategy);

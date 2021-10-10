@@ -5,9 +5,9 @@ import {VInternalComponent} from '../internal/v-internal-component';
 import {VComponentType} from '../router/v-route';
 import {VLogger} from '../internal/v-logger';
 import {VRendererUtil} from './v-renderer-util';
-import {VCallError} from './v-call-error';
 import {VRenderError} from "./v-render-error";
 import {VHtmlParser} from "./v-html-parser";
+import {VRenderEvents} from "./v-render-events";
 
 interface VElement {
     publicDataName: string;
@@ -42,8 +42,8 @@ enum InternalLifeCycleHook {
 export class VRenderer {
     private readonly _view: HTMLElement;
 
-    constructor(private options: VRendererOptions) {
-        this._view = document.createElement(this.options.selector);
+    constructor(options: VRendererOptions) {
+        this._view = document.createElement(options.selector);
         const body = document.querySelector('body');
         if (body) {
             body.appendChild(this._view);
@@ -52,248 +52,206 @@ export class VRenderer {
         }
     }
 
-    public renderRoot(component: unknown & VComponentType, declarations: VComponentType[]) {
-        this.clear();
+    public renderRoot(component: unknown & VComponentType, allComponents: VComponentType[]) {
+        this.clearHtml();
 
-        if (!component.vComponentOptions) {
-            throw new VRenderError('Component is not a vComponent');
-        }
+        allComponents.forEach(this.defineAsWebComponent);
 
-        const root = this.createElement(component, declarations);
-        this._view.appendChild(root);
+        const rootOptions: VComponentOptions = JSON.parse(component.vComponentOptions)
+        this._view.innerHTML = `<${rootOptions.selector}></${rootOptions.selector}>`;
     }
 
-    public clear(): void {
+    private clearHtml(): void {
         this._view.innerHTML = '';
     }
 
-    public render(component: unknown & VComponentType) {
-        this.clear();
-        const element = this.createElement(component, []);
-        this._view.appendChild(element);
-    }
-
-    attachAttributeDirective(directive: VAttributeDirective, shadow: ShadowRoot, component: VComponentType, dom: Document): void {
-        if (!shadow.children) {
-            return;
+    private defineAsWebComponent(componentType: VComponentType) {
+        if (!componentType.vComponentOptions) {
+            throw new VRenderError('Component is not a Vienna Component');
         }
 
-        const elements = dom.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
-        if (!elements) {
-            return;
-        }
+        const declaredComponentOptions: VComponentOptions = JSON.parse(componentType.vComponentOptions);
 
-        Array.from(elements).forEach((el: HTMLElement) => {
-            const methodName = el.dataset[directive.internalDataName];
-            if (directive.internalDataName === 'vIf') {
-                const shouldRender = this.callInternalMethod(component, methodName, el);
-                if (!shouldRender) {
-                    el.parentNode.removeChild(el);
-                }
-            } else if (directive.internalDataName === 'vIfNot') {
-                const shouldNotRender = this.callInternalMethod(component, methodName, el);
-                if (shouldNotRender) {
-                    el.parentNode.removeChild(el);
-                }
-            } else if (directive.internalDataName === 'vFor') {
-                const number = this.callInternalMethod(component, methodName, el);
-                for (let i = 0; i < number; i++) {
-                    const clone = el.cloneNode(true);
-                    el.parentNode.insertBefore(clone, el);
-                }
-            }
-        });
-    }
+        class DeclaredElement extends HTMLElement {
 
-    //
-    // public createElement(component: unknown & VComponentType, declarations: VComponentType[]): HTMLElement {
-    //     if (component.vComponentOptions) {
-    //         const options: VComponentOptions = JSON.parse(component.vComponentOptions);
-    //
-    //         // Create element
-    //         const element = document.createElement(options.selector);
-    //         const encapsulationMode = options.encapsulationMode ? options.encapsulationMode : 'closed';
-    //         const shadow = element.attachShadow({mode: encapsulationMode});
-    //
-    //         // Attach styles
-    //         const style = document.createElement('style');
-    //         style.innerHTML = options.styles.length < 1 ? '' : options.styles.join();
-    //         shadow.appendChild(style);
-    //
-    //         // Attach html
-    //         const inner = document.createElement('div');
-    //         const html = VHtmlParser.parse(component, options.html);
-    //
-    //         const parser = new DOMParser();
-    //         const dom = parser.parseFromString(html, 'text/html');
-    //
-    //         // Todo: work on a way to render nested elements (we cannot just call this method since we do not want to override the document itself)
-    //         // const componentSelectors = declarations.forEach(d => {
-    //         // 	const options: VComponentOptions = JSON.parse(d.vComponentOptions);
-    //         // 	const components = dom.querySelectorAll(options.selector);
-    //         // 	components.forEach(c => c.innerHTML = this.createElement(c, declarations).innerHTML);
-    //         // });
-    //
-    //         // Attach supported attribute directives
-    //         SUPPORTED_ATTRIBUTE_DIRECTIVES.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, shadow, component, dom));
-    //
-    //         inner.innerHTML = dom.documentElement.innerHTML;
-    //         shadow.appendChild(inner);
-    //
-    //         // Attach supported dom events
-    //         SUPPORTED_DOM_EVENTS.forEach((vDomEvent) => this.attachDomEvents(vDomEvent, shadow, component, dom, declarations));
-    //
-    //         // Call init lifecycle hook
-    //         this.callLifeCycleHook(InternalLifeCycleHook.INIT, component);
-    //
-    //         return element;
-    //     }
-    // }
+            private _shadow;
 
-    private createElement(component: VComponentType, declarations: VComponentType[]): HTMLElement {
-        const createShadowElement = (componentType: VComponentType) => {
-            const declaredComponentOptions: VComponentOptions = JSON.parse(componentType.vComponentOptions);
+            constructor() {
+                super();
 
-            class DeclaredElement extends HTMLElement {
-                constructor() {
-                    super();
+                const mode = declaredComponentOptions.encapsulationMode
+                    ? declaredComponentOptions.encapsulationMode
+                    : 'closed';
+                this._shadow = this.attachShadow({mode});
 
-                    const style = document.createElement('style');
-                    style.innerHTML = declaredComponentOptions.styles.length < 1
-                        ? ''
-                        : declaredComponentOptions.styles.join();
-
-                    const shadow = this.attachShadow({mode: declaredComponentOptions.encapsulationMode});
-                    shadow.append(style);
-
-                    const html = document.createElement('div');
-                    html.innerHTML = VHtmlParser.parse(component, declaredComponentOptions.html);
-                    shadow.append(html);
-                }
+                this.render();
             }
 
-            window.customElements.define(declaredComponentOptions.selector, DeclaredElement);
+            forceRebuild() {
+                const event = new CustomEvent(VRenderEvents.RENDER);
+                document.dispatchEvent(event);
+            }
 
-            return new DeclaredElement();
-        }
-        const element = createShadowElement(component);
-        const parser = new DOMParser();
-        const dom = parser.parseFromString(element.innerHTML, 'text/html');
+            render() {
+                const style = document.createElement('style');
+                style.innerHTML = declaredComponentOptions.styles.length < 1
+                    ? ''
+                    : declaredComponentOptions.styles.join();
 
-        const walkNodeTree = (node: HTMLElement) => {
-            if (node.hasChildNodes()) {
-                node.childNodes.forEach((n: HTMLElement) => {
-                    walkNodeTree(n);
+                this._shadow.append(style);
+
+                const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
+                const parser = new DOMParser();
+                const dom = parser.parseFromString(componentHtml, 'text/html');
+
+                // Attach supported attribute directives
+                SUPPORTED_ATTRIBUTE_DIRECTIVES.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, componentType, dom));
+
+                const htmlContainer = dom.createElement(`${declaredComponentOptions.selector}-body`);
+                htmlContainer.innerHTML = dom.body.innerHTML;
+                this._shadow.appendChild(htmlContainer);
+
+                // Attach supported dom events
+                SUPPORTED_DOM_EVENTS.forEach((vDomEvent) => this.attachDomEvents(vDomEvent, componentType));
+
+                // Call init lifecycle hook
+                this.callLifeCycleHook(InternalLifeCycleHook.INIT, componentType);
+            }
+
+            attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
+                if (!this._shadow.children) {
+                    return;
+                }
+
+                const elements = dom.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
+                if (!elements) {
+                    return;
+                }
+
+                Array.from(elements).forEach((el: HTMLElement) => {
+                    const methodName = el.dataset[directive.internalDataName];
+                    if (directive.internalDataName === 'vIf') {
+                        const shouldRender = this.callInternalMethod(component, methodName, el);
+                        if (!shouldRender) {
+                            el.parentNode.removeChild(el);
+                        }
+                    } else if (directive.internalDataName === 'vIfNot') {
+                        const shouldNotRender = this.callInternalMethod(component, methodName, el);
+                        if (shouldNotRender) {
+                            el.parentNode.removeChild(el);
+                        }
+                    } else if (directive.internalDataName === 'vFor') {
+                        const number = this.callInternalMethod(component, methodName, el);
+                        for (let i = 0; i < number; i++) {
+                            const clone = el.cloneNode(true);
+                            el.parentNode.insertBefore(clone, el);
+                        }
+                    }
                 });
             }
 
-            const declaredComponentType: VComponentType = declarations.find(d => {
-                const options: VComponentOptions = JSON.parse(d.vComponentOptions);
-                return node.tagName && options.selector.toLowerCase() === node.tagName.toLowerCase();
-            });
-            if (declaredComponentType) {
-                createShadowElement(declaredComponentType);
-            }
-        }
+            private attachDomEvents(vDomEvent: VDomEvent, component: VComponentType): void {
+                if (!this._shadow.children) {
+                    return;
+                }
 
-        walkNodeTree(dom.documentElement);
+                const elements = this._shadow.querySelectorAll<HTMLElement>(`[data-${vDomEvent.publicDataName}]`);
+                if (!elements) {
+                    return;
+                }
 
-        return element;
-    }
-
-    private callLifeCycleHook(hook: InternalLifeCycleHook, component: VComponentType): void {
-        switch (hook) {
-            case InternalLifeCycleHook.INIT:
-                this.callInternalMethod(component, 'vInit');
-                break;
-            case InternalLifeCycleHook.UNKNOWN:
-            default:
-            // Intended fall-through
-        }
-    }
-
-    private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement) {
-        const componentPrototype = Object.getPrototypeOf(component) || {};
-        const componentPrototypePrototype = Object.getPrototypeOf(componentPrototype) || {};
-        const methods = Object.getOwnPropertyNames(componentPrototypePrototype);
-        if (!methods || methods.length < 1) {
-            return;
-        }
-
-        const methodVariables: any[] = [];
-
-        const indexOfFirstParenthesis = methodName.indexOf('(');
-        const indexOfLastParenthesis = methodName.indexOf(')');
-        if (indexOfFirstParenthesis !== -1 && indexOfLastParenthesis !== -1) {
-            // First, we find the actual values for the variables that we have some references for
-            methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
-                .split(',')
-                .filter(v => v.length > 0)
-                .map((variableName) => VRendererUtil.getObjectValueForTemplateReference(component, variableName))
-                .forEach((value) => methodVariables.push(value));
-
-            // Then, just replace the method name by the name without arguments
-            methodName = methodName.substring(0, indexOfFirstParenthesis);
-        }
-
-        const methodIndex = methods.indexOf(methodName);
-        if (methodIndex === -1) {
-            throw new VCallError(`Invalid method name: '${methodName}'. This probably means that the method does not exist`);
-        } else {
-            // Let's call the method
-            const method = Object.getPrototypeOf(componentPrototype)[methods[methodIndex]].bind(component);
-            if (isEmpty(methodVariables) && htmlElement) {
-                return method(htmlElement);
-            }
-            if (!isEmpty(methodVariables)) {
-                return method(methodVariables);
-            }
-            return method();
-        }
-    }
-
-    private attachDomEvents(vDomEvent: VDomEvent, shadow: ShadowRoot, component: VComponentType, dom: Document): void {
-        if (!shadow.children) {
-            return;
-        }
-
-        const elements = dom.querySelectorAll<HTMLElement>(`[data-${vDomEvent.publicDataName}]`);
-        if (!elements) {
-            return;
-        }
-
-        Array.from(elements).forEach((el) => {
-            const methodName = el.dataset[vDomEvent.internalDataName];
-            Array.from(shadow.children)
-                .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
-                .map((shadowEl: HTMLElement) => this.findMethodNameInElement(shadowEl, vDomEvent, methodName))
-                .filter((shadowEl) => shadowEl)
-                .forEach((shadowEl: HTMLElement) => {
-                    shadowEl.addEventListener(vDomEvent.domEvent, () => {
-                        this.callInternalMethod(component, methodName, shadowEl);
-                        this.render(component); // Re-render since change may have changed
-                    });
+                Array.from(elements).forEach((el) => {
+                    const methodName = el.dataset[vDomEvent.internalDataName];
+                    Array.from(this._shadow.children)
+                        .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
+                        .map((shadowEl: HTMLElement) => this.findMethodNameInElement(shadowEl, vDomEvent, methodName))
+                        .filter((shadowEl) => shadowEl)
+                        .forEach((shadowEl: HTMLElement) => {
+                            shadowEl.addEventListener(vDomEvent.domEvent, () => {
+                                this.callInternalMethod(component, methodName, shadowEl);
+                                this.forceRebuild(); // Re-render since change may have changed
+                            });
+                        });
                 });
-        });
-    }
+            }
 
-    private findMethodNameInElement(element: HTMLElement, vElement: VElement, methodName: string): HTMLElement | undefined {
-        const inCurrent = element.dataset[vElement.internalDataName] === methodName;
-        if (inCurrent) {
-            return element;
-        }
+            private findMethodNameInElement(element: HTMLElement, vElement: VElement, methodName: string): HTMLElement | undefined {
+                const inCurrent = element.dataset[vElement.internalDataName] === methodName;
+                if (inCurrent) {
+                    return element;
+                }
 
-        if (element.hasChildNodes()) {
-            const children = Array.from(element.children);
-            for (let i = 0; i < children.length; i++) {
-                const child = children[i] as HTMLElement;
-                const inChild = this.findMethodNameInElement(child, vElement, methodName);
-                if (inChild) {
-                    return child;
+                if (element.hasChildNodes()) {
+                    const children = Array.from(element.children);
+                    for (let i = 0; i < children.length; i++) {
+                        const child = children[i] as HTMLElement;
+                        const inChild = this.findMethodNameInElement(child, vElement, methodName);
+                        if (inChild) {
+                            return child;
+                        }
+                    }
+                }
+
+                return undefined;
+            }
+
+            private callLifeCycleHook(hook: InternalLifeCycleHook, component: VComponentType): void {
+                switch (hook) {
+                    case InternalLifeCycleHook.INIT:
+                        this.callInternalMethod(component, 'vInit');
+                        break;
+                    case InternalLifeCycleHook.UNKNOWN:
+                    default:
+                    // Intended fall-through
+                }
+            }
+
+            private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement) {
+                const componentPrototype = Object.getPrototypeOf(component) || {};
+                const componentPrototypePrototype = Object.getPrototypeOf(componentPrototype) || {};
+                const methods = Object.getOwnPropertyNames(componentPrototypePrototype);
+                if (!methods || methods.length < 1) {
+                    return;
+                }
+
+                const methodVariables: any[] = [];
+
+                const indexOfFirstParenthesis = methodName.indexOf('(');
+                const indexOfLastParenthesis = methodName.indexOf(')');
+                if (indexOfFirstParenthesis !== -1 && indexOfLastParenthesis !== -1) {
+                    // First, we find the actual values for the variables that we have some references for
+                    methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
+                        .split(',')
+                        .filter(v => v.length > 0)
+                        .map((variableName) => VRendererUtil.getObjectValueForTemplateReference(component, variableName))
+                        .forEach((value) => methodVariables.push(value));
+
+                    // Then, just replace the method name by the name without arguments
+                    methodName = methodName.substring(0, indexOfFirstParenthesis);
+                }
+
+                const methodIndex = methods.indexOf(methodName);
+                if (methodIndex !== -1) {
+                    const method = Object.getPrototypeOf(componentPrototype)[methods[methodIndex]].bind(component);
+                    if (isEmpty(methodVariables) && htmlElement) {
+                        return method(htmlElement);
+                    }
+                    if (!isEmpty(methodVariables)) {
+                        return method(methodVariables);
+                    }
+                    return method();
                 }
             }
         }
 
-        return undefined;
+        const selector = declaredComponentOptions.selector;
+        if (selector.indexOf('-') === -1) {
+            throw new VRenderError(`Selector '${selector}' must have a hyphen`);
+        }
+
+        const isCustomElementUndefined = !window.customElements.get(selector);
+        if (isCustomElementUndefined) {
+            window.customElements.define(selector, DeclaredElement);
+        }
     }
 }
