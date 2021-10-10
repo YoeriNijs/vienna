@@ -35,7 +35,7 @@ export function VApplication(config: VApplicationConfig) {
                 });
 
                 const router = new VRouter(config.routeNotFoundStrategy);
-                this._routes.forEach((route) => router.addRoute(route));
+                this._routes.forEach(route => router.addRoute(route));
             }
         }
 
