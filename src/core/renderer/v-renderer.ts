@@ -3,7 +3,6 @@ import {VRendererOptions} from './v-renderer-options';
 import {VComponentOptions} from '../component/v-component-options';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VComponentType} from '../router/v-route';
-import {VLogger} from '../internal/v-logger';
 import {VRendererUtil} from './v-renderer-util';
 import {VRenderError} from "./v-render-error";
 import {VHtmlParser} from "./v-html-parser";
@@ -48,7 +47,7 @@ export class VRenderer {
         if (body) {
             body.appendChild(this._view);
         } else {
-            VLogger.error('No body tag found');
+            throw new VRenderError('No body tag found');
         }
     }
 
