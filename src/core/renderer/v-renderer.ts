@@ -87,6 +87,12 @@ export class VRenderer {
                 this.render();
             }
 
+            self() {
+                const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
+                const parser = new DOMParser();
+                return parser.parseFromString(componentHtml, 'text/html');
+            }
+
             forceRebuild() {
                 const event = new CustomEvent(VRenderEvents.REBUILD);
                 document.dispatchEvent(event);

@@ -43,9 +43,11 @@ interface User {
 		<section data-v-if-not="isLoggedIn()">
 		    <div class="public-area">
 		        <span>Hi, please log in first.</span>
-                <div class="btn-menu">
-                    <button data-v-click="login(user.name)">Login</button>
-                </div>
+		        <input id="username" type="text" placeholder="Username" minlength="1"/>
+		        <input id="password" type="password" placeholder="Password" minlength="1"/>
+<!--                <div class="btn-menu">-->
+<!--                    <button data-v-click="login">Login</button>-->
+<!--                </div>-->
             </div>
         </section>
 		
@@ -65,16 +67,24 @@ export class HomeComponent implements VInit {
     }
 
     vInit(): void {
-        console.log(this.loginService.isLoggedIn);
+        setTimeout(() => {
+            const el = document.getElementsByTagName('app-home')[0];
+            const self: Document = (el as any).self();
+            const username = (self.getElementById('username') as HTMLInputElement).value;
+            const password = self.getElementById('password');
+            console.log(username, password);
+        }, 2000);
     }
 
-    login(name: string): void {
-        const username = prompt('Please enter your username');
-        const password = prompt('Please enter your password');
+    login(): void {
+        const el = document.getElementsByTagName('app-home')[0];
+        const self: Document = (el as any).self();
+        const username = self.getElementById('username').nodeValue;
+        const password = self.getElementById('password').nodeValue;
         if (username === this.user.name && password == this.user.password) {
-            this.loginService.login(name);
+            this.loginService.login(username);
         } else {
-            alert('Invalid credentials');
+            // alert('Invalid credentials');
         }
     }
 
