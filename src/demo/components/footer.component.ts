@@ -5,13 +5,14 @@ import {VComponent} from '../../core';
     styles: [`
 		.wrapper {
 			border: 1px solid black;
-			border-radius: 8px;
 			padding: 10px;
 		}
 	`],
     html: `
 		<div class="wrapper">
-		    <div class="item">Footer</div>
+		    <div class="item">
+		        <slot></slot>
+            </div>
 		<div>
 	`,
 })

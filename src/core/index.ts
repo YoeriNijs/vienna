@@ -1,6 +1,7 @@
 // Public Vienna framework api
 export * from './application/v-application';
 export * from './application/v-application-config';
+export * from './binding/prop';
 export * from './component/v-component';
 export * from './component/v-component-encapsulation';
 export * from './component/v-component-options';

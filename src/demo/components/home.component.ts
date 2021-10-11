@@ -21,12 +21,23 @@ interface User {
             margin: 10px 0;
         }
         
+        section {
+            padding: 10px;
+            border: 1px solid black;
+            margin: 10px 0;
+        }
+        
+        form {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        
         .btn-menu {
             margin-top: 4px;
         }
-	`],
+    `],
     html: `
-        <app-navbar></app-navbar>
+        <app-navbar title="{{ navbarTitle }}"></app-navbar>
         
 		<section data-v-if="isLoggedIn()">
 			<div class="member-area">
@@ -42,19 +53,23 @@ interface User {
 		
 		<section data-v-if-not="isLoggedIn()">
 		    <div class="public-area">
-		        <span>Hi, please log in first.</span>
-		        <input id="username" type="text" placeholder="Username" minlength="1"/>
-		        <input id="password" type="password" placeholder="Password" minlength="1"/>
-<!--                <div class="btn-menu">-->
-<!--                    <button data-v-click="login">Login</button>-->
-<!--                </div>-->
+		        <span>Hi there, please log in first.</span>
+		        <form>
+                    <input data-v-bind="username" id="username" type="text" placeholder="Username" minlength="1"/>
+                    <input data-v-bind="password" id="password" type="password" placeholder="Password" minlength="1"/>
+                    <div class="btn-menu">
+                        <button data-v-click="login">Login</button>
+                    </div>
+                </form>
             </div>
         </section>
 		
-		<app-footer></app-footer>
-	`,
+		<app-footer>Footer from homepage</app-footer>
+	`
 })
 export class HomeComponent implements VInit {
+    navbarTitle = 'My fancy app :: Home';
+
     user: User = {
         name: 'user',
         password: 'password',
@@ -63,28 +78,21 @@ export class HomeComponent implements VInit {
         },
     };
 
+    username: HTMLInputElement;
+    password: HTMLInputElement;
+
     constructor(protected loginService: LoginService) {
     }
 
     vInit(): void {
-        setTimeout(() => {
-            const el = document.getElementsByTagName('app-home')[0];
-            const self: Document = (el as any).self();
-            const username = (self.getElementById('username') as HTMLInputElement).value;
-            const password = self.getElementById('password');
-            console.log(username, password);
-        }, 2000);
+        console.log('In init lifecycle hook');
     }
 
     login(): void {
-        const el = document.getElementsByTagName('app-home')[0];
-        const self: Document = (el as any).self();
-        const username = self.getElementById('username').nodeValue;
-        const password = self.getElementById('password').nodeValue;
-        if (username === this.user.name && password == this.user.password) {
-            this.loginService.login(username);
+        if (this.username.value === this.user.name && this.password.value == this.user.password) {
+            this.loginService.login(this.user.name);
         } else {
-            // alert('Invalid credentials');
+            alert('Invalid credentials');
         }
     }
 

@@ -20,15 +20,22 @@ interface VDomEvent extends VElement {
 interface VAttributeDirective extends VElement {
 }
 
+interface VAttributeBinding extends VElement {
+}
+
 const SUPPORTED_DOM_EVENTS: VDomEvent[] = [
     {publicDataName: 'v-click', internalDataName: 'vClick', domEvent: 'click'},
 ];
 
-const SUPPORTED_ATTRIBUTE_DIRECTIVES: VAttributeDirective[] = [
+const SUPPORTED_ATTRIBUTE_MANIPULATORS: VAttributeDirective[] = [
     {publicDataName: 'v-if', internalDataName: 'vIf'},
     {publicDataName: 'v-if-not', internalDataName: 'vIfNot'},
-    {publicDataName: 'v-for', internalDataName: 'vFor'},
+    {publicDataName: 'v-for', internalDataName: 'vFor'}
 ];
+
+const SUPPORTED_ATTRIBUTE_BINDINGS: VAttributeBinding[] = [
+    {publicDataName: 'v-bind', internalDataName: 'vBind'}
+]
 
 enum InternalLifeCycleHook {
     INIT,
@@ -87,12 +94,6 @@ export class VRenderer {
                 this.render();
             }
 
-            self() {
-                const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
-                const parser = new DOMParser();
-                return parser.parseFromString(componentHtml, 'text/html');
-            }
-
             forceRebuild() {
                 const event = new CustomEvent(VRenderEvents.REBUILD);
                 document.dispatchEvent(event);
@@ -106,14 +107,14 @@ export class VRenderer {
 
                 this._shadow.append(style);
 
-                const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
+                const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html, this.attributes);
                 this._lastKnownHtml = componentHtml;
 
                 const parser = new DOMParser();
                 const dom = parser.parseFromString(componentHtml, 'text/html');
 
                 // Attach supported attribute directives
-                SUPPORTED_ATTRIBUTE_DIRECTIVES.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, componentType, dom));
+                SUPPORTED_ATTRIBUTE_MANIPULATORS.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, componentType, dom));
 
                 const htmlContainer = dom.createElement(`${declaredComponentOptions.selector}-body`);
                 htmlContainer.innerHTML = dom.body.innerHTML;
@@ -122,19 +123,14 @@ export class VRenderer {
                 // Attach supported dom events
                 SUPPORTED_DOM_EVENTS.forEach((vDomEvent) => this.attachDomEvents(vDomEvent, componentType));
 
+                // Bind
+                SUPPORTED_ATTRIBUTE_BINDINGS.forEach((b) => this.bind(b, componentType));
+
                 // Call init lifecycle hook
                 this.callLifeCycleHook(InternalLifeCycleHook.INIT, componentType);
 
                 // Enable change detection loop
                 setInterval(() => this.detectChanges(), 300);
-            }
-
-            private detectChanges() {
-                const currentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
-                if (this._lastKnownHtml !== currentHtml) {
-                    this._lastKnownHtml = currentHtml;
-                    this.forceRebuild();
-                }
             }
 
             attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
@@ -148,25 +144,51 @@ export class VRenderer {
                 }
 
                 Array.from(elements).forEach((el: HTMLElement) => {
-                    const methodName = el.dataset[directive.internalDataName];
+                    const value = el.dataset[directive.internalDataName];
                     if (directive.internalDataName === 'vIf') {
-                        const shouldRender = this.callInternalMethod(component, methodName, el);
+                        const shouldRender = this.callInternalMethod(component, value, el);
                         if (!shouldRender) {
                             el.parentNode.removeChild(el);
                         }
                     } else if (directive.internalDataName === 'vIfNot') {
-                        const shouldNotRender = this.callInternalMethod(component, methodName, el);
+                        const shouldNotRender = this.callInternalMethod(component, value, el);
                         if (shouldNotRender) {
                             el.parentNode.removeChild(el);
                         }
                     } else if (directive.internalDataName === 'vFor') {
-                        const number = this.callInternalMethod(component, methodName, el);
+                        const number = this.callInternalMethod(component, value, el);
                         for (let i = 0; i < number; i++) {
                             const clone = el.cloneNode(true);
                             el.parentNode.insertBefore(clone, el);
                         }
                     }
                 });
+            }
+
+            bind(directive: VAttributeDirective, component: VComponentType): void {
+                if (!this._shadow.children) {
+                    return;
+                }
+
+                const elements = this._shadow.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
+                if (!elements) {
+                    return;
+                }
+
+                Array.from(elements).forEach((el: HTMLElement) => {
+                    const value = el.dataset[directive.internalDataName];
+                    if (directive.internalDataName === 'vBind') {
+                        (component as any)[value] = el;
+                    }
+                });
+            }
+
+            private detectChanges() {
+                const currentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html, this.attributes);
+                if (this._lastKnownHtml !== currentHtml) {
+                    this._lastKnownHtml = currentHtml;
+                    this.forceRebuild();
+                }
             }
 
             private attachDomEvents(vDomEvent: VDomEvent, component: VComponentType): void {
@@ -206,7 +228,7 @@ export class VRenderer {
                         const child = children[i] as HTMLElement;
                         const inChild = this.findMethodNameInElement(child, vElement, methodName);
                         if (inChild) {
-                            return child;
+                            return inChild;
                         }
                     }
                 }
@@ -242,7 +264,7 @@ export class VRenderer {
                     methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
                         .split(',')
                         .filter(v => v.length > 0)
-                        .map((variableName) => VRendererUtil.getObjectValueForTemplateReference(component, variableName))
+                        .map((variableName) => VRendererUtil.getValueForTemplateReference(component, variableName, this.attributes))
                         .forEach((value) => methodVariables.push(value));
 
                     // Then, just replace the method name by the name without arguments

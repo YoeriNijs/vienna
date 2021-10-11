@@ -1,9 +1,11 @@
-import {VComponent} from '../../core';
+import {Prop, VComponent} from '../../core';
 
 @VComponent({
     selector: 'app-navbar',
     styles: [`
 		.header {
+            background-color: blue;
+            color: #fff;
 			display: flex;
 			justify-content: space-between;
 			border: 1px solid black;
@@ -13,9 +15,10 @@ import {VComponent} from '../../core';
 	`],
     html: `
 		<section class="header">
-			<div class="title">My App</div>
+			<div class="title">{{ title }}</div>
 		</section>
 	`,
 })
 export class NavbarComponent {
+    @Prop() title: string = 'My navbar title';
 }

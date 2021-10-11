@@ -5,7 +5,7 @@ import {LoginService} from "./login.service";
     selector: 'app-personal',
     styles: [],
     html: `
-        <app-navbar></app-navbar>
+        <app-navbar title="My fancy app :: Personal"></app-navbar>
  
 		<div class="container">
 			<div class="msg">Welcome in my personal world</div>
