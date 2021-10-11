@@ -1,3 +1,3 @@
 export enum VRenderEvents {
-    RENDER = 'v-renderer-render'
+    REBUILD = 'v-renderer-rebuild'
 }

@@ -17,10 +17,7 @@ export function VApplication(config: VApplicationConfig) {
             private readonly _mainRenderer: VRenderer = new VRenderer({
                 selector: 'v-app-renderer',
             });
-
-            // private readonly _declarations: VComponentType[] = config.declarations.map((c: Type<VComponentType>) => VComponentInjector.resolve<VComponentType>(c));
             private readonly _declarations: VComponentType[] = config.declarations.map((c: Type<VComponentType>) => VComponentInjector.resolve<VComponentType>(c));
-
             private readonly _routes: VRoute[] = config.routes;
 
             constructor() {
@@ -28,7 +25,7 @@ export function VApplication(config: VApplicationConfig) {
                     const root = this._declarations.find((declaredComponent) => declaredComponent instanceof event.detail.component);
                     if (root) {
                         this._mainRenderer.renderRoot(root, this._declarations);
-                        document.addEventListener(VRenderEvents.RENDER, () => this._mainRenderer.renderRoot(root, this._declarations));
+                        document.addEventListener(VRenderEvents.REBUILD, () => this._mainRenderer.renderRoot(root, this._declarations));
                     } else {
                         throw new VRenderError(`Cannot find declaration for path '${event.detail.path}'. Declare a class for this path in your Vienna application configuration.`);
                     }

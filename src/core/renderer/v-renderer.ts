@@ -88,7 +88,7 @@ export class VRenderer {
             }
 
             forceRebuild() {
-                const event = new CustomEvent(VRenderEvents.RENDER);
+                const event = new CustomEvent(VRenderEvents.REBUILD);
                 document.dispatchEvent(event);
             }
 
@@ -182,7 +182,7 @@ export class VRenderer {
                         .forEach((shadowEl: HTMLElement) => {
                             shadowEl.addEventListener(vDomEvent.domEvent, () => {
                                 this.callInternalMethod(component, methodName, shadowEl);
-                                this.forceRebuild(); // Re-render since change may have changed
+                                this.forceRebuild(); // Re-render since view may have changed
                             });
                         });
                 });

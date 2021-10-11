@@ -3,18 +3,14 @@ import {LoginService} from "./login.service";
 
 @VComponent({
     selector: 'app-personal',
-    styles: [`
-		.container {
-			padding: 10px;
-		}
-	`],
+    styles: [],
     html: `
         <app-navbar></app-navbar>
  
 		<div class="container">
 			<div class="msg">Welcome in my personal world</div>
             <button data-v-click="navigateBack()"><< back</button>
-		<div>
+		</div>
 		
 		<app-footer></app-footer>
 	`,

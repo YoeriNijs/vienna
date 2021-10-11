@@ -12,7 +12,7 @@ interface User {
 }
 
 @VComponent({
-    selector: 'app-main',
+    selector: 'app-home',
     styles: [`
         .member-area,
         .public-area {
@@ -64,7 +64,9 @@ export class HomeComponent implements VInit {
     constructor(protected loginService: LoginService) {
     }
 
-    vInit(): void {}
+    vInit(): void {
+        console.log(this.loginService.isLoggedIn);
+    }
 
     login(name: string): void {
         const username = prompt('Please enter your username');
