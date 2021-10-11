@@ -64,9 +64,7 @@ export class HomeComponent implements VInit {
     constructor(protected loginService: LoginService) {
     }
 
-    vInit(): void {
-        console.log('in Init lifecycle hook');
-    }
+    vInit(): void {}
 
     login(name: string): void {
         const username = prompt('Please enter your username');

@@ -115,7 +115,6 @@ export class HomeComponent implements VInit {
 # Todo
 
 - Implement input bindings
-- Implement change detection
 - Add unit tests
 - Work with global styling somehow
 - Fix events that are fired multiple times

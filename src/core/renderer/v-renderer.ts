@@ -74,6 +74,7 @@ export class VRenderer {
         class DeclaredElement extends HTMLElement {
 
             private _shadow;
+            private _lastKnownHtml: string;
 
             constructor() {
                 super();
@@ -100,6 +101,8 @@ export class VRenderer {
                 this._shadow.append(style);
 
                 const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
+                this._lastKnownHtml = componentHtml;
+
                 const parser = new DOMParser();
                 const dom = parser.parseFromString(componentHtml, 'text/html');
 
@@ -115,6 +118,17 @@ export class VRenderer {
 
                 // Call init lifecycle hook
                 this.callLifeCycleHook(InternalLifeCycleHook.INIT, componentType);
+
+                // Enable change detection loop
+                setInterval(() => this.detectChanges(), 300);
+            }
+
+            private detectChanges() {
+                const currentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html);
+                if (this._lastKnownHtml !== currentHtml) {
+                    this._lastKnownHtml = currentHtml;
+                    this.forceRebuild();
+                }
             }
 
             attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
