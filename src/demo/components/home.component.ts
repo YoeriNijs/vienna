@@ -7,6 +7,7 @@ interface ContactInformation {
 
 interface User {
     name: string;
+    password: string;
     contact: ContactInformation;
 }
 
@@ -53,7 +54,8 @@ interface User {
 })
 export class HomeComponent implements VInit {
     user: User = {
-        name: 'Young padawan',
+        name: 'user',
+        password: 'password',
         contact: {
             email: 'young@padawan.com',
         },
@@ -63,11 +65,17 @@ export class HomeComponent implements VInit {
     }
 
     vInit(): void {
-        this.user.name = 'Piet';
+        console.log('in Init lifecycle hook');
     }
 
     login(name: string): void {
-        this.loginService.login(name);
+        const username = prompt('Please enter your username');
+        const password = prompt('Please enter your password');
+        if (username === this.user.name && password == this.user.password) {
+            this.loginService.login(name);
+        } else {
+            alert('Invalid credentials');
+        }
     }
 
     logoff(name: string): void {
