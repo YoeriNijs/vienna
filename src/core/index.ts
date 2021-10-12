@@ -5,6 +5,7 @@ export * from './binding/prop';
 export * from './component/v-component';
 export * from './component/v-component-encapsulation';
 export * from './component/v-component-options';
+export * from './component/v-component-type';
 export * from './injector/v-injectable-decorator';
 export * from './router/hooks/v-init';
 export * from './router/hooks/v-destroy';

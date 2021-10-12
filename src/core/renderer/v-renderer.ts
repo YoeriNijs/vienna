@@ -2,11 +2,11 @@ import {isEmpty} from 'pincet';
 import {VRendererOptions} from './v-renderer-options';
 import {VComponentOptions} from '../component/v-component-options';
 import {VInternalComponent} from '../internal/v-internal-component';
-import {VComponentType} from '../router/v-route';
 import {VRendererUtil} from './v-renderer-util';
 import {VRenderError} from "./v-render-error";
 import {VHtmlParser} from "./v-html-parser";
 import {VRenderEvents} from "./v-render-events";
+import { VComponentType } from '../component/v-component-type';
 
 interface VElement {
     publicDataName: string;

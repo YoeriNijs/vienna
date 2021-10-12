@@ -1,12 +1,13 @@
 import {VRouter} from '../router/v-router';
 import {VRenderer} from '../renderer/v-renderer';
 import {VRouterEvents, VRouterNavigatedEvent} from '../router/v-router-event';
-import {VComponentType, VRoute} from '../router/v-route';
+import {VRoute} from '../router/v-route';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VApplicationConfig} from './v-application-config';
 import {Type, VComponentInjector} from '../injector/v-component-injector';
 import {VRenderEvents} from "../renderer/v-render-events";
 import {VRenderError} from "../renderer/v-render-error";
+import { VComponentType } from '../component/v-component-type';
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {

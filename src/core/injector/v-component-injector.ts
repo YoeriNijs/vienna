@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {VComponentType} from '../router/v-route';
+import { VComponentType } from '../component/v-component-type';
 
 export interface Type<T> {
     new(...args: any[]): T;

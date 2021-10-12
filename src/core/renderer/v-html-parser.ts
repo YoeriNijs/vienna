@@ -1,6 +1,6 @@
-import {VComponentType} from '../router/v-route';
 import {VRenderError} from './v-render-error';
 import {VRendererUtil} from './v-renderer-util';
+import {VComponentType} from "../component/v-component-type";
 
 export class VHtmlParser {
     private constructor() {

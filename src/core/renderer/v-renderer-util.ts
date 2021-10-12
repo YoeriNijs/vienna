@@ -1,7 +1,7 @@
-import {VComponentType} from '../router/v-route';
 import {VRenderError} from './v-render-error';
 import {VSanitizer} from './v-sanitizer';
 import 'reflect-metadata';
+import { VComponentType } from '../component/v-component-type';
 
 export class VRendererUtil {
     private constructor() {
