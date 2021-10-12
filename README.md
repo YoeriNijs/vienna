@@ -18,3 +18,4 @@ See demo app to see how the framework works.
 - Support query params
 - Fix direct route bug
 - https://www.thinktecture.com/en/web-components/flaws/
+- https://hackernoon.com/how-to-create-new-template-engine-using-javascript-8f26313p
