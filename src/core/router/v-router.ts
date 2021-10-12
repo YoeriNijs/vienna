@@ -26,10 +26,11 @@ export class VRouter {
         const url = window.location.hash.slice(1) || '/';
         const route = this.findRoute(url);
         if (route === null) {
-            if (this.routeNotFoundStrategy === VRouteNotFoundStrategy.ROOT) {
-                window.location.href = '#';
-            } else {
+            if (this.routeNotFoundStrategy === VRouteNotFoundStrategy.IGNORE) {
                 throw new VNoRouteException(`No route found for url '${url}'`);
+            } else {
+                // Default or root: navigate to root
+                window.location.href = '#';
             }
         } else {
             this.dispatchNavigationAction(route);

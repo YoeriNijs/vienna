@@ -17,3 +17,4 @@ See demo app to see how the framework works.
 - Work with global styling somehow
 - Fix events that are fired multiple times
 - Support query params
+- Fix direct route bug

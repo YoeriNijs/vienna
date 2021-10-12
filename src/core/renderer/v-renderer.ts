@@ -157,9 +157,11 @@ export class VRenderer {
                         }
                     } else if (directive.internalDataName === 'vFor') {
                         const number = this.callInternalMethod(component, value, el);
-                        for (let i = 0; i < number; i++) {
-                            const clone = el.cloneNode(true);
-                            el.parentNode.insertBefore(clone, el);
+                        if (number > 0) {
+                            for (let i = 0; i < number - 1; i++) {
+                                const clone = el.cloneNode(true);
+                                el.parentNode.insertBefore(clone, el);
+                            }
                         }
                     }
                 });
