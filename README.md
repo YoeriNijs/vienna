@@ -14,7 +14,6 @@ See demo app to see how the framework works.
 - Implement input bindings from component variable
 - Implement change detection inside component
 - Add unit tests
-- Work with global styling somehow
-- Fix events that are fired multiple times
+- Work with global styling somehow (e.g. Constructable Stylesheet Objects, see https://wicg.github.io/construct-stylesheets/)
 - Support query params
 - Fix direct route bug
