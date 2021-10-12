@@ -17,3 +17,4 @@ See demo app to see how the framework works.
 - Work with global styling somehow (e.g. Constructable Stylesheet Objects, see https://wicg.github.io/construct-stylesheets/)
 - Support query params
 - Fix direct route bug
+- https://www.thinktecture.com/en/web-components/flaws/
