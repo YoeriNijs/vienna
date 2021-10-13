@@ -39,6 +39,19 @@ interface User {
     html: `
         <app-navbar title="{{ navbarTitle }}"></app-navbar>
         
+<!--        <v-check if="{{ a ===  b }}">-->
+<!--            <true>-->
+<!--                 &lt;!&ndash; true &ndash;&gt;   -->
+<!--            </true>-->
+<!--            <false>-->
+<!--                &lt;!&ndash; false &ndash;&gt;-->
+<!--            </false>-->
+<!--        </v-check>-->
+        
+<!--        <v-loop for="{{ let i; i < var; i++ }}">-->
+<!--            <span>{{ var[i] }}</span>-->
+<!--        </v-loop>-->
+        
 		<section data-v-if="isLoggedIn()">
 			<div class="member-area">
 				<span>Hi there, {{ user.name }}!</span>
