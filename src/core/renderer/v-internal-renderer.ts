@@ -8,8 +8,6 @@ import { VComponentType } from '../component/v-component-type';
 import {VInternalRendererTransformer} from "./handlers/v-internal-renderer-transformer";
 import {VInternalTemplateTransformer} from "./handlers/v-internal-template-transformer";
 import {VInternalAttributeTransformer} from "./handlers/v-internal-attribute-transformer";
-import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
-import {VInternalTemplate} from "../template-engine/v-internal-template";
 import {getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 
 interface VElement {
@@ -112,13 +110,12 @@ export class VInternalRenderer {
                 style.innerHTML = declaredComponentOptions.styles.length < 1
                     ? ''
                     : declaredComponentOptions.styles.join();
-
                 this._shadow.append(style);
 
-                // Todo: bind attribute values with prop annotation -> add new transformer
-                const html = this._transformers.reduce((prevTransformer, currentTransformer) => currentTransformer.transform(prevTransformer, componentType, this.attributes), declaredComponentOptions.html);
-
                 const parser = new DOMParser();
+                const html = this._transformers.reduce((prevTransformer, currentTransformer) => {
+                        return currentTransformer.transform(prevTransformer, componentType, this.attributes)
+                    }, declaredComponentOptions.html);
                 const dom = parser.parseFromString(html, 'text/html');
 
                 // Attach supported attribute directives
