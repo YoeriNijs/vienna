@@ -10,6 +10,7 @@ import {VInternalTemplateTransformer} from "./handlers/v-internal-template-trans
 import {VInternalAttributeTransformer} from "./handlers/v-internal-attribute-transformer";
 import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
 import {VInternalTemplate} from "../template-engine/v-internal-template";
+import {getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 
 interface VElement {
     publicDataName: string;
@@ -274,9 +275,7 @@ export class VInternalRenderer {
                     methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
                         .split(',')
                         .filter(v => v.length > 0)
-                        .map(v => `{{ ${v} }}`)
-                        .map(v => new VInternalTemplate(v))
-                        .map((template) => VInternalTemplateEngine.render(template, component))
+                        .map(v => getNestedPropertyByStringPath(component, v))
                         .forEach((value) => methodVariables.push(value));
 
                     // Then, just replace the method name by the name without arguments
