@@ -8,7 +8,8 @@ import { VComponentType } from '../component/v-component-type';
 import {VInternalRendererTransformer} from "./handlers/v-internal-renderer-transformer";
 import {VInternalTemplateTransformer} from "./handlers/v-internal-template-transformer";
 import {VInternalAttributeTransformer} from "./handlers/v-internal-attribute-transformer";
-import { VRendererUtil } from './v-renderer-util';
+import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
+import {VInternalTemplate} from "../template-engine/v-internal-template";
 
 interface VElement {
     publicDataName: string;
@@ -273,7 +274,9 @@ export class VInternalRenderer {
                     methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
                         .split(',')
                         .filter(v => v.length > 0)
-                        .map((variableName) => VRendererUtil.getValueForTemplateReference(component, variableName, this.attributes))
+                        .map(v => `{{ ${v} }}`)
+                        .map(v => new VInternalTemplate(v))
+                        .map((template) => VInternalTemplateEngine.render(template, component))
                         .forEach((value) => methodVariables.push(value));
 
                     // Then, just replace the method name by the name without arguments
