@@ -1,13 +1,18 @@
 import {VRenderError} from './v-render-error';
-import {VSanitizer} from './v-sanitizer';
 import 'reflect-metadata';
 import { VComponentType } from '../component/v-component-type';
 
+/**
+ * @deprecated
+ */
 export class VRendererUtil {
     private constructor() {
         // Util class
     }
 
+    /**
+     * @deprecated
+     */
     public static getValueForTemplateReference(component: VComponentType, templateReference: string, attributes: NamedNodeMap) {
         // First, check for binded attributes since they have a higher weight than object keys
         const attributeValue = this.getValueFromAttribute(attributes, component, templateReference);
@@ -32,8 +37,8 @@ export class VRendererUtil {
                 return name === templateReference;
             });
         if (bindedProperty) {
-            const value = bindedProperty.value;
-            return typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
+            return bindedProperty.value;
+            // return typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
         } else {
             return undefined;
         }
@@ -45,6 +50,7 @@ export class VRendererUtil {
             const prop = templateReference.substring(templateReference.indexOf('.') + 1, templateReference.length);
             prop.split('.').forEach((nestedProp) => value = value[nestedProp]); // To the nested prop we go
         }
-        return typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
+        return value;
+        // return typeof value === 'string' ? VSanitizer.sanitizeHtml(value) : value;
     }
 }

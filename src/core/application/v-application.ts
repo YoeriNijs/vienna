@@ -1,5 +1,5 @@
 import {VRouter} from '../router/v-router';
-import {VRenderer} from '../renderer/v-renderer';
+import {VInternalRenderer} from '../renderer/v-internal-renderer';
 import {VRouterEvents, VRouterNavigatedEvent} from '../router/v-router-event';
 import {VRoute} from '../router/v-route';
 import {VInternalComponent} from '../internal/v-internal-component';
@@ -15,7 +15,7 @@ export function VApplication(config: VApplicationConfig) {
             name: 'VApplication',
         })
         class InternalVApplication {
-            private readonly _mainRenderer: VRenderer = new VRenderer({
+            private readonly _mainRenderer: VInternalRenderer = new VInternalRenderer({
                 selector: 'v-app-renderer',
             });
             private readonly _declarations: VComponentType[] = config.declarations.map((c: Type<VComponentType>) => VComponentInjector.resolve<VComponentType>(c));

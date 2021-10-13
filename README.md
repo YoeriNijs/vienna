@@ -17,6 +17,9 @@ See demo app to see how the framework works.
 - Work with global styling somehow (e.g. Constructable Stylesheet Objects, see https://wicg.github.io/construct-stylesheets/)
 - Support query params
 - Fix direct route bug
+  
+# Literature
 - https://www.thinktecture.com/en/web-components/flaws/
 - https://hackernoon.com/how-to-create-new-template-engine-using-javascript-8f26313p
-- https://www.raresportan.com/object-change-detection/
+- https://www.raresportan.com/object-change-detection/ (using Proxy)
+- https://fatfreeframework.com/3.7/views-and-templates (nice example of directive syntax)

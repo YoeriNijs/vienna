@@ -2,11 +2,13 @@ import {isEmpty} from 'pincet';
 import {VRendererOptions} from './v-renderer-options';
 import {VComponentOptions} from '../component/v-component-options';
 import {VInternalComponent} from '../internal/v-internal-component';
-import {VRendererUtil} from './v-renderer-util';
 import {VRenderError} from "./v-render-error";
-import {VHtmlParser} from "./v-html-parser";
 import {VRenderEvents} from "./v-render-events";
 import { VComponentType } from '../component/v-component-type';
+import {VInternalRendererTransformer} from "./handlers/v-internal-renderer-transformer";
+import {VInternalTemplateTransformer} from "./handlers/v-internal-template-transformer";
+import {VInternalAttributeTransformer} from "./handlers/v-internal-attribute-transformer";
+import { VRendererUtil } from './v-renderer-util';
 
 interface VElement {
     publicDataName: string;
@@ -45,7 +47,7 @@ enum InternalLifeCycleHook {
 @VInternalComponent({
     name: 'VRenderer',
 })
-export class VRenderer {
+export class VInternalRenderer {
     private readonly _view: HTMLElement;
 
     constructor(options: VRendererOptions) {
@@ -82,6 +84,10 @@ export class VRenderer {
 
             private _shadow;
             private _lastKnownHtml: string;
+            private _transformers: VInternalRendererTransformer[] = [
+                new VInternalAttributeTransformer(),
+                new VInternalTemplateTransformer()
+            ]
 
             constructor() {
                 super();
@@ -107,11 +113,11 @@ export class VRenderer {
 
                 this._shadow.append(style);
 
-                const componentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html, this.attributes);
-                this._lastKnownHtml = componentHtml;
+                // Todo: bind attribute values with prop annotation -> add new transformer
+                const html = this._transformers.reduce((prevTransformer, currentTransformer) => currentTransformer.transform(prevTransformer, componentType, this.attributes), declaredComponentOptions.html);
 
                 const parser = new DOMParser();
-                const dom = parser.parseFromString(componentHtml, 'text/html');
+                const dom = parser.parseFromString(html, 'text/html');
 
                 // Attach supported attribute directives
                 SUPPORTED_ATTRIBUTE_MANIPULATORS.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, componentType, dom));
@@ -129,8 +135,9 @@ export class VRenderer {
                 // Call init lifecycle hook
                 this.callLifeCycleHook(InternalLifeCycleHook.INIT, componentType);
 
+                // Todo: replace this setInterval by proxy
                 // Enable change detection loop
-                setInterval(() => this.detectChanges(), 300);
+                // setInterval(() => this.detectChanges(), 300);
             }
 
             attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
@@ -186,11 +193,11 @@ export class VRenderer {
             }
 
             private detectChanges() {
-                const currentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html, this.attributes);
-                if (this._lastKnownHtml !== currentHtml) {
-                    this._lastKnownHtml = currentHtml;
-                    this.forceRebuild();
-                }
+                // const currentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html, this.attributes);
+                // if (this._lastKnownHtml !== currentHtml) {
+                //     this._lastKnownHtml = currentHtml;
+                //     this.forceRebuild();
+                // }
             }
 
             private attachDomEvents(vDomEvent: VDomEvent, component: VComponentType): void {
