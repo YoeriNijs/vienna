@@ -3,7 +3,7 @@ import {Prop, VComponent} from '../../core';
 @VComponent({
     selector: 'app-navbar',
     styles: [`
-		.header {
+		:host {
             background-color: blue;
             color: #fff;
 			display: flex;
@@ -13,11 +13,7 @@ import {Prop, VComponent} from '../../core';
 			padding: 10px;
 		}
 	`],
-    html: `
-		<section class="header">
-			<div class="title">{{ title }}</div>
-		</section>
-	`,
+    html: `<div class="title">{{ title }}</div>`
 })
 export class NavbarComponent {
     @Prop() title: string = 'My navbar title';

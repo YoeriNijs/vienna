@@ -4,11 +4,14 @@ import {VComponentOptions} from '../component/v-component-options';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VRenderError} from "./v-render-error";
 import {VRenderEvents} from "./v-render-events";
-import { VComponentType } from '../component/v-component-type';
-import {VInternalRendererTransformer} from "./handlers/v-internal-renderer-transformer";
-import {VInternalTemplateTransformer} from "./handlers/v-internal-template-transformer";
-import {VInternalAttributeTransformer} from "./handlers/v-internal-attribute-transformer";
+import {VComponentType} from '../component/v-component-type';
+import {VInternalHtmlTransformer} from "./transformers/html/v-internal-html-transformer";
+import {VInternalTemplateTransformer} from "./transformers/html/v-internal-template-transformer";
 import {getNestedPropertyByStringPath} from "../util/v-internal-object-util";
+import {VInternalStyleTransformer} from "./transformers/html/v-internal-style-transformer";
+import {VInternalControllerTransformer} from "./transformers/controller/v-internal-controller-transformer";
+import {VInternalAttributeTransformer} from "./transformers/controller/v-internal-attribute-transformer";
+import {VInternalCheckTransformer} from "./transformers/html/v-internal-check-transformer";
 
 interface VElement {
     publicDataName: string;
@@ -78,23 +81,24 @@ export class VInternalRenderer {
             throw new VRenderError('Component is not a Vienna Component');
         }
 
-        const declaredComponentOptions: VComponentOptions = JSON.parse(componentType.vComponentOptions);
+        const options: VComponentOptions = JSON.parse(componentType.vComponentOptions);
 
         class DeclaredElement extends HTMLElement {
 
-            private _shadow;
-            private _lastKnownHtml: string;
-            private _transformers: VInternalRendererTransformer[] = [
-                new VInternalAttributeTransformer(),
-                new VInternalTemplateTransformer()
-            ]
+            private _shadow: ShadowRoot;
+            private _controllerTransformers: VInternalControllerTransformer[] = [
+                new VInternalAttributeTransformer()
+            ];
+            private _htmlTransformers: VInternalHtmlTransformer[] = [
+                new VInternalTemplateTransformer(),
+                new VInternalStyleTransformer(),
+                new VInternalCheckTransformer()
+            ];
 
             constructor() {
                 super();
 
-                const mode = declaredComponentOptions.encapsulationMode
-                    ? declaredComponentOptions.encapsulationMode
-                    : 'closed';
+                const mode = options.encapsulationMode ? options.encapsulationMode : 'closed';
                 this._shadow = this.attachShadow({mode});
 
                 this.render();
@@ -106,72 +110,70 @@ export class VInternalRenderer {
             }
 
             render() {
-                const style = document.createElement('style');
-                style.innerHTML = declaredComponentOptions.styles.length < 1
-                    ? ''
-                    : declaredComponentOptions.styles.join();
-                this._shadow.append(style);
+                // Transform internal component state
+                const component = this._controllerTransformers.reduce((component, transformer) => {
+                    return transformer.transform(component, this.attributes);
+                }, componentType);
 
-                const parser = new DOMParser();
-                const html = this._transformers.reduce((prevTransformer, currentTransformer) => {
-                        return currentTransformer.transform(prevTransformer, componentType, this.attributes)
-                    }, declaredComponentOptions.html);
-                const dom = parser.parseFromString(html, 'text/html');
+                // Transform visible component view
+                const html = this._htmlTransformers.reduce((html, transformer) => {
+                    return transformer.transform(html, component, this.attributes)
+                }, options.html);
 
                 // Attach supported attribute directives
-                SUPPORTED_ATTRIBUTE_MANIPULATORS.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, componentType, dom));
+                const parser = new DOMParser();
+                const dom = parser.parseFromString(html, 'text/html');
+                // SUPPORTED_ATTRIBUTE_MANIPULATORS.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, component, dom));
 
-                const htmlContainer = dom.createElement(`${declaredComponentOptions.selector}-body`);
-                htmlContainer.innerHTML = dom.body.innerHTML;
-                this._shadow.appendChild(htmlContainer);
+                this._shadow.append(dom.head, dom.body);
 
                 // Attach supported dom events
-                SUPPORTED_DOM_EVENTS.forEach((vDomEvent) => this.attachDomEvents(vDomEvent, componentType));
+                SUPPORTED_DOM_EVENTS.forEach((vDomEvent) => this.attachDomEvents(vDomEvent, component));
 
                 // Bind
-                SUPPORTED_ATTRIBUTE_BINDINGS.forEach((b) => this.bind(b, componentType));
+                SUPPORTED_ATTRIBUTE_BINDINGS.forEach((b) => this.bind(b, component));
 
                 // Call init lifecycle hook
-                this.callLifeCycleHook(InternalLifeCycleHook.INIT, componentType);
+                this.callLifeCycleHook(InternalLifeCycleHook.INIT, component);
 
                 // Todo: replace this setInterval by proxy
                 // Enable change detection loop
                 // setInterval(() => this.detectChanges(), 300);
             }
 
-            attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
-                if (!this._shadow.children) {
-                    return;
-                }
-
-                const elements = dom.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
-                if (!elements) {
-                    return;
-                }
-
-                Array.from(elements).forEach((el: HTMLElement) => {
-                    const value = el.dataset[directive.internalDataName];
-                    if (directive.internalDataName === 'vIf') {
-                        const shouldRender = this.callInternalMethod(component, value, el);
-                        if (!shouldRender) {
-                            el.parentNode.removeChild(el);
-                        }
-                    } else if (directive.internalDataName === 'vIfNot') {
-                        const shouldNotRender = this.callInternalMethod(component, value, el);
-                        if (shouldNotRender) {
-                            el.parentNode.removeChild(el);
-                        }
-                    } else if (directive.internalDataName === 'vFor') {
-                        const number = this.callInternalMethod(component, value, el);
-                        if (number > 0) {
-                            for (let i = 0; i < number - 1; i++) {
-                                const clone = el.cloneNode(true);
-                                el.parentNode.insertBefore(clone, el);
-                            }
-                        }
-                    }
-                });
-            }
+            // attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
+            //     if (!this._shadow.children) {
+            //         return;
+            //     }
+            //
+            //     const elements = dom.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
+            //     if (!elements) {
+            //         return;
+            //     }
+            //
+            //     Array.from(elements).forEach((el: HTMLElement) => {
+            //         const value = el.dataset[directive.internalDataName];
+            //         if (directive.internalDataName === 'vIf') {
+            //             const shouldRender = this.callInternalMethod(component, value, el);
+            //             if (!shouldRender) {
+            //                 el.parentNode.removeChild(el);
+            //             }
+            //         } else if (directive.internalDataName === 'vIfNot') {
+            //             const shouldNotRender = this.callInternalMethod(component, value, el);
+            //             if (shouldNotRender) {
+            //                 el.parentNode.removeChild(el);
+            //             }
+            //         } else if (directive.internalDataName === 'vFor') {
+            //             const number = this.callInternalMethod(component, value, el);
+            //             if (number > 0) {
+            //                 for (let i = 0; i < number - 1; i++) {
+            //                     const clone = el.cloneNode(true);
+            //                     el.parentNode.insertBefore(clone, el);
+            //                 }
+            //             }
+            //         }
+            //     });
+            // }
 
             bind(directive: VAttributeDirective, component: VComponentType): void {
                 if (!this._shadow.children) {
@@ -293,7 +295,7 @@ export class VInternalRenderer {
             }
         }
 
-        const selector = declaredComponentOptions.selector;
+        const selector = options.selector;
         if (selector.indexOf('-') === -1) {
             throw new VRenderError(`Selector '${selector}' must have a hyphen`);
         }

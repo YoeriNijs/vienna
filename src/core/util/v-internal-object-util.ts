@@ -35,7 +35,7 @@ export const getNestedPropertyByStringPath = (obj: any, path: string): any => {
 }
 
 export const getDefinedOrElse = <T>(obj: T, fn: () => void): T => {
-    if (obj) {
+    if (obj !== undefined && obj !== null) {
         return obj;
     } else {
         fn();
