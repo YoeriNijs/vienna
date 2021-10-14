@@ -17,6 +17,10 @@ See demo app to see how the framework works.
 - Work with global styling somehow (e.g. Constructable Stylesheet Objects, see https://wicg.github.io/construct-stylesheets/)
 - Support query params
 - Fix direct route bug
+- Use transformers to transform component values first based on current attribute bindings
+
+# Ideas
+- Support optional dark mode (css variables)
   
 # Literature
 - https://www.thinktecture.com/en/web-components/flaws/
