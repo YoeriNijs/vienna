@@ -1,4 +1,4 @@
-import {Prop, VComponent} from '../../core';
+import {VComponent, VProp} from '../../core';
 
 @VComponent({
     selector: 'app-navbar',
@@ -16,5 +16,5 @@ import {Prop, VComponent} from '../../core';
     html: `<div class="title">{{ title }}</div>`
 })
 export class NavbarComponent {
-    @Prop() title: string = 'My navbar title';
+    @VProp() title: string = 'My navbar title';
 }

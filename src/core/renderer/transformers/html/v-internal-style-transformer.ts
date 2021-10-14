@@ -6,9 +6,9 @@ export class VInternalStyleTransformer implements VInternalHtmlTransformer {
     transform(html: string, component: VComponentType): string {
         const options: VComponentOptions = JSON.parse(component.vComponentOptions);
         const componentCss = options.styles.join();
-        const defaultBodyCss = `body { padding: 0; margin: 0; }`;
-        const style = `<style>${defaultBodyCss}${componentCss}</style>`;
-        return `${style}${html}`;
+        const bodyCss = `body { padding: 0; margin: 0; }`;
+        const style = `<style>${bodyCss}${componentCss}</style>`;
+        const cleanedStyle = style.replace(/\s\s+/g, ' '); // To remove redundant whitespaces
+        return `${cleanedStyle}${html}`;
     }
-
 }
