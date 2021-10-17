@@ -1,4 +1,4 @@
-export const getUrlParameter = (name: string) => {
+export const getUrlParameter = (name: string): string => {
     name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
     const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
     const results = regex.exec(location.search);
