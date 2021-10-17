@@ -54,10 +54,6 @@ interface User {
                 </div>
             </false>
         </v-check>
-        
-<!--        <v-loop for="{{ let i; i < var; i++ }}">-->
-<!--            <span>{{ var[i] }}</span>-->
-<!--        </v-loop>-->
 		
 		<app-footer>Footer from homepage</app-footer>
 	`
@@ -79,7 +75,7 @@ export class HomeComponent implements VInit {
     }
 
     vInit(): void {
-        console.log('Init lifecycle hook...');
+        this.username.focus();
     }
 
     login(): void {

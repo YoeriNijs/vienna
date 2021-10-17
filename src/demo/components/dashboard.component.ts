@@ -2,17 +2,31 @@ import {VComponent} from '../../core';
 
 @VComponent({
     selector: 'app-dashboard',
-    styles: [],
+    styles: [`
+        :host { 
+            display: flex; 
+            flex-direction: column;
+        }
+        
+        div.menu { 
+            font-weight: bold;
+            margin-top: 4px;
+        } 
+    `],
     html: `
+        <div class="menu">Menu</div>
         <ul>
-            <li data-v-for="calculateMenuItems()">
-                <a href="#/personal">menu item</a>
-            </li>
+            <v-repeat for="{ item } of {{ menuItems }}">
+                <li>
+                    <a href="{ item.link }">{ item.name }</a>
+                </li>
+            <v-repeat>
         </ul>
 	`,
 })
 export class DashboardComponent {
-    calculateMenuItems() {
-        return 2;
-    }
+    menuItems = [
+        {name: 'personal', link: '#/personal'},
+        {name: 'settings', link: '#/settings'}
+    ];
 }

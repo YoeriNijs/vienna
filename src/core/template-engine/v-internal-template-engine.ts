@@ -2,8 +2,6 @@ import {VInternalTemplate} from "./v-internal-template";
 import {VTemplateRenderException} from "./v-template-render-exception";
 import {getDefinedOrElse, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 
-const REGEX_REFERENCE_WITH_BRACKETS = /{{(.*?)}}/g;
-const REGEX_REFERENCE_WITHOUT_BRACKETS = /{{|}}/;
 const REGEX_TAG_BODY = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
 const REGEX_TAG_OR_COMMENT = new RegExp(
     `${'<(?:'
@@ -21,9 +19,15 @@ const REGEX_TAG_OR_COMMENT = new RegExp(
 
 export class VInternalTemplateEngine {
 
-    public static render(template: VInternalTemplate, data: any): string {
-        return template.get().replace(REGEX_REFERENCE_WITH_BRACKETS, (match: string) => {
-            const templateReference = match.split(REGEX_REFERENCE_WITHOUT_BRACKETS)
+    private constructor() {
+        // Util class
+    }
+
+    public static render(template: VInternalTemplate, data: any, prefix = '{{', suffix = '}}'): string {
+        const regexRefWithBrackets = new RegExp(`${prefix}(.*?)${suffix}`, 'g');
+        const regexRefWithoutBrackets = new RegExp(`${prefix}|${suffix}`);
+        return template.get().replace(regexRefWithBrackets, (match: string) => {
+            const templateReference = match.split(regexRefWithoutBrackets)
                 .filter(v => v)[0]
                 .trim();
             const rawValue = getNestedPropertyByStringPath(data, templateReference);
@@ -42,9 +46,5 @@ export class VInternalTemplateEngine {
             value = value.replace(REGEX_TAG_OR_COMMENT, '');
         } while (value !== prev);
         return value.replace(/</g, '&lt;');
-    }
-
-    private constructor() {
-        // Util class
     }
 }

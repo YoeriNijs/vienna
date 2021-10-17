@@ -1,5 +1,5 @@
 import {isEmpty} from 'pincet';
-import {VRendererOptions} from './v-renderer-options';
+import {VInternalRendererOptions} from './v-internal-renderer-options';
 import {VComponentOptions} from '../component/v-component-options';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VRenderError} from "./v-render-error";
@@ -12,6 +12,7 @@ import {VInternalStyleTransformer} from "./transformers/html/v-internal-style-tr
 import {VInternalControllerTransformer} from "./transformers/controller/v-internal-controller-transformer";
 import {VInternalAttributeTransformer} from "./transformers/controller/v-internal-attribute-transformer";
 import {VInternalCheckTransformer} from "./transformers/html/v-internal-check-transformer";
+import {VInternalRepeatTransformer} from "./transformers/html/v-internal-repeat-transformer";
 
 interface VElement {
     publicDataName: string;
@@ -32,12 +33,6 @@ const SUPPORTED_DOM_EVENTS: VDomEvent[] = [
     {publicDataName: 'v-click', internalDataName: 'vClick', domEvent: 'click'},
 ];
 
-const SUPPORTED_ATTRIBUTE_MANIPULATORS: VAttributeDirective[] = [
-    {publicDataName: 'v-if', internalDataName: 'vIf'},
-    {publicDataName: 'v-if-not', internalDataName: 'vIfNot'},
-    {publicDataName: 'v-for', internalDataName: 'vFor'}
-];
-
 const SUPPORTED_ATTRIBUTE_BINDINGS: VAttributeBinding[] = [
     {publicDataName: 'v-bind', internalDataName: 'vBind'}
 ]
@@ -53,7 +48,7 @@ enum InternalLifeCycleHook {
 export class VInternalRenderer {
     private readonly _view: HTMLElement;
 
-    constructor(options: VRendererOptions) {
+    constructor(options: VInternalRendererOptions) {
         this._view = document.createElement(options.selector);
         const body = document.querySelector('body');
         if (body) {
@@ -90,6 +85,7 @@ export class VInternalRenderer {
                 new VInternalAttributeTransformer()
             ];
             private _htmlTransformers: VInternalHtmlTransformer[] = [
+                new VInternalRepeatTransformer(),
                 new VInternalTemplateTransformer(),
                 new VInternalStyleTransformer(),
                 new VInternalCheckTransformer()
@@ -141,40 +137,6 @@ export class VInternalRenderer {
                 // setInterval(() => this.detectChanges(), 300);
             }
 
-            // attachAttributeDirective(directive: VAttributeDirective, component: VComponentType, dom: Document): void {
-            //     if (!this._shadow.children) {
-            //         return;
-            //     }
-            //
-            //     const elements = dom.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
-            //     if (!elements) {
-            //         return;
-            //     }
-            //
-            //     Array.from(elements).forEach((el: HTMLElement) => {
-            //         const value = el.dataset[directive.internalDataName];
-            //         if (directive.internalDataName === 'vIf') {
-            //             const shouldRender = this.callInternalMethod(component, value, el);
-            //             if (!shouldRender) {
-            //                 el.parentNode.removeChild(el);
-            //             }
-            //         } else if (directive.internalDataName === 'vIfNot') {
-            //             const shouldNotRender = this.callInternalMethod(component, value, el);
-            //             if (shouldNotRender) {
-            //                 el.parentNode.removeChild(el);
-            //             }
-            //         } else if (directive.internalDataName === 'vFor') {
-            //             const number = this.callInternalMethod(component, value, el);
-            //             if (number > 0) {
-            //                 for (let i = 0; i < number - 1; i++) {
-            //                     const clone = el.cloneNode(true);
-            //                     el.parentNode.insertBefore(clone, el);
-            //                 }
-            //             }
-            //         }
-            //     });
-            // }
-
             bind(directive: VAttributeDirective, component: VComponentType): void {
                 if (!this._shadow.children) {
                     return;
@@ -212,6 +174,7 @@ export class VInternalRenderer {
                 }
 
                 Array.from(elements).forEach((el) => {
+                    console.log(el.attributes);
                     const methodName = el.dataset[vDomEvent.internalDataName];
                     Array.from(this._shadow.children)
                         .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
