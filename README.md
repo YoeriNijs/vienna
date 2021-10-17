@@ -15,12 +15,12 @@ See demo app to see how the framework works.
 - Implement change detection inside component
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
   instead of all)
-- Refactor arguments in methods in views
 - Add unit tests
 - Work with global styling somehow (e.g. Constructable Stylesheet Objects,
   see https://wicg.github.io/construct-stylesheets/)
 - Support query params
 - Fix direct route bug
+- Use Rollup instead of Webpack since it generates a much smaller bundle size
 
 # Ideas
 

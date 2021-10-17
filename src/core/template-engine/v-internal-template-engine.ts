@@ -1,6 +1,7 @@
 import {VInternalTemplate} from "./v-internal-template";
 import {VTemplateRenderException} from "./v-template-render-exception";
 import {getDefinedOrElse, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
+import {escapeBracketsInRegex} from "../util/v-internal-regex-util";
 
 const REGEX_TAG_BODY = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
 const REGEX_TAG_OR_COMMENT = new RegExp(
@@ -24,8 +25,8 @@ export class VInternalTemplateEngine {
     }
 
     public static render(template: VInternalTemplate, data: any, prefix = '{{', suffix = '}}'): string {
-        const regexRefWithBrackets = new RegExp(`${prefix}(.*?)${suffix}`, 'g');
-        const regexRefWithoutBrackets = new RegExp(`${prefix}|${suffix}`);
+        const regexRefWithBrackets = new RegExp(escapeBracketsInRegex(`${prefix}(.*?)${suffix}`), 'g');
+        const regexRefWithoutBrackets = new RegExp(escapeBracketsInRegex(`${prefix}|${suffix}`));
         return template.get().replace(regexRefWithBrackets, (match: string) => {
             const templateReference = match.split(regexRefWithoutBrackets)
                 .filter(v => v)[0]

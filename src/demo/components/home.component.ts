@@ -36,7 +36,7 @@ interface User {
                     <span>Hi there, {{ user.name }}!</span>
                     <app-dashboard></app-dashboard>
                     <div class="btn-menu">
-                        <button data-v-click="logoff(user.name)">Log off</button>
+                        <button data-v-click="logoff({{user.name}}, 43, '3')">Log off</button>
                     </div>
                 </div>
             </true>
@@ -87,7 +87,8 @@ export class HomeComponent implements VInit {
         }
     }
 
-    logoff(name: string): void {
+    logoff(name: string, nogwat: any, nogwat2: any): void {
+        console.log(name, nogwat, nogwat2);
         this.loginService.logoff(name);
         this.isLoggedIn = false;
     }

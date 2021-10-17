@@ -7,12 +7,13 @@ import {VRenderEvents} from "./v-render-events";
 import {VComponentType} from '../component/v-component-type';
 import {VInternalHtmlTransformer} from "./transformers/html/v-internal-html-transformer";
 import {VInternalTemplateTransformer} from "./transformers/html/v-internal-template-transformer";
-import {getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 import {VInternalStyleTransformer} from "./transformers/html/v-internal-style-transformer";
 import {VInternalControllerTransformer} from "./transformers/controller/v-internal-controller-transformer";
 import {VInternalAttributeTransformer} from "./transformers/controller/v-internal-attribute-transformer";
 import {VInternalCheckTransformer} from "./transformers/html/v-internal-check-transformer";
 import {VInternalRepeatTransformer} from "./transformers/html/v-internal-repeat-transformer";
+import {VInternalTemplate} from "../template-engine/v-internal-template";
+import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
 
 interface VElement {
     publicDataName: string;
@@ -233,11 +234,14 @@ export class VInternalRenderer {
                 const indexOfLastParenthesis = methodName.indexOf(')');
                 if (indexOfFirstParenthesis !== -1 && indexOfLastParenthesis !== -1) {
                     // First, we find the actual values for the variables that we have some references for
-                    methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
+                    const actualValues = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
                         .split(',')
                         .filter(v => v.length > 0)
-                        .map(v => getNestedPropertyByStringPath(component, v))
-                        .forEach((value) => methodVariables.push(value));
+                        .map(v => {
+                            const template = new VInternalTemplate(v);
+                            return VInternalTemplateEngine.render(template, component);
+                        });
+                    methodVariables.push(...actualValues);
 
                     // Then, just replace the method name by the name without arguments
                     methodName = methodName.substring(0, indexOfFirstParenthesis);
