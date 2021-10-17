@@ -13,16 +13,21 @@ See demo app to see how the framework works.
 
 - Implement input bindings from component variable
 - Implement change detection inside component
+- Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
+  instead of all)
+- Refactor arguments in methods in views
 - Add unit tests
-- Work with global styling somehow (e.g. Constructable Stylesheet Objects, see https://wicg.github.io/construct-stylesheets/)
+- Work with global styling somehow (e.g. Constructable Stylesheet Objects,
+  see https://wicg.github.io/construct-stylesheets/)
 - Support query params
 - Fix direct route bug
-- Use transformers to transform component values first based on current attribute bindings
 
 # Ideas
+
 - Support optional dark mode (css variables)
-  
+
 # Literature
+
 - https://www.thinktecture.com/en/web-components/flaws/
 - https://hackernoon.com/how-to-create-new-template-engine-using-javascript-8f26313p
 - https://www.raresportan.com/object-change-detection/ (using Proxy)

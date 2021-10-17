@@ -174,7 +174,6 @@ export class VInternalRenderer {
                 }
 
                 Array.from(elements).forEach((el) => {
-                    console.log(el.attributes);
                     const methodName = el.dataset[vDomEvent.internalDataName];
                     Array.from(this._shadow.children)
                         .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
