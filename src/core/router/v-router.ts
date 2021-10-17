@@ -38,7 +38,14 @@ export class VRouter {
     }
 
     private findRoute(url: string): VRoute {
-        const resolvedRoute = this._routes.find((r) => r.path === url);
+        const resolvedRoute = this._routes.find((r) => {
+            const paramIndex = url.indexOf('?');
+            if (paramIndex === -1) {
+                return r.path === url;
+            } else {
+                return r.path === url.substring(0, paramIndex);
+            }
+        });
         if (resolvedRoute) {
             return resolvedRoute;
         }
