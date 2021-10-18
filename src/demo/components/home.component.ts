@@ -1,5 +1,5 @@
 import {VComponent, VInit} from '../../core';
-import {LoginService} from './login.service';
+import {LoginService} from "../services/login.service";
 
 interface ContactInformation {
     email: string;
