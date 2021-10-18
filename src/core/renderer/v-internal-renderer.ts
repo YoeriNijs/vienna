@@ -39,6 +39,7 @@ const SUPPORTED_ATTRIBUTE_BINDINGS: VAttributeBinding[] = [
 ]
 
 enum InternalLifeCycleHook {
+    DESTROY,
     INIT,
     UNKNOWN
 }
@@ -213,6 +214,9 @@ export class VInternalRenderer {
                 switch (hook) {
                     case InternalLifeCycleHook.INIT:
                         this.callInternalMethod(component, 'vInit');
+                        break;
+                    case InternalLifeCycleHook.DESTROY:
+                        this.callInternalMethod(component, 'vDestroy');
                         break;
                     case InternalLifeCycleHook.UNKNOWN:
                     default:

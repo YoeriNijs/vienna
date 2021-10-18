@@ -1,9 +1,12 @@
-import {VComponent, VInit} from '../../core';
-import {LoginService} from "../services/login.service";
+import {VComponent} from '../../core';
 
 @VComponent({
     selector: 'app-personal',
-    styles: [],
+    styles: [`
+        .container {
+            margin: 10px 0;
+        }
+    `],
     html: `
         <app-navbar title="My fancy app :: Personal"></app-navbar>
  
@@ -12,17 +15,10 @@ import {LoginService} from "../services/login.service";
             <button data-v-click="navigateBack()"><< back</button>
 		</div>
 		
-		<app-footer></app-footer>
+		<app-footer>Footer from personal</app-footer>
 	`,
 })
-export class PersonalComponent implements VInit {
-
-    constructor(private loginService: LoginService) {
-    }
-
-    vInit(): void {
-        console.log('Is logged in according to service?', this.loginService.isLoggedIn);
-    }
+export class PersonalComponent {
 
     navigateBack(): void {
         window.history.back();
