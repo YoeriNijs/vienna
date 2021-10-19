@@ -3,7 +3,6 @@ import {VInternalRendererOptions} from './v-internal-renderer-options';
 import {VComponentOptions} from '../component/v-component-options';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VRenderError} from "./v-render-error";
-import {VRenderEvents} from "./v-render-events";
 import {VComponentType} from '../component/v-component-type';
 import {VInternalHtmlTransformer} from "./transformers/html/v-internal-html-transformer";
 import {VInternalTemplateTransformer} from "./transformers/html/v-internal-template-transformer";
@@ -14,6 +13,8 @@ import {VInternalCheckTransformer} from "./transformers/html/v-internal-check-tr
 import {VInternalRepeatTransformer} from "./transformers/html/v-internal-repeat-transformer";
 import {VInternalTemplate} from "../template-engine/v-internal-template";
 import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
+import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
+import {VInternalEventName} from "../eventbus/v-internal-event-name";
 
 interface VElement {
     publicDataName: string;
@@ -49,8 +50,10 @@ enum InternalLifeCycleHook {
 })
 export class VInternalRenderer {
     private readonly _view: HTMLElement;
+    private readonly _eventBus: VInternalEventbus;
 
     constructor(options: VInternalRendererOptions) {
+        this._eventBus = options.eventBus;
         this._view = document.createElement(options.selector);
         const body = document.querySelector('body');
         if (body) {
@@ -63,7 +66,7 @@ export class VInternalRenderer {
     public renderRoot(component: unknown & VComponentType, allComponents: VComponentType[]) {
         this.clearHtml();
 
-        allComponents.forEach(this.defineAsWebComponent);
+        allComponents.forEach(c => this.defineAsWebComponent(c, this._eventBus));
 
         const rootOptions: VComponentOptions = JSON.parse(component.vComponentOptions)
         this._view.innerHTML = `<${rootOptions.selector}></${rootOptions.selector}>`;
@@ -73,7 +76,7 @@ export class VInternalRenderer {
         this._view.innerHTML = '';
     }
 
-    private defineAsWebComponent(componentType: VComponentType) {
+    private defineAsWebComponent(componentType: VComponentType, eventBus: VInternalEventbus) {
         if (!componentType.vComponentOptions) {
             throw new VRenderError('Component is not a Vienna Component');
         }
@@ -103,8 +106,7 @@ export class VInternalRenderer {
             }
 
             forceRebuild() {
-                const event = new CustomEvent(VRenderEvents.REBUILD);
-                document.dispatchEvent(event);
+                eventBus.publish(VInternalEventName.REBUILD);
             }
 
             render() {

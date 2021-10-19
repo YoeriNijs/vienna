@@ -16,8 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "pincet": "^0.4.2",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.4.0"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

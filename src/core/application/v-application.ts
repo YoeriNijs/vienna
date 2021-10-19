@@ -1,14 +1,14 @@
 import {VRouter} from '../router/v-router';
 import {VInternalRenderer} from '../renderer/v-internal-renderer';
-import {VRouterEvents, VRouterNavigatedEvent} from '../router/v-router-event';
 import {VRoute} from '../router/v-route';
 import {VInternalComponent} from '../internal/v-internal-component';
 import {VApplicationConfig} from './v-application-config';
-import {Type, VComponentInjector} from '../injector/v-component-injector';
-import {VRenderEvents} from "../renderer/v-render-events";
+import {Type, VInjector} from '../injector/v-injector';
 import {VRenderError} from "../renderer/v-render-error";
-import { VComponentType } from '../component/v-component-type';
-import {fromEvent} from "rxjs";
+import {VComponentType} from '../component/v-component-type';
+import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
+import {VInternalEventName} from "../eventbus/v-internal-event-name";
+import {VInternalRouterOptions} from "../router/v-internal-router-options";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -16,32 +16,44 @@ export function VApplication(config: VApplicationConfig) {
             name: 'VApplication',
         })
         class InternalVApplication {
-            private readonly _mainRenderer: VInternalRenderer = new VInternalRenderer({
-                selector: 'v-app-renderer',
-            });
-            private readonly _declarations: VComponentType[] = config.declarations.map((c: Type<VComponentType>) => VComponentInjector.resolve<VComponentType>(c));
-            private readonly _routes: VRoute[] = config.routes;
+            private readonly _eventBus: VInternalEventbus;
+            private readonly _mainRenderer: VInternalRenderer;
+            private readonly _declarations: VComponentType[];
+            private readonly _routes: VRoute[];
 
-            constructor() {
-                fromEvent(document, VRouterEvents.NAVIGATED).subscribe((event: VRouterNavigatedEvent<VRoute>) => {
-                    const root = this._declarations.find((declaredComponent) => declaredComponent instanceof event.detail.component);
-                    if (root) {
-                        this._mainRenderer.renderRoot(root, this._declarations);
-                        return fromEvent(document, VRenderEvents.REBUILD).subscribe(() => this._mainRenderer.renderRoot(root, this._declarations));
-                    } else {
-                        throw new VRenderError(`Cannot find declaration for path '${event.detail.path}'. Declare a class for this path in your Vienna application configuration.`);
-                    }
-                })
+            constructor(private eventBus: VInternalEventbus) {
+                this._eventBus = eventBus;
+                this._mainRenderer = new VInternalRenderer({
+                    selector: 'v-app-renderer',
+                    eventBus: this._eventBus
+                });
+                this._declarations = config.declarations.map((c: Type<VComponentType>) => VInjector.resolve<VComponentType>(c));
+                this._routes = config.routes;
 
-                const router = new VRouter(config.routeNotFoundStrategy);
+                this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) =>  this.renderComponentForRoute(route));
+
+                const routerOptions: VInternalRouterOptions = { eventBus: this._eventBus, routeNotFoundStrategy: config.routeNotFoundStrategy };
+                const router = new VRouter(routerOptions);
                 this._routes.forEach(route => router.addRoute(route));
+            }
+
+            private renderComponentForRoute(route: VRoute): void {
+                const root = this._declarations.find((declaredComponent) => declaredComponent instanceof (route.component as any));
+                if (root) {
+                    this._mainRenderer.renderRoot(root, this._declarations);
+                    this._eventBus.subscribe(VInternalEventName.REBUILD, () => this._mainRenderer.renderRoot(root, this._declarations));
+                } else {
+                    throw new VRenderError(`Cannot find declaration for path '${route.path}'. Declare a class for this path in your Vienna application configuration.`);
+                }
             }
         }
 
         return class extends target {
             constructor(...args: any[]) {
                 super(...args);
-                new InternalVApplication();
+
+                const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus);
+                new InternalVApplication(eventBus);
             }
         };
     }

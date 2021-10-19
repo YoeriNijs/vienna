@@ -1,4 +1,5 @@
-import {VComponent, VProp} from '../../core';
+import {VComponent, VInit, VProp} from '../../core';
+import {LoginService} from "../services/login.service";
 
 @VComponent({
     selector: 'app-navbar',
@@ -13,8 +14,19 @@ import {VComponent, VProp} from '../../core';
 			padding: 10px;
 		}
 	`],
-    html: `<div class="title">{{ title }}</div>`
+    html: `
+        <div class="title">{{ title }}</div>
+    `
 })
-export class NavbarComponent {
+export class NavbarComponent implements VInit {
     @VProp() title: string = 'My navbar title';
+    isLoggedIn: boolean;
+
+    constructor(private loginService: LoginService) {
+    }
+
+    vInit(): void {
+        this.isLoggedIn = this.loginService.isLoggedIn;
+        console.log('is logged in', this.isLoggedIn);
+    }
 }

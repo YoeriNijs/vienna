@@ -1,6 +1,6 @@
 import {VRouteData} from "./v-route-data";
 import {VCanActivateGuard} from "./v-can-activate-guard";
-import {Type} from "../injector/v-component-injector";
+import {Type} from "../injector/v-injector";
 
 export interface VRoute {
     path: string;

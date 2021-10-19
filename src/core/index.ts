@@ -15,4 +15,3 @@ export * from './router/v-route';
 export * from './router/v-route-data';
 export * from './router/v-route-not-found-strategy';
 export * from './router/v-route-params';
-export * from './router/v-router-event';

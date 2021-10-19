@@ -1,48 +1,51 @@
 import {VInjectable} from "../injector/v-injectable-decorator";
-import {BehaviorSubject, fromEvent, tap} from "rxjs";
-import {VRouterEvents, VRouterNavigatedEvent} from "./v-router-event";
-import {VRouteParams} from "./v-route-params";
-import {VRouteData} from "./v-route-data";
 import {VRoute} from "./v-route";
+import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
+import {VInternalEventName} from "../eventbus/v-internal-event-name";
+import {VRouteData} from "./v-route-data";
+import {VRouteParams} from "./v-route-params";
 
 @VInjectable()
 export class VActivatedRoute {
-    private _data$: BehaviorSubject<VRouteData> = new BehaviorSubject({});
-    private _params$: BehaviorSubject<VRouteParams> = new BehaviorSubject({});
 
-    get data$(): BehaviorSubject<VRouteData> {
-        return this._data$;
+    private _eventBus: VInternalEventbus;
+
+    public data(callBack: (data: VRouteData) => void): (data: VRouteData) => void {
+        this._eventBus.subscribe<VRouteData>(VInternalEventName.ROUTE_DATA, callBack);
+        return callBack;
     }
 
-    get params$(): BehaviorSubject<VRouteParams> {
-        return this._params$;
+    public params(callBack: (params: VRouteParams) => void): (params: VRouteParams) => void {
+        this._eventBus.subscribe<VRouteData>(VInternalEventName.ROUTE_PARAMS, callBack);
+        return callBack;
     }
 
-    constructor() {
-        fromEvent(document, VRouterEvents.NAVIGATED).pipe(
-            tap(() => this.setParams()),
-            tap((event: CustomEvent) => this.setData(event))
-        ).subscribe();
+    constructor(protected eventBus: VInternalEventbus) {
+        this._eventBus = eventBus;
+
+        eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
+            this.setParams();
+            this.setData(route);
+        });
     }
 
     private setParams(): void {
         const firstQuestionMark = window.location.hash.indexOf('?');
         if (firstQuestionMark === -1) {
-            this.params$.next({});
+            this._eventBus.publish(VInternalEventName.ROUTE_PARAMS, {});
         } else {
             const partialLocation = window.location.hash.substring(firstQuestionMark, window.location.hash.length);
             const searchParams = new URLSearchParams(partialLocation);
             const params = Object.fromEntries(searchParams.entries());
-            this._params$.next(params);
+            this._eventBus.publish(VInternalEventName.ROUTE_PARAMS, params);
         }
     }
 
-    private setData(event: VRouterNavigatedEvent<VRoute>): void {
-        const route: VRoute = event.detail;
+    private setData(route: VRoute): void {
         if (route.data) {
-            this._data$.next(route.data);
+            this._eventBus.publish(VInternalEventName.ROUTE_DATA, route.data);
         } else {
-            this._data$.next({});
+            this._eventBus.publish(VInternalEventName.ROUTE_DATA, {});
         }
     }
 

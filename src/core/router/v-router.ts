@@ -2,10 +2,11 @@ import {VInternalComponent} from '../internal/v-internal-component';
 import {VNoRouteException} from './v-no-route-exception';
 import {VRoute} from './v-route';
 import {VRouteNotFoundStrategy} from './v-route-not-found-strategy';
-import {VRouterEvents, VRouterNavigatedEvent} from './v-router-event';
-import {filter, from, fromEvent, isObservable, mergeMap, Observable, of, reduce, tap} from "rxjs";
-import {Type, VComponentInjector} from "../injector/v-component-injector";
+import {Type, VInjector} from "../injector/v-injector";
 import {VCanActivateGuard} from "./v-can-activate-guard";
+import {VInternalRouterOptions} from "./v-internal-router-options";
+import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
+import {VInternalEventName} from "../eventbus/v-internal-event-name";
 
 @VInternalComponent({
     name: 'VRouter',
@@ -13,12 +14,12 @@ import {VCanActivateGuard} from "./v-can-activate-guard";
 export class VRouter {
     private _routes: VRoute[] = [];
 
-    constructor(private routeNotFoundStrategy?: VRouteNotFoundStrategy) {
+    constructor(private options: VInternalRouterOptions) {
         window.location.href = window.location.hash.slice(1) === '/'
             ? '#'
             : `#/${window.location.hash.slice(1)}` || '#';
 
-        fromEvent(window, 'hashchange').subscribe(() => this.navigate());
+        window.addEventListener('hashchange', () => this.navigate());
     }
 
     addRoute(route: VRoute): VRouter {
@@ -32,15 +33,16 @@ export class VRouter {
         if (route === null) {
             this.handleRouteNotFound(url);
         } else {
-            this.canActivate(route).pipe(
-                filter(canActivate => canActivate),
-                tap(() => this.dispatchNavigationAction(route))
-            ).subscribe();
+            this.canActivate(route).then(canDispatch => {
+                if (canDispatch) {
+                    this.dispatchNavigationAction(route)
+                }
+            });
         }
     }
 
     private handleRouteNotFound(url: string): void {
-        if (this.routeNotFoundStrategy === VRouteNotFoundStrategy.IGNORE) {
+        if (this.options.routeNotFoundStrategy === VRouteNotFoundStrategy.IGNORE) {
             throw new VNoRouteException(`No route found for url '${url}'`);
         } else {
             // Default or root: navigate to root
@@ -57,32 +59,27 @@ export class VRouter {
                 return r.path === url.substring(0, paramIndex);
             }
         });
-        if (resolvedRoute) {
-            return resolvedRoute;
-        }
-        return null;
+        return resolvedRoute ? resolvedRoute : null;
     }
 
     private dispatchNavigationAction(route: VRoute): void {
-        const event: VRouterNavigatedEvent<VRoute> = new CustomEvent(VRouterEvents.NAVIGATED, {detail: route});
-        document.dispatchEvent(event);
+        const eventBus: VInternalEventbus = this.options.eventBus;
+        eventBus.publish<VRoute>(VInternalEventName.NAVIGATED, route);
     }
 
-    private canActivate(route: VRoute): Observable<boolean> {
+    private canActivate(route: VRoute): Promise<boolean> {
         const guards: Type<VCanActivateGuard>[] = route.canActivate || [];
         if (guards.length < 1) {
-            return of(true);
+            return Promise.resolve(true);
         }
 
-        return from(guards).pipe(
-            mergeMap((g) => {
-                const guard = VComponentInjector.resolve<VCanActivateGuard>(g);
-                const canActivate = guard.canActivate(route);
-                return isObservable(canActivate)
-                    ? canActivate
-                    : of(canActivate);
-            }),
-            reduce((prev, curr) => prev && curr, true),
-        );
+        const promises: Promise<boolean>[] = guards
+            .map(g => VInjector.resolve<VCanActivateGuard>(g))
+            .map(g => Promise.resolve(g.canActivate(route)))
+            .reduce((guards: any, guard: any) => guards.concat(guard), []);
+
+        return promises.reduce((prev, curr) => {
+            return prev.then(res1 => curr.then(res2 => res1 === true && res2 === true));
+        }, Promise.resolve(true));
     }
 }
