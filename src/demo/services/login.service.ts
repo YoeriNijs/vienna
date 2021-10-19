@@ -27,6 +27,7 @@ export class LoginService {
 	}
 
 	logoff(): void {
+		this._username = '';
 		this._role = 'visitor';
 		this._isLoggedIn = false;
 		alert(`${this._username} is logged off!`);
