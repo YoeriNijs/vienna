@@ -10,7 +10,7 @@ This is just one big WIP. Please, forgive my ugly code, lack of unit tests and d
 See demo app to see how the framework works.
 
 # Todo
-
+- Fix repeat (does not work with [0, 1, 2], among others)
 - Implement input bindings from component variable
 - Implement change detection inside component
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id

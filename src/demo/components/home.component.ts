@@ -1,15 +1,7 @@
 import {VComponent, VInit} from '../../core';
 import {LoginService} from "../services/login.service";
-
-interface ContactInformation {
-    email: string;
-}
-
-interface User {
-    name: string;
-    password: string;
-    contact: ContactInformation;
-}
+import {UserService} from "../services/user.service";
+import {User} from "../model/user";
 
 @VComponent({
     selector: 'app-home',
@@ -33,10 +25,10 @@ interface User {
         <v-check if="{{ isLoggedIn }}">
             <true>
                 <div class="member-area">
-                    <span>Hi there, {{ user.name }}!</span>
+                    <span>Hi there, {{ userName }}!</span>
                     <app-dashboard></app-dashboard>
                     <div class="btn-menu">
-                        <button data-v-click="logoff({{user.name}})">Log off</button>
+                        <button data-v-click="logoff()">Log off</button>
                     </div>
                 </div>
             </true>
@@ -45,10 +37,22 @@ interface User {
                 <div class="public-area">
                     <span>Hi there, please log in first.</span>
                     <form>
-                        <input data-v-bind="username" id="username" type="text" placeholder="Username" minlength="1"/>
-                        <input data-v-bind="password" id="password" type="password" placeholder="Password" minlength="1"/>
+                        <input data-v-bind="usernameLogin" id="usernameLogin" type="text" placeholder="Username" minlength="1"/>
+                        <input data-v-bind="passwordLogin" id="passwordLogin" type="password" placeholder="Password" minlength="1"/>
                         <div class="btn-menu">
                             <button type="submit" data-v-click="login">Login</button>
+                        </div>
+                    </form>
+                    
+                    <hr />
+                    
+                    <span>Register</span>
+                    <form>
+                        <input data-v-bind="usernameRegister" id="usernameRegister" type="text" placeholder="Username" minlength="1"/>
+                        <input data-v-bind="passwordRegister" id="passwordRegister" type="password" placeholder="Password" minlength="1"/>
+                        <input data-v-bind="emailRegister" id="emailRegister" type="email" placeholder="E-mail" minlength="1"/>
+                        <div class="btn-menu">
+                            <button type="submit" data-v-click="register">Register</button>
                         </div>
                     </form>
                 </div>
@@ -60,35 +64,45 @@ interface User {
 })
 export class HomeComponent implements VInit {
     navbarTitle = 'My fancy app :: Home';
-    user: User = {
-        name: 'user',
-        password: 'password',
-        contact: {
-            email: 'young@padawan.com',
-        },
-    };
-    username: HTMLInputElement;
-    password: HTMLInputElement;
     isLoggedIn = false;
 
-    constructor(protected loginService: LoginService) {
+    userName: string;
+
+    usernameLogin: HTMLInputElement;
+    passwordLogin: HTMLInputElement;
+    usernameRegister: HTMLInputElement;
+    passwordRegister: HTMLInputElement;
+    emailRegister: HTMLInputElement;
+
+    constructor(protected loginService: LoginService, protected userService: UserService) {
     }
 
     vInit(): void {
-        this.username.focus();
+        this.usernameLogin.focus();
     }
 
     login(): void {
-        if (this.username.value === this.user.name && this.password.value == this.user.password) {
-            this.loginService.login(this.user.name);
+        if (this.userService.isRegistered(this.usernameLogin.value, this.passwordLogin.value)) {
+            this.loginService.login(this.usernameLogin.value);
+            this.userName = this.loginService.username;
             this.isLoggedIn = true;
         } else {
             alert('Invalid credentials');
         }
     }
 
-    logoff(name: string): void {
-        this.loginService.logoff(name);
+    register(): void {
+        const user: User = {
+            name: this.usernameRegister.value,
+            password: this.passwordRegister.value,
+            contact: { email: this.emailRegister.value }
+        };
+        this.userService.register(user);
+        alert('User created!');
+    }
+
+    logoff(): void {
+        this.loginService.logoff();
         this.isLoggedIn = false;
     }
 }

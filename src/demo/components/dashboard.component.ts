@@ -27,6 +27,6 @@ import {VComponent} from '../../core';
 export class DashboardComponent {
     menuItems = [
         {name: 'personal', link: '#/personal'},
-        {name: 'settings', link: '#/settings'}
+        {name: 'settings', link: '#/settings?message=Settings with param from navigation'}
     ];
 }
