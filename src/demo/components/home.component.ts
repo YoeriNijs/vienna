@@ -92,11 +92,23 @@ export class HomeComponent implements VInit {
     }
 
     register(): void {
-        const user: User = {
-            name: this.usernameRegister.value,
-            password: this.passwordRegister.value,
-            contact: { email: this.emailRegister.value }
-        };
+        const name = this.usernameRegister.value;
+        if (!name || name.trim().length < 1) {
+            alert('Fill in a valid name');
+            return;
+        }
+        const password = this.passwordRegister.value;
+        if (!password || password.trim().length < 1) {
+            alert('Fill in a valid password');
+            return;
+        }
+        const email = this.emailRegister.value;
+        if (!email || email.trim().length < 1) {
+            alert('Fill in a valid email');
+            return;
+        }
+
+        const user: User = { name, password, contact: { email } };
         this.userService.register(user);
         alert('User created!');
     }
