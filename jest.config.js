@@ -8,4 +8,7 @@ module.exports = {
     collectCoverage: true,
     clearMocks: true,
     coverageDirectory: "coverage",
+    setupFiles: [
+        "<rootDir>/src/testing/util/v-internal-setup-document.ts"
+    ]
 };

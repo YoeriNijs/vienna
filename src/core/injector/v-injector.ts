@@ -9,7 +9,7 @@ export interface Type<T> {
 export type GenericClassDecorator<T> = (target: T) => void;
 
 export const VInjector = new class {
-    resolve<T>(target: Type<T>): T {
+    resolve<T>(target: Type<T>, overrideOptions?: Partial<VInjectableOptions>): T {
 
         const tokens = Reflect.getMetadata('design:paramtypes', target) || [];
         const injections = tokens.map((token: any) => VInjector.resolve<any>(token));
@@ -21,13 +21,15 @@ export const VInjector = new class {
         }
 
         const injectableOptions: VInjectableOptions = injectableOptionsField.get();
-        if (injectableOptions.singleton) {
+        if (overrideOptions && overrideOptions.singleton || !overrideOptions && injectableOptions.singleton) {
             if (VInternalSingletons.exists(instance)) {
                 return VInternalSingletons.get(instance);
             } else {
                 VInternalSingletons.add(instance);
                 return instance;
             }
+        } else {
+            return instance;
         }
     }
 }();

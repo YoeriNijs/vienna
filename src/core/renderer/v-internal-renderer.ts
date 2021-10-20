@@ -68,7 +68,7 @@ export class VInternalRenderer {
 
         allComponents.forEach(c => this.defineAsWebComponent(c, this._eventBus));
 
-        const rootOptions: VComponentOptions = JSON.parse(component.vComponentOptions)
+        const rootOptions: VComponentOptions = JSON.parse(component.vComponentOptions);
         this._view.innerHTML = `<${rootOptions.selector}></${rootOptions.selector}>`;
     }
 
