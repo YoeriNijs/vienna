@@ -27,4 +27,12 @@ export class VTestComponent<T extends VComponentType> {
     get html(): string {
         return this.component.querySelector('body').innerHTML;
     }
+
+    query(selector: string): HTMLElement {
+        return this.component.querySelector(selector);
+    }
+
+    queryAll(selector: string): HTMLElement[] {
+        return Array.from(this.component.querySelectorAll(selector)).map(node => node as HTMLElement);
+    }
 }

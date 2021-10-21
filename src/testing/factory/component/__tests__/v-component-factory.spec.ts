@@ -5,7 +5,7 @@ import {VComponent} from "../../../../core";
 @VComponent({
     selector: 'app-component',
     styles: [' :host { margin: 0; padding: 0; }'],
-    html: `<span>{{ message }}</span>`
+    html: `<span>{{ message }}</span><span>Lorem Ipsum</span>`
 })
 export class AppComponent {
     message = 'Some text'
@@ -22,11 +22,17 @@ describe('VComponentFactory', () => {
         component = createComponent();
     });
 
-    it('should have valid styles', () => {
+    it('should be able to test styles', () => {
         expect(component.styles).toEqual('body { padding: 0; margin: 0; } :host { margin: 0; padding: 0; }');
     });
 
-    it('should have valid text', () => {
-        expect(component.html).toEqual('<span>Some text</span>');
+    it('should be able to test html', () => {
+        expect(component.html).toEqual('<span>Some text</span><span>Lorem Ipsum</span>');
+    });
+
+    it('should be able to query', () => {
+        expect(component.query('span').innerHTML).toEqual('Some text');
+        expect(component.queryAll('span')).toHaveLength(2);
+        expect(component.queryAll('span')[1].innerHTML).toEqual('Lorem Ipsum');
     });
 })

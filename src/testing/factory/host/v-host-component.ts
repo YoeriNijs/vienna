@@ -31,4 +31,20 @@ export class VHostComponent {
     get componentHtml(): string {
         return this.component.querySelector('body').innerHTML;
     }
+
+    queryHost(selector: string): HTMLElement {
+        return this.host.querySelector(selector);
+    }
+
+    queryHostAll(selector: string): HTMLElement[] {
+        return Array.from(this.host.querySelectorAll(selector)).map(node => node as HTMLElement);
+    }
+
+    queryComponent(selector: string): HTMLElement {
+        return this.component.querySelector(selector);
+    }
+
+    queryComponentAll(selector: string): HTMLElement[] {
+        return Array.from(this.component.querySelectorAll(selector)).map(node => node as HTMLElement);
+    }
 }

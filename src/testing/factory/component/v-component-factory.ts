@@ -7,22 +7,22 @@ import {VInternalRendererOptions} from "../../../core/renderer/v-internal-render
 import {VInternalRenderer} from "../../../core/renderer/v-internal-renderer";
 
 export const vComponentFactory = <T extends VComponentType>(factoryOptions: VComponentFactoryOptions): () => VTestComponent<T> => {
+    const providedComponentType: Type<T> = factoryOptions.component as Type<T>;
+    const providedComponent: T = VInjector.resolve<T>(providedComponentType, { singleton: false });
+    const componentOptions: VComponentOptions = (providedComponent as any).vComponentOptions
+        ? JSON.parse((providedComponent as any).vComponentOptions)
+        : {};
+    const optionsWithOpenEncapsulation: VComponentOptions = Object.assign({ encapsulationMode: 'open' }, componentOptions);
+    const component: T = {vComponentOptions: JSON.stringify(optionsWithOpenEncapsulation), ...providedComponent};
+
     const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus, { singleton: true });
     const options: VInternalRendererOptions = {
         selector: 'v-renderer',
         eventBus: eventBus
     };
 
-    const component: T = VInjector.resolve<T>(factoryOptions.component as Type<T>, { singleton: false });
-
-    // Override encapsulation mode to query shadowroot
-    const componentOptions: VComponentOptions = (component as any).vComponentOptions
-        ? JSON.parse((component as any).vComponentOptions) : {};
-    const optionsOverride: VComponentOptions = Object.assign({ encapsulationMode: 'open' }, componentOptions);
-    const clone: T = {vComponentOptions: JSON.stringify(optionsOverride), ...component};
-
     const renderer = new VInternalRenderer(options);
-    renderer.renderRoot(clone, [clone]);
+    renderer.renderRoot(component, [component]);
 
-    return (): VTestComponent<T> => new VTestComponent<T>(clone, eventBus);
+    return (): VTestComponent<T> => new VTestComponent<T>(component, eventBus);
 }
