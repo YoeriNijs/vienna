@@ -12,6 +12,10 @@ export const getNestedPropertyByStringPath = (obj: any, path: string): any => {
         return undefined;
     }
 
+    if (typeof obj !== 'object') {
+        return obj;
+    }
+
     if (!path || path.length < 0) {
         return undefined;
     }

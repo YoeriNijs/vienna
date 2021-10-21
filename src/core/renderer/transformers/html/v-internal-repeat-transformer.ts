@@ -55,7 +55,7 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
             repeatElement.parentElement.removeChild(repeatElement);
         }
 
-        return document.head.innerHTML + document.body.innerHTML;
+        return document.head.innerHTML.trim() + document.body.innerHTML.trim();
     }
 
     private appendNewChildren(root: Element, iterationValues: string[], templateRef: string): void {
@@ -87,18 +87,21 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
     private replaceForString(c: HTMLElement, templateRef: string, iterationValue: any): void {
         Array.from(c.attributes || [])
             .filter(attr => attr && attr.value)
-            .forEach(attr => attr.value = attr.value.replace(templateRef, iterationValue));
+            .forEach(attr => attr.value = attr.value.replace(templateRef, iterationValue).trim());
         c.innerHTML = this.replaceTemplateRefByValue(c.innerHTML, iterationValue);
     }
 
     private replaceForObject(c: HTMLElement, iterationValue: object): void {
         Array.from(c.attributes || [])
             .filter(attr => attr && attr.value)
-            .forEach(attr => attr.value = this.replaceTemplateRefByValue(attr.value, iterationValue));
+            .forEach(attr => attr.value = this.replaceTemplateRefByValue(attr.value, iterationValue).trim());
         c.innerHTML = this.replaceTemplateRefByValue(c.innerHTML, iterationValue);
     }
 
-    private replaceTemplateRefByValue(attr: string, iterationValue: object) {
+    private replaceTemplateRefByValue(attr: string, iterationValue: any) {
+        if (typeof iterationValue === 'string') {
+            iterationValue = iterationValue.replace(/['"]+/g, '');
+        }
         const template = new VInternalTemplate(attr);
         return VInternalTemplateEngine.render(template, iterationValue, '{', '}');
     }

@@ -31,7 +31,9 @@ export class VInternalTemplateEngine {
             const templateReference = match.split(regexRefWithoutBrackets)
                 .filter(v => v)[0]
                 .trim();
-            const rawValue = getNestedPropertyByStringPath(data, templateReference);
+            const rawValue = typeof data === 'object'
+                ? getNestedPropertyByStringPath(data, templateReference)
+                : data;
             const value = getDefinedOrElse<any>(rawValue, () => {
                 throw new VTemplateRenderException(`Cannot find value for template reference '${match}'`)
             });
