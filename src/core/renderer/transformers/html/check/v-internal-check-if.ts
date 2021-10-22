@@ -31,6 +31,9 @@ export class VInternalCheckIf implements VInternalCheck {
         if (falseElement) {
             checkElement.removeChild(falseElement);
         }
+        if (trueElement.children.length < 1) {
+            throw new VTemplateRenderException(`True element has no inner html elements. Add an inner element.`);
+        }
         Array.from(trueElement.children)
             .forEach(c => checkElement.parentElement.insertBefore(c, checkElement));
         trueElement.parentElement.removeChild(trueElement);
@@ -40,6 +43,9 @@ export class VInternalCheckIf implements VInternalCheck {
     private createFalse(trueElement: Element, checkElement: Element, falseElement: Element) {
         if (trueElement) {
             checkElement.removeChild(trueElement);
+        }
+        if (falseElement.children.length < 1) {
+            throw new VTemplateRenderException(`False element has no inner html elements. Add an inner element.`);
         }
         Array.from(falseElement.children)
             .forEach(c => checkElement.parentElement.insertBefore(c, checkElement));
