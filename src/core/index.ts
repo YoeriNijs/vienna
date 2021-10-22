@@ -10,7 +10,7 @@ export * from './injector/v-injectable-decorator';
 export * from './router/hooks/v-init';
 export * from './router/hooks/v-destroy';
 export * from './router/v-activated-route';
-export * from './router/v-can-activate-guard';
+export * from './router/v-route-guard';
 export * from './router/v-route';
 export * from './router/v-route-data';
 export * from './router/v-route-not-found-strategy';

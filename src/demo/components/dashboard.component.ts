@@ -16,11 +16,11 @@ import {VComponent} from '../../core';
     html: `
         <div class="menu">Menu</div>
         <ul>
-            <v-repeat for="{ item } of {{ menuItems }}">
+            <v-repeat let="{{ item }}" for="{{ menuItems }}">
                 <li>
-                    <a href="{ item.link }">{ item.name }</a>
+                    <a href="{{ item.link }}">{{ item.name }}</a>
                 </li>
-            <v-repeat>
+            </v-repeat>
         </ul>
 	`,
 })

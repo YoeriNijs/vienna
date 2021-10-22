@@ -1,4 +1,4 @@
-export class VInternalSingletons {
+export class VInternalInjectableSingletons {
 
     private static _singletons: any[] = [];
 
@@ -14,9 +14,5 @@ export class VInternalSingletons {
     public static exists<T>(instance: T): boolean {
         const instanceProto = Object.getPrototypeOf(instance);
         return this._singletons.some(s => Object.getPrototypeOf(s) === instanceProto);
-    }
-
-    private constructor() {
-        // Do not instantiate
     }
 }

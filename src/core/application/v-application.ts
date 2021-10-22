@@ -30,9 +30,12 @@ export function VApplication(config: VApplicationConfig) {
                 this._declarations = config.declarations.map((c: Type<VComponentType>) => VInjector.resolve<VComponentType>(c));
                 this._routes = config.routes;
 
-                this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) =>  this.renderComponentForRoute(route));
+                this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => this.renderComponentForRoute(route));
 
-                const routerOptions: VInternalRouterOptions = { eventBus: this._eventBus, routeNotFoundStrategy: config.routeNotFoundStrategy };
+                const routerOptions: VInternalRouterOptions = {
+                    eventBus: this._eventBus,
+                    routeNotFoundStrategy: config.routeNotFoundStrategy
+                };
                 const router = new VRouter(routerOptions);
                 this._routes.forEach(route => router.addRoute(route));
             }

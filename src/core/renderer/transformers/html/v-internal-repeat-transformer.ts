@@ -15,40 +15,23 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
 
         const repeatElements = document.getElementsByTagName('v-repeat');
         for (let repeatElement of repeatElements) {
-            const forCondition = repeatElement.attributes.getNamedItem('for');
-            if (forCondition === null || forCondition.value.length < 1) {
-                repeatElement.parentElement.removeChild(repeatElement);
-                continue;
-            }
-            const forValue = forCondition.value;
-            const ofString = ' of ';
-            const ofIndex = forValue.indexOf(ofString);
-            if (ofIndex === -1) {
-                repeatElement.parentElement.removeChild(repeatElement);
-                continue;
-            }
-            const first = forValue.substring(0, ofIndex).trim();
-            const second = forValue.substring(ofIndex + ofString.length, forValue.length).trim();
-            if (!first || !second) {
-                repeatElement.parentElement.removeChild(repeatElement);
-                continue;
-            }
-
-            if (second.startsWith('[') && second.endsWith(']')) {
-                const iterationValues = second
+            const letValue = this.extractLetValueFromElement(repeatElement);
+            const forValue = this.extractForValueFromElement(repeatElement);
+            if (forValue.startsWith('[') && forValue.endsWith(']')) {
+                const iterationValues = forValue
                     .replace('[', '')
                     .replace(']', '')
                     .split(',');
-                this.appendNewChildren(repeatElement, iterationValues, first);
+                this.appendNewChildren(repeatElement, iterationValues, letValue);
             } else {
-                const templateReference = second.split(REGEX_REFERENCE_WITHOUT_BRACKETS)
+                const templateReference = forValue.split(REGEX_REFERENCE_WITHOUT_BRACKETS)
                     .filter(v => v)[0]
                     .trim();
                 const iterationValues = getNestedPropertyByStringPath(component, templateReference);
                 if (!Array.isArray(iterationValues)) {
                     throw new VRenderError('Repeat value is no array!');
                 }
-                this.appendNewChildren(repeatElement, iterationValues, first);
+                this.appendNewChildren(repeatElement, iterationValues, letValue);
             }
 
             Array.from(repeatElement.children).forEach(c => repeatElement.parentElement.append(c));
@@ -56,6 +39,34 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
         }
 
         return document.head.innerHTML.trim() + document.body.innerHTML.trim();
+    }
+
+    private extractForValueFromElement(repeatElement: Element): string {
+        const forAttribute = repeatElement.attributes.getNamedItem('for');
+        if (forAttribute === null) {
+            throw new VRenderError(`Invalid repeat element. Add for attribute.`)
+        }
+        const forValue = forAttribute.value;
+        if (forValue.trim().length < 1) {
+            throw new VRenderError(`Invalid for attribute '${forValue}': undefined value.`);
+        }
+        return forValue;
+    }
+
+    private extractLetValueFromElement(repeatElement: Element): string {
+        const letAttribute = repeatElement.attributes.getNamedItem('let');
+        if (letAttribute === null) {
+            throw new VRenderError(`Invalid repeat element. Add let attribute.`)
+        }
+        const letValue = letAttribute.value;
+        if (letValue.length < 1 || !letValue.startsWith('{{') || !letValue.endsWith('}}')) {
+            throw new VRenderError(`Invalid let attribute '${letValue}': should start with {{ and end with }}.`);
+        }
+        const variableName = letValue.replace('{{', '').replace('}}', '');
+        if (variableName.trim().length < 1) {
+            throw new VRenderError(`Invalid let attribute '${letValue}': undefined template reference.`);
+        }
+        return letValue;
     }
 
     private appendNewChildren(root: Element, iterationValues: string[], templateRef: string): void {
@@ -103,6 +114,6 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
             iterationValue = iterationValue.replace(/['"]+/g, '');
         }
         const template = new VInternalTemplate(attr);
-        return VInternalTemplateEngine.render(template, iterationValue, '{', '}');
+        return VInternalTemplateEngine.render(template, iterationValue);
     }
 }

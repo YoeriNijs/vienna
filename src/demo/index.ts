@@ -19,18 +19,18 @@ import {SettingsComponent} from "./components/settings.component";
         SettingsComponent
     ],
     routes: [
-        { path: '/', component: HomeComponent },
-        { path: '/about', component: AboutComponent },
+        {path: '/', component: HomeComponent},
+        {path: '/about', component: AboutComponent},
         {
             path: '/settings',
             component: SettingsComponent,
-            data: { footerText: 'Footer text from route data' }
+            data: {footerText: 'Footer text from route data'}
         },
         {
             path: '/personal',
             component: PersonalComponent,
-            data: { authorizedForRole: 'user' },
-            canActivate: [CanActivatePersonalGuard]
+            data: {authorizedForRole: 'user'},
+            guards: [CanActivatePersonalGuard]
         },
     ],
     routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT,

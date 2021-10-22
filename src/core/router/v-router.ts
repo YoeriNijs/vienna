@@ -3,7 +3,7 @@ import {VNoRouteException} from './v-no-route-exception';
 import {VRoute} from './v-route';
 import {VRouteNotFoundStrategy} from './v-route-not-found-strategy';
 import {Type, VInjector} from "../injector/v-injector";
-import {VCanActivateGuard} from "./v-can-activate-guard";
+import {VRouteGuard} from "./v-route-guard";
 import {VInternalRouterOptions} from "./v-internal-router-options";
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
@@ -33,9 +33,9 @@ export class VRouter {
         if (route === null) {
             this.handleRouteNotFound(url);
         } else {
-            this.canActivate(route).then(canDispatch => {
-                if (canDispatch) {
-                    this.dispatchNavigationAction(route)
+            this.isAllowedToNavigateTo(route).then(yes => {
+                if (yes) {
+                    this.dispatchNavigationAction(route);
                 }
             });
         }
@@ -67,15 +67,15 @@ export class VRouter {
         eventBus.publish<VRoute>(VInternalEventName.NAVIGATED, route);
     }
 
-    private canActivate(route: VRoute): Promise<boolean> {
-        const guards: Type<VCanActivateGuard>[] = route.canActivate || [];
+    private isAllowedToNavigateTo(route: VRoute): Promise<boolean> {
+        const guards: Type<VRouteGuard>[] = route.guards || [];
         if (guards.length < 1) {
             return Promise.resolve(true);
         }
 
         const promises: Promise<boolean>[] = guards
-            .map(g => VInjector.resolve<VCanActivateGuard>(g))
-            .map(g => Promise.resolve(g.canActivate(route)))
+            .map(g => VInjector.resolve<VRouteGuard>(g))
+            .map(g => Promise.resolve(g.guard(route)))
             .reduce((guards: any, guard: any) => guards.concat(guard), []);
 
         return promises.reduce((prev, curr) => {
