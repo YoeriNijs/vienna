@@ -35,7 +35,7 @@ export class VInternalTemplateEngine {
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
             const value = getDefinedOrElse<any>(rawValue, () => {
-                throw new VTemplateRenderException(`Cannot find value for template reference '${match}'. Raw value: ${rawValue}`)
+                throw new VTemplateRenderException(`Cannot find value for template reference '${match}'.`)
             });
             return VInternalTemplateEngine.sanitize(`${value}`);
         });

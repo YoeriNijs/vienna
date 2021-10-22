@@ -62,7 +62,7 @@ describe('VInternalTemplateEngine', () => {
         it.each([{}, undefined])('should throw a render exception when there is a interpolation and data is %s', (data) => {
             const template = createTemplate('Hello, my name is {{ name }}');
             const render = () => VInternalTemplateEngine.render(template, data);
-            expect(render).toThrow(new VTemplateRenderException('Cannot find value for template reference \'{{ name }}\''));
+            expect(render).toThrow(new VTemplateRenderException(`Cannot find value for template reference '{{ name }}'.`));
         });
     });
 
