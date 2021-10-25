@@ -1,5 +1,7 @@
 # Vienna (very alpha, still in development)
 
+![Vienna logo](https://raw.githubusercontent.com/YoeriNijs/vienna/main/img/logo.png)
+
 ## Because small code is also nice
 
 Vienna is a small framework under active development and, for me, just a way to discover how frameworks like Angular
