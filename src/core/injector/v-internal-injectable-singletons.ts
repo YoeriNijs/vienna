@@ -2,6 +2,10 @@ export class VInternalInjectableSingletons {
 
     private static _singletons: any[] = [];
 
+    private constructor() {
+        // Do not instantiate
+    }
+
     public static add(singleton: object): void {
         this._singletons.push(singleton);
     }
