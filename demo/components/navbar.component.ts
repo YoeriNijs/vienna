@@ -1,4 +1,4 @@
-import {VComponent, VInit, VProp} from '../../core';
+import {VComponent, VInit, VProp} from '../../src';
 import {LoginService} from "../services/login.service";
 
 @VComponent({

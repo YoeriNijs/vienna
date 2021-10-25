@@ -1,4 +1,4 @@
-import {VComponent, VInit} from '../../core';
+import {VComponent, VInit} from '../../src';
 import {LoginService} from "../services/login.service";
 import {UserService} from "../services/user.service";
 import {User} from "../model/user";

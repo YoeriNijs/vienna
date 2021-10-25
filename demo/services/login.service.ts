@@ -1,4 +1,4 @@
-import {VInjectable} from '../../core';
+import {VInjectable} from '../../src';
 import {Role} from "../model/role";
 
 @VInjectable({singleton: true})

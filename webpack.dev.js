@@ -1,10 +1,17 @@
-const { merge } = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const common = require('./webpack.common.js');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = merge(common, {
-  mode: 'development',
-  devtool: 'inline-source-map',
-  devServer: {
-    static: './dist',
-  },
+    entry: './demo/index.ts',
+    mode: 'development',
+    devtool: 'inline-source-map',
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: 'Vienna',
+        }),
+    ],
+    devServer: {
+        static: './lib',
+    },
 });

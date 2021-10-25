@@ -1,4 +1,4 @@
-import {VActivatedRoute, VComponent, VInit} from "../../core";
+import {VActivatedRoute, VComponent} from "../../src";
 import {RouteData} from "../model/route-data";
 
 @VComponent({

@@ -1,4 +1,4 @@
-import {VInjectable, VRoute, VRouteGuard} from "../../core";
+import {VInjectable, VRoute, VRouteGuard} from "../../src";
 import {RouteData} from "../model/route-data";
 import {LoginService} from "../services/login.service";
 

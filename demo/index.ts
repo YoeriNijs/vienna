@@ -1,4 +1,4 @@
-import {VApplication, VRouteNotFoundStrategy} from '../core';
+import {VApplication, VRouteNotFoundStrategy} from '../src';
 import {DashboardComponent} from './components/dashboard.component';
 import {HomeComponent} from './components/home.component';
 import {FooterComponent} from "./components/footer.component";
@@ -37,3 +37,6 @@ import {SettingsComponent} from "./components/settings.component";
 })
 export class DemoApplication {
 }
+
+// Run the application
+new DemoApplication();

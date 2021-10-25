@@ -1,4 +1,4 @@
-import {VComponent} from '../../core';
+import {VComponent} from '../../src';
 
 @VComponent({
     selector: 'app-personal',

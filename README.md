@@ -9,6 +9,12 @@ This is just one big WIP. Please, forgive my ugly code, lack of unit tests and d
 
 See demo app to see how the framework works.
 
+# Install
+
+```
+npm install vienna-ts
+```
+
 # Todo
 
 - Implement input bindings from component variable

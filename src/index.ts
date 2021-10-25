@@ -1,3 +1,2 @@
-import { DemoApplication } from './demo';
-
-new DemoApplication();
+export * from './core';
+export * from './testing';

@@ -1,4 +1,4 @@
-import {VInjectable} from "../../core";
+import {VInjectable} from "../../src";
 import {User} from "../model/user";
 
 @VInjectable()
