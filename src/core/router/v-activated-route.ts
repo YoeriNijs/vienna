@@ -10,6 +10,15 @@ export class VActivatedRoute {
 
     private _eventBus: VInternalEventbus;
 
+    constructor(protected eventBus: VInternalEventbus) {
+        this._eventBus = eventBus;
+
+        eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
+            this.setParams();
+            this.setData(route);
+        });
+    }
+
     public data(callBack: (data: VRouteData) => void): (data: VRouteData) => void {
         this._eventBus.subscribe<VRouteData>(VInternalEventName.ROUTE_DATA, callBack);
         return callBack;
@@ -18,15 +27,6 @@ export class VActivatedRoute {
     public params(callBack: (params: VRouteParams) => void): (params: VRouteParams) => void {
         this._eventBus.subscribe<VRouteData>(VInternalEventName.ROUTE_PARAMS, callBack);
         return callBack;
-    }
-
-    constructor(protected eventBus: VInternalEventbus) {
-        this._eventBus = eventBus;
-
-        eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
-            this.setParams();
-            this.setData(route);
-        });
     }
 
     private setParams(): void {
@@ -42,7 +42,7 @@ export class VActivatedRoute {
     }
 
     private setData(route: VRoute): void {
-        if (route.data) {
+        if (route && route.data) {
             this._eventBus.publish(VInternalEventName.ROUTE_DATA, route.data);
         } else {
             this._eventBus.publish(VInternalEventName.ROUTE_DATA, {});
