@@ -27,17 +27,17 @@ const createRenderer = (eventBus: VInternalEventbus): VInternalRenderer => {
 
 export const vHostFactory = <T extends VComponentType>(factoryOptions: VHostFactoryOptions): () => VHostComponent => {
     const providedComponentType: Type<T> = factoryOptions.component as Type<T>;
-    const providedComponent: T = VInjector.resolve<T>(providedComponentType, { singleton: false });
+    const providedComponent: T = VInjector.resolve<T>(providedComponentType, {singleton: false});
     const componentOptions: VComponentOptions = (providedComponent as any).vComponentOptions
         ? JSON.parse((providedComponent as any).vComponentOptions)
         : {};
-    const componentOptionsWithOpenMode: VComponentOptions = Object.assign({ encapsulationMode: 'open' }, componentOptions);
+    const componentOptionsWithOpenMode: VComponentOptions = Object.assign({encapsulationMode: 'open'}, componentOptions);
     const component: T = {vComponentOptions: JSON.stringify(componentOptionsWithOpenMode), ...providedComponent};
 
-    const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus, { singleton: true });
+    const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus, {singleton: true});
     const renderer = createRenderer(eventBus);
     const host = createHost(factoryOptions.hostHtml);
-    renderer.renderRoot(host, [host, component]);
+    renderer.renderAllFromRootNode(host, [host, component]);
 
     return (): VHostComponent => new VHostComponent(eventBus);
 }

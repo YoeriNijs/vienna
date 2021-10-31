@@ -27,6 +27,5 @@ export class NavbarComponent implements VInit {
 
     vInit(): void {
         this.isLoggedIn = this.loginService.isLoggedIn;
-        console.log('is logged in', this.isLoggedIn);
     }
 }

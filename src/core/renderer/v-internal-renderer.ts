@@ -63,17 +63,22 @@ export class VInternalRenderer {
         }
     }
 
-    public renderRoot(component: unknown & VComponentType, allComponents: VComponentType[]) {
-        this.clearHtml();
+    public renderAllFromRootNode(component: unknown & VComponentType, allComponents: VComponentType[]) {
+        // Notify listeners that rendering has started
+        this._eventBus.publish(VInternalEventName.RENDERING_STARTED);
 
+        // First, clean up the entire view
+        this._view.innerHTML = '';
+
+        // Next, initialize all webcomponents
         allComponents.forEach(c => this.defineAsWebComponent(c, this._eventBus));
 
+        // Then, append the root node to the dom, which holds the webcomponents
         const rootOptions: VComponentOptions = JSON.parse(component.vComponentOptions);
         this._view.innerHTML = `<${rootOptions.selector}></${rootOptions.selector}>`;
-    }
 
-    private clearHtml(): void {
-        this._view.innerHTML = '';
+        // Notify users that rendering is done
+        this._eventBus.publish(VInternalEventName.RENDERING_FINISHED);
     }
 
     private defineAsWebComponent(componentType: VComponentType, eventBus: VInternalEventbus) {
@@ -135,10 +140,6 @@ export class VInternalRenderer {
 
                 // Call init lifecycle hook
                 this.callLifeCycleHook(InternalLifeCycleHook.INIT, component);
-
-                // Todo: replace this setInterval by proxy
-                // Enable change detection loop
-                // setInterval(() => this.detectChanges(), 300);
             }
 
             bind(directive: VAttributeDirective, component: VComponentType): void {
@@ -157,14 +158,6 @@ export class VInternalRenderer {
                         (component as any)[value] = el;
                     }
                 });
-            }
-
-            private detectChanges() {
-                // const currentHtml = VHtmlParser.parse(componentType, declaredComponentOptions.html, this.attributes);
-                // if (this._lastKnownHtml !== currentHtml) {
-                //     this._lastKnownHtml = currentHtml;
-                //     this.forceRebuild();
-                // }
             }
 
             private attachDomEvents(vDomEvent: VDomEvent, component: VComponentType): void {
