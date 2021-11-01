@@ -20,7 +20,7 @@
     "test:watch": "jest --watch --config ./jest.config.js",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
+    "version": "auto-changelog -p && git add CHANGELOG.md && npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
   "husky": {
@@ -46,6 +46,7 @@
     "@types/jsdom": "^16.2.13",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "auto-changelog": "^2.3.0",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
@@ -70,5 +71,12 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "auto-changelog": {
+    "output": "CHANGELOG.md",
+    "template": "keepachangelog",
+    "unreleased": true,
+    "commitLimit": false,
+    "hideCredit": true
   }
 }
