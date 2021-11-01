@@ -29,4 +29,4 @@ jobs:
     - name: Send greeting
       env:
         SUPER_SECRET: ${{ secrets.BLA }}
-      run: echo "Hello $SUPER_SECRET"
+      run: echo "Hello $env:SUPER_SECRET"
