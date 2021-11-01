@@ -19,8 +19,7 @@
     "test": "jest --config ./jest.config.js",
     "test:watch": "jest --watch --config ./jest.config.js",
     "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "auto-changelog -p && git add CHANGELOG.md && npm run format && git add -A src",
+    "version": "auto-changelog -p && git add CHANGELOG.md",
     "postversion": "git push && git push --tags"
   },
   "husky": {
