@@ -20,7 +20,8 @@
     "test:watch": "jest --watch --config ./jest.config.js",
     "prepublishOnly": "npm test && npm run lint",
     "version": "auto-changelog -p && git add CHANGELOG.md",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "publish": "npm run version && npm run build && cd lib && npm publish"
   },
   "husky": {
     "hooks": {
