@@ -25,7 +25,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint && npm run test"
+      "pre-push": "npm run lint && npm run test",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
   "files": [
@@ -45,6 +46,8 @@
     "@types/jsdom": "^16.2.13",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
@@ -61,5 +64,10 @@
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.1",
     "webpack-merge": "^5.8.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
