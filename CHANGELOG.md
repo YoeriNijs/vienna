@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.0.3
+## 0.0.4
 
 ### Commits
 
@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test [`6312f97`](https://github.com/YoeriNijs/vienna/commit/6312f97318116121f713a21c46ac5359e853de2a)
 - Fixed init bug [`ee8a2bd`](https://github.com/YoeriNijs/vienna/commit/ee8a2bdd270dcde162a28e0e7c11ebeec4946fb7)
 - Cleanup [`e351135`](https://github.com/YoeriNijs/vienna/commit/e3511353fdac77b29527d5cd34edd3b0a274251f)
+- Changed script [`5bc4ca6`](https://github.com/YoeriNijs/vienna/commit/5bc4ca691faee828a3d622f2594dc77d8d07c497)
 - Added publish script [`62677f0`](https://github.com/YoeriNijs/vienna/commit/62677f0a9badf51526af83ca97d646cd6a6c54ab)
 - Implement Commitizen [`83eebe2`](https://github.com/YoeriNijs/vienna/commit/83eebe2dcec8e2e0998092e11a17e54c712df507)
 - Add some data validation in demo app [`5a6f7e0`](https://github.com/YoeriNijs/vienna/commit/5a6f7e088cb674914ce8351a14672fc289995f05)
@@ -57,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Throw exception when there are no html elements [`4cc8cfa`](https://github.com/YoeriNijs/vienna/commit/4cc8cfa177fbf31ee0ae3689014d50f945dd11ed)
 - Cleanup [`209f3ad`](https://github.com/YoeriNijs/vienna/commit/209f3ad6de404ea33a864bf67b7571498ab45587)
 - Cleanup [`141a32c`](https://github.com/YoeriNijs/vienna/commit/141a32c8c8e21391a585f4d792a121def1ff2bba)
+- Prepping new release [`28d5336`](https://github.com/YoeriNijs/vienna/commit/28d533680eadf7196c89e8aa3caaa311b936c775)
 - Update manual.yml [`6b3ae99`](https://github.com/YoeriNijs/vienna/commit/6b3ae998908db8922f3a005bd05168d27710e0a6)
 - Do not instantiate [`e42d614`](https://github.com/YoeriNijs/vienna/commit/e42d614f59165a98f05fa5e80cd283b4660a022c)
 - Fixed some tests [`985a0c2`](https://github.com/YoeriNijs/vienna/commit/985a0c2319c6a71de372b173bef0668497524268)
