@@ -1,6 +1,6 @@
 {
   "name": "vienna-ts",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A small frontend framework to build big things",
   "author": "Yoeri Nijs",
   "license": "GPL-3.0",
@@ -21,7 +21,7 @@
     "prepublishOnly": "npm test && npm run lint",
     "version": "auto-changelog -p && git add CHANGELOG.md",
     "postversion": "git push && git push --tags",
-    "release": "npm run version && npm run build && cd lib && npm publish"
+    "release": "npm run version && npm run build && npm publish"
   },
   "husky": {
     "hooks": {
