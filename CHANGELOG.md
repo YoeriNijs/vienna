@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.0.2
+## 0.0.3
 
 ### Commits
 
@@ -14,22 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial commit [`70336d5`](https://github.com/YoeriNijs/vienna/commit/70336d5a9bc40511653dc3daeeda150166cf3bd8)
 - Using webcomponent to render everything [`c7e137e`](https://github.com/YoeriNijs/vienna/commit/c7e137e32fe8da2dd9df544e23204bb423e1604b)
 - Initial commit [`640a1f4`](https://github.com/YoeriNijs/vienna/commit/640a1f4a0178007992777104ff1f95e50ca37c81)
-- Implemented dependency injection, clean up a
-  bit [`235e4b2`](https://github.com/YoeriNijs/vienna/commit/235e4b22871d68460225f4f618ea587ac6d6f79c)
-- Introduced new attribute: v-check, refactored a
-  lot [`2c412f1`](https://github.com/YoeriNijs/vienna/commit/2c412f141cd502295a062f7b60e63f744d9d8365)
-- Use singleton services + removed rxjs dependency + introduced
-  eventbus [`f21c239`](https://github.com/YoeriNijs/vienna/commit/f21c2392595e9e38f18ca69877b5f8db574cd42f)
+- Implemented dependency injection, clean up a bit [`235e4b2`](https://github.com/YoeriNijs/vienna/commit/235e4b22871d68460225f4f618ea587ac6d6f79c)
+- Introduced new attribute: v-check, refactored a lot [`2c412f1`](https://github.com/YoeriNijs/vienna/commit/2c412f141cd502295a062f7b60e63f744d9d8365)
+- Use singleton services + removed rxjs dependency + introduced eventbus [`f21c239`](https://github.com/YoeriNijs/vienna/commit/f21c2392595e9e38f18ca69877b5f8db574cd42f)
 - Implemented binding [`1db999e`](https://github.com/YoeriNijs/vienna/commit/1db999ed17670ab470319ea151099de1423855c6)
 - Refactored repeat element [`dd215d3`](https://github.com/YoeriNijs/vienna/commit/dd215d39b7765456acb3ba3e6895261f8bf79f11)
+- Fixed nested v-checks + removed internal utils [`6b1ffd7`](https://github.com/YoeriNijs/vienna/commit/6b1ffd7cfb753711763cce875f25ff72505b9e18)
 - Added testing utilities [`5dedea9`](https://github.com/YoeriNijs/vienna/commit/5dedea9ba5d511815715051f6b0291df2afb5491)
 - Implemented some transformers [`21f1d7f`](https://github.com/YoeriNijs/vienna/commit/21f1d7fa71a1b05bd10d85df4b4a90b0265b6bcc)
 - New repeat directive [`663d028`](https://github.com/YoeriNijs/vienna/commit/663d028c05a31b2e98b0383cf6b2129641d1ec60)
 - Added activated route + guard mechanism [`d68b8cb`](https://github.com/YoeriNijs/vienna/commit/d68b8cbc4a0af0dd6292ce5d40f39fd202cdd2e6)
 - Added new templating engine + added tests [`958e5d0`](https://github.com/YoeriNijs/vienna/commit/958e5d07b355eb00e675ec9779472a3d4d91e898)
 - First alpha release [`cd8cf96`](https://github.com/YoeriNijs/vienna/commit/cd8cf963a6f517725ab3675453b5189ba0445d43)
-- Added change detection by implementing a proxy
-  zone [`4010339`](https://github.com/YoeriNijs/vienna/commit/401033967a04568485945df5546742a08c0c097e)
+- Added change detection by implementing a proxy zone [`4010339`](https://github.com/YoeriNijs/vienna/commit/401033967a04568485945df5546742a08c0c097e)
 - Added more tests [`fc0249b`](https://github.com/YoeriNijs/vienna/commit/fc0249b6e06946dc14503bbd50be60474a0c56dd)
 - Some minor improvements in demo [`67bd24f`](https://github.com/YoeriNijs/vienna/commit/67bd24f9dd9e2f3fbda28c0b6ea139d849c760b2)
 - Fixed repeat bug [`3349a21`](https://github.com/YoeriNijs/vienna/commit/3349a219ab16d6ecaa0bb1a4ac32eb8e3d79c07d)
@@ -45,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test [`6312f97`](https://github.com/YoeriNijs/vienna/commit/6312f97318116121f713a21c46ac5359e853de2a)
 - Fixed init bug [`ee8a2bd`](https://github.com/YoeriNijs/vienna/commit/ee8a2bdd270dcde162a28e0e7c11ebeec4946fb7)
 - Cleanup [`e351135`](https://github.com/YoeriNijs/vienna/commit/e3511353fdac77b29527d5cd34edd3b0a274251f)
+- Added publish script [`62677f0`](https://github.com/YoeriNijs/vienna/commit/62677f0a9badf51526af83ca97d646cd6a6c54ab)
 - Implement Commitizen [`83eebe2`](https://github.com/YoeriNijs/vienna/commit/83eebe2dcec8e2e0998092e11a17e54c712df507)
 - Add some data validation in demo app [`5a6f7e0`](https://github.com/YoeriNijs/vienna/commit/5a6f7e088cb674914ce8351a14672fc289995f05)
 - Add change detection [`0bce8ec`](https://github.com/YoeriNijs/vienna/commit/0bce8ecfb8940cf85a44d76983e5067487f5226b)
@@ -56,8 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Work with nested routes [`32f35c1`](https://github.com/YoeriNijs/vienna/commit/32f35c17019a19ce6ad90f08fec13b314d438388)
 - Updated [`702915b`](https://github.com/YoeriNijs/vienna/commit/702915be63366c2d4864c234bad2779025a4ca3c)
 - Cleanup [`67cf977`](https://github.com/YoeriNijs/vienna/commit/67cf9776da547c76284cb07b6d241bb409b26936)
-- Throw exception when there are no html
-  elements [`4cc8cfa`](https://github.com/YoeriNijs/vienna/commit/4cc8cfa177fbf31ee0ae3689014d50f945dd11ed)
+- Throw exception when there are no html elements [`4cc8cfa`](https://github.com/YoeriNijs/vienna/commit/4cc8cfa177fbf31ee0ae3689014d50f945dd11ed)
 - Cleanup [`209f3ad`](https://github.com/YoeriNijs/vienna/commit/209f3ad6de404ea33a864bf67b7571498ab45587)
 - Cleanup [`141a32c`](https://github.com/YoeriNijs/vienna/commit/141a32c8c8e21391a585f4d792a121def1ff2bba)
 - Update manual.yml [`6b3ae99`](https://github.com/YoeriNijs/vienna/commit/6b3ae998908db8922f3a005bd05168d27710e0a6)
@@ -69,6 +66,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement Husky the right way [`6dba88e`](https://github.com/YoeriNijs/vienna/commit/6dba88efb1c91ae79866104408db429d51f84b5c)
 - Updated [`2f38632`](https://github.com/YoeriNijs/vienna/commit/2f38632671e95858fba3996cf7ce648028b834d3)
 - Throw error instead [`dd246f7`](https://github.com/YoeriNijs/vienna/commit/dd246f79994dfa6317706df3ed2b4283914c9b49)
+- Prepping new release [`b4364a5`](https://github.com/YoeriNijs/vienna/commit/b4364a51ac2c9a3740f3e96217794882284a9452)
+- Update manual.yml [`8d65bcf`](https://github.com/YoeriNijs/vienna/commit/8d65bcfd82ae1eb1707701e13129619f1c0a64d6)
+- Update manual.yml [`62ad12c`](https://github.com/YoeriNijs/vienna/commit/62ad12c3395b9460f70a2792ca9ab5c548578162)
+- Update manual.yml [`188f012`](https://github.com/YoeriNijs/vienna/commit/188f0122d12b56c49718adb0ce104f2a21279007)
 - New release [`10edde6`](https://github.com/YoeriNijs/vienna/commit/10edde6c1cb01c8f5f753b8d4bddbaae053db2b0)
 - Added logo because it looks awesome :) [`62f4653`](https://github.com/YoeriNijs/vienna/commit/62f4653efecc2ed21901f6e06634bdf5ce4da23d)
 - Deleted readme for now [`c4a5615`](https://github.com/YoeriNijs/vienna/commit/c4a5615fed040921f5f0cb88c1fec4ec4cf27d53)
