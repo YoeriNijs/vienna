@@ -8,18 +8,23 @@ export class VInternalCheckIf implements VInternalCheck {
 
     transform(document: Document, checkElement: Element, callInternalMethod: Function): Document {
         const condition = checkElement.attributes.getNamedItem('if').value;
-        const trueElement = Array.from(checkElement.children).find(c => c.tagName === 'TRUE');
-        const falseElement = Array.from(checkElement.children).find(c => c.tagName === 'FALSE');
-        if (!trueElement && !falseElement) {
+        const trueElements = Array.from(checkElement.children).filter(c => c.tagName === 'TRUE');
+        const falseElements = Array.from(checkElement.children).filter(c => c.tagName === 'FALSE');
+        if (trueElements.length < 1 && falseElements.length < 1) {
             throw new VTemplateRenderException(`Missing true or false for check element. Add true or false or both.`);
         }
+        if (trueElements.length > 1 || falseElements.length > 1) {
+            throw new VTemplateRenderException(`Found multiple true or false elements. It is only allowed to create one true and one false element.`);
+        }
 
+        const trueElement = trueElements[0];
+        const falseElement = falseElements[0];
         const showTrueElement = condition.indexOf('(') !== -1 && condition.indexOf(')') !== -1
             ? callInternalMethod(condition)
             : eval(condition);
         if (showTrueElement && trueElement) {
             this.createTrue(falseElement, checkElement, trueElement);
-        } else if (falseElement) {
+        } else if (!showTrueElement && falseElement) {
             this.createFalse(trueElement, checkElement, falseElement);
         } else {
             this.createNone(trueElement, checkElement, falseElement);

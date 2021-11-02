@@ -1,7 +1,6 @@
 import {isEmpty} from 'pincet';
 import {VInternalRendererOptions} from './v-internal-renderer-options';
 import {VComponentOptions} from '../component/v-component-options';
-import {VInternalComponent} from '../internal/v-internal-component';
 import {VRenderError} from "./v-render-error";
 import {VComponentType} from '../component/v-component-type';
 import {VInternalHtmlTransformer} from "./transformers/html/v-internal-html-transformer";
@@ -45,9 +44,6 @@ enum InternalLifeCycleHook {
     UNKNOWN
 }
 
-@VInternalComponent({
-    name: 'VRenderer',
-})
 export class VInternalRenderer {
     private readonly _view: HTMLElement;
     private readonly _eventBus: VInternalEventbus;

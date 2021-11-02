@@ -3,18 +3,22 @@ import {VComponentType} from "../../../component/v-component-type";
 import {VInternalCheckFactory} from "./check/v-internal-check-factory";
 
 export class VInternalCheckTransformer implements VInternalHtmlTransformer {
-    transform(html: string, component: VComponentType, attributes: NamedNodeMap): string {
+    transform(html: string, component: VComponentType): string {
         const parser = new DOMParser();
         let document = parser.parseFromString(html, 'text/html');
+        do document = this.replaceVChecks(document, component);
+        while (document.getElementsByTagName('v-check').length > 0);
+        return document.head.innerHTML.trim() + document.body.innerHTML.trim();
+    }
 
+    private replaceVChecks(document: any, component: VComponentType) {
         const elements = document.getElementsByTagName('v-check');
         for (let element of elements) {
             new VInternalCheckFactory(element).transform((impl) => {
-                document = impl.transform(document, element, this.callInternalMethod(component), component, attributes);
+                document = impl.transform(document, element, this.callInternalMethod(component));
             });
         }
-
-        return document.head.innerHTML + document.body.innerHTML;
+        return document;
     }
 
     private callInternalMethod(component: VComponentType): Function {
@@ -41,9 +45,7 @@ export class VInternalCheckTransformer implements VInternalHtmlTransformer {
                 method = method.substring(0, indexOfLastOpenParenthesis);
             }
 
-            const caller = () => "{ return " + method + " };"
-            const fn = new Function(caller());
-            return fn.call(null).call(null, ...args)
+            return component[method](...args);
         }
     }
 }

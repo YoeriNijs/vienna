@@ -3,7 +3,7 @@ import {VInternalRepeatTransformer} from "../v-internal-repeat-transformer";
 import {VRenderError} from "../../../v-render-error";
 
 @VComponent({
-    selector: 'app-component',
+    selector: 'repeat-component',
     styles: [],
     html: ''
 })

@@ -1,4 +1,3 @@
-import {VInternalComponent} from '../internal/v-internal-component';
 import {VNoRouteException} from './v-no-route-exception';
 import {VRoute} from './v-route';
 import {VRouteNotFoundStrategy} from './v-route-not-found-strategy';
@@ -8,9 +7,6 @@ import {VInternalRouterOptions} from "./v-internal-router-options";
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
 
-@VInternalComponent({
-    name: 'VRouter',
-})
 export class VRouter {
     private _routes: VRoute[] = [];
 

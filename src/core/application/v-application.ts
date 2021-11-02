@@ -1,7 +1,6 @@
 import {VRouter} from '../router/v-router';
 import {VInternalRenderer} from '../renderer/v-internal-renderer';
 import {VRoute} from '../router/v-route';
-import {VInternalComponent} from '../internal/v-internal-component';
 import {VApplicationConfig} from './v-application-config';
 import {Type, VInjector} from '../injector/v-injector';
 import {VRenderError} from "../renderer/v-render-error";
@@ -13,9 +12,6 @@ import {VInternalProxyMapper} from "../proxy/v-internal-proxy-mapper";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
-        @VInternalComponent({
-            name: 'VApplication',
-        })
         class InternalVApplication {
             private readonly _proxyMapper = new VInternalProxyMapper();
             private readonly _eventBus: VInternalEventbus;
