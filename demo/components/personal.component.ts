@@ -12,7 +12,7 @@ import {VComponent} from '../../src';
  
 		<div class="container">
 			<div class="msg">Welcome in my personal world</div>
-            <button data-v-click="navigateBack()"><< back</button>
+            <button @click="navigateBack()"><< back</button>
 		</div>
 		
 		<app-footer>Footer from personal</app-footer>

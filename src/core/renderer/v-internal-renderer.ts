@@ -7,42 +7,19 @@ import {VInternalHtmlTransformer} from "./transformers/html/v-internal-html-tran
 import {VInternalTemplateTransformer} from "./transformers/html/v-internal-template-transformer";
 import {VInternalStyleTransformer} from "./transformers/html/v-internal-style-transformer";
 import {VInternalControllerTransformer} from "./transformers/controller/v-internal-controller-transformer";
-import {VInternalAttributeTransformer} from "./transformers/controller/v-internal-attribute-transformer";
 import {VInternalCheckTransformer} from "./transformers/html/v-internal-check-transformer";
 import {VInternalRepeatTransformer} from "./transformers/html/v-internal-repeat-transformer";
 import {VInternalTemplate} from "../template-engine/v-internal-template";
 import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
+import {VInternalPropTransformer} from "./transformers/controller/v-internal-prop-transformer";
+import {VInternalHtmlAttributeTransformer} from "./transformers/html/v-internal-html-attribute-transformer";
+import {VInternalAttacher} from "./attachers/v-internal-attacher";
+import {VInternalEventAttacher} from "./attachers/v-internal-event-attacher";
+import {VInternalBindAttacher} from "./attachers/v-internal-bind-attacher";
 
-interface VElement {
-    publicDataName: string;
-    internalDataName: string;
-}
-
-interface VDomEvent extends VElement {
-    domEvent: string;
-}
-
-interface VAttributeDirective extends VElement {
-}
-
-interface VAttributeBinding extends VElement {
-}
-
-const SUPPORTED_DOM_EVENTS: VDomEvent[] = [
-    {publicDataName: 'v-click', internalDataName: 'vClick', domEvent: 'click'},
-];
-
-const SUPPORTED_ATTRIBUTE_BINDINGS: VAttributeBinding[] = [
-    {publicDataName: 'v-bind', internalDataName: 'vBind'}
-]
-
-enum InternalLifeCycleHook {
-    DESTROY,
-    INIT,
-    UNKNOWN
-}
+type InternalLifeCycleHook = 'init' | 'destroy' | 'unknown';
 
 export class VInternalRenderer {
     private readonly _view: HTMLElement;
@@ -86,16 +63,22 @@ export class VInternalRenderer {
 
         class DeclaredElement extends HTMLElement {
 
-            private _shadow: ShadowRoot;
+            private readonly _shadow: ShadowRoot;
+
             private _controllerTransformers: VInternalControllerTransformer[] = [
-                new VInternalAttributeTransformer()
+                new VInternalPropTransformer()
             ];
             private _htmlTransformers: VInternalHtmlTransformer[] = [
+                new VInternalHtmlAttributeTransformer(),
                 new VInternalRepeatTransformer(),
                 new VInternalTemplateTransformer(),
                 new VInternalStyleTransformer(),
                 new VInternalCheckTransformer()
             ];
+            private _attachers: VInternalAttacher[] = [
+                new VInternalBindAttacher(),
+                new VInternalEventAttacher()
+            ]
 
             constructor() {
                 super();
@@ -106,15 +89,12 @@ export class VInternalRenderer {
                 this.render();
             }
 
-            forceRebuild() {
-                eventBus.publish(VInternalEventName.REBUILD);
-            }
-
             render() {
                 // Transform internal component state
-                const component = this._controllerTransformers.reduce((component, transformer) => {
-                    return transformer.transform(component, this.attributes);
-                }, componentType);
+                const component = this._controllerTransformers
+                    .filter(transformer => transformer.accept(componentType, this.attributes))
+                    .reduce((component, transformer) =>
+                        transformer.transform(component, this.attributes), componentType);
 
                 // Transform visible component view
                 const html = this._htmlTransformers.reduce((html, transformer) => {
@@ -124,98 +104,40 @@ export class VInternalRenderer {
                 // Attach supported attribute directives
                 const parser = new DOMParser();
                 const dom = parser.parseFromString(html, 'text/html');
-                // SUPPORTED_ATTRIBUTE_MANIPULATORS.forEach((vAttributeDirective) => this.attachAttributeDirective(vAttributeDirective, component, dom));
 
+                // Append element to shadow dom
                 this._shadow.append(dom.head, dom.body);
 
-                // Attach supported dom events
-                SUPPORTED_DOM_EVENTS.forEach((vDomEvent) => this.attachDomEvents(vDomEvent, component));
-
-                // Bind
-                SUPPORTED_ATTRIBUTE_BINDINGS.forEach((b) => this.bind(b, component));
+                // Attach events, bindings and so on
+                this._attachers
+                    .filter(a => a.accept(component, this._shadow))
+                    .forEach(a => a.attach(component, this._shadow, {
+                        callInternalMethod: this.callInternalMethod,
+                        forceRebuild: () => {
+                            this.callLifeCycleHook('destroy', component);
+                            eventBus.publish(VInternalEventName.REBUILD);
+                        }
+                    }));
 
                 // Call init lifecycle hook
-                this.callLifeCycleHook(InternalLifeCycleHook.INIT, component);
-            }
-
-            bind(directive: VAttributeDirective, component: VComponentType): void {
-                if (!this._shadow.children) {
-                    return;
-                }
-
-                const elements = this._shadow.querySelectorAll<HTMLElement>(`[data-${directive.publicDataName}]`);
-                if (!elements) {
-                    return;
-                }
-
-                Array.from(elements).forEach((el: HTMLElement) => {
-                    const value = el.dataset[directive.internalDataName];
-                    if (directive.internalDataName === 'vBind') {
-                        (component as any)[value] = el;
-                    }
-                });
-            }
-
-            private attachDomEvents(vDomEvent: VDomEvent, component: VComponentType): void {
-                if (!this._shadow.children) {
-                    return;
-                }
-
-                const elements = this._shadow.querySelectorAll<HTMLElement>(`[data-${vDomEvent.publicDataName}]`);
-                if (!elements) {
-                    return;
-                }
-
-                Array.from(elements).forEach((el) => {
-                    const methodName = el.dataset[vDomEvent.internalDataName];
-                    Array.from(this._shadow.children)
-                        .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
-                        .map((shadowEl: HTMLElement) => this.findMethodNameInElement(shadowEl, vDomEvent, methodName))
-                        .filter((shadowEl) => shadowEl)
-                        .forEach((shadowEl: HTMLElement) => {
-                            shadowEl.addEventListener(vDomEvent.domEvent, () => {
-                                this.callInternalMethod(component, methodName, shadowEl);
-                                this.forceRebuild(); // Re-render since view may have changed
-                            });
-                        });
-                });
-            }
-
-            private findMethodNameInElement(element: HTMLElement, vElement: VElement, methodName: string): HTMLElement | undefined {
-                const inCurrent = element.dataset[vElement.internalDataName] === methodName;
-                if (inCurrent) {
-                    return element;
-                }
-
-                if (element.hasChildNodes()) {
-                    const children = Array.from(element.children);
-                    for (let i = 0; i < children.length; i++) {
-                        const child = children[i] as HTMLElement;
-                        const inChild = this.findMethodNameInElement(child, vElement, methodName);
-                        if (inChild) {
-                            return inChild;
-                        }
-                    }
-                }
-
-                return undefined;
+                this.callLifeCycleHook('init', component);
             }
 
             private callLifeCycleHook(hook: InternalLifeCycleHook, component: VComponentType): void {
                 switch (hook) {
-                    case InternalLifeCycleHook.INIT:
+                    case 'init':
                         this.callInternalMethod(component, 'vInit');
                         break;
-                    case InternalLifeCycleHook.DESTROY:
+                    case 'destroy':
                         this.callInternalMethod(component, 'vDestroy');
                         break;
-                    case InternalLifeCycleHook.UNKNOWN:
+                    case 'unknown':
                     default:
                     // Intended fall-through
                 }
             }
 
-            private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement) {
+            private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement): void {
                 const componentPrototype = Object.getPrototypeOf(component) || {};
                 const componentPrototypePrototype = Object.getPrototypeOf(componentPrototype) || {};
                 const methods = Object.getOwnPropertyNames(componentPrototypePrototype);

@@ -1,8 +1,16 @@
-import {VInternalControllerTransformer} from "./v-internal-controller-transformer";
 import {VComponentType} from "../../../component/v-component-type";
 import {V_INTERNAL_PROP_PLACEHOLDER, V_INTERNAL_PROP_PREFIX} from "../../../binding/v-prop";
+import {VInternalControllerTransformer} from "./v-internal-controller-transformer";
 
-export class VInternalAttributeTransformer implements VInternalControllerTransformer {
+export class VInternalPropTransformer implements VInternalControllerTransformer {
+    accept(component: VComponentType, attributes: NamedNodeMap | undefined): boolean {
+        return Array.from(attributes)
+            .some(attr => {
+                const value = Object.getPrototypeOf(component)[`${V_INTERNAL_PROP_PREFIX}${attr.name}`];
+                return value === V_INTERNAL_PROP_PLACEHOLDER
+            });
+    }
+
     transform(component: VComponentType, attributes: NamedNodeMap | undefined): VComponentType {
         const actual = Array.from(attributes)
             .filter(attr => {

@@ -28,7 +28,7 @@ import {User} from "../model/user";
                     <span>Hi there, {{ userName }}!</span>
                     <app-dashboard></app-dashboard>
                     <div class="btn-menu">
-                        <button data-v-click="logoff()">Log off</button>
+                        <button @click="logoff()">Log off</button>
                     </div>
                 </div>
             </true>
@@ -37,10 +37,10 @@ import {User} from "../model/user";
                 <div class="public-area">
                     <span>Hi there, please log in first.</span>
                     <form>
-                        <input data-v-bind="usernameLogin" id="usernameLogin" type="text" placeholder="Username" minlength="1"/>
-                        <input data-v-bind="passwordLogin" id="passwordLogin" type="password" placeholder="Password" minlength="1"/>
+                        <input @bind="usernameLogin" id="usernameLogin" type="text" placeholder="Username" minlength="1"/>
+                        <input @bind="passwordLogin" id="passwordLogin" type="password" placeholder="Password" minlength="1"/>
                         <div class="btn-menu">
-                            <button type="submit" data-v-click="login">Login</button>
+                            <button type="submit" @click="login">Login</button>
                         </div>
                     </form>
                     
@@ -48,11 +48,11 @@ import {User} from "../model/user";
                     
                     <span>Register</span>
                     <form>
-                        <input data-v-bind="usernameRegister" id="usernameRegister" type="text" placeholder="Username" minlength="1"/>
-                        <input data-v-bind="passwordRegister" id="passwordRegister" type="password" placeholder="Password" minlength="1"/>
-                        <input data-v-bind="emailRegister" id="emailRegister" type="email" placeholder="E-mail" minlength="1"/>
+                        <input @bind="usernameRegister" id="usernameRegister" type="text" placeholder="Username" minlength="1"/>
+                        <input @bind="passwordRegister" id="passwordRegister" type="password" placeholder="Password" minlength="1"/>
+                        <input @bind="emailRegister" id="emailRegister" type="email" placeholder="E-mail" minlength="1"/>
                         <div class="btn-menu">
-                            <button type="submit" data-v-click="register">Register</button>
+                            <button type="submit" @click="register">Register</button>
                         </div>
                     </form>
                 </div>
