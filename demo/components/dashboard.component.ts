@@ -31,13 +31,13 @@ import {VEmit} from "../../src/core/binding/v-emit";
 export class DashboardComponent {
     @VEmit('titleChange')
     titleChange: VEmitter<string> = new VEmitter<string>();
-    
+
     menuItems = [
         {name: 'personal', link: '#/personal'},
         {name: 'settings', link: '#/settings?message=Settings with param from navigation'}
     ];
 
     changeTitle(): void {
-        this.titleChange.publish('New title from dashboard');
+        this.titleChange.emit('New title from dashboard');
     }
 }
