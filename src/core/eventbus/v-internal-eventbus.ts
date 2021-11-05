@@ -1,7 +1,7 @@
 import {VInternalEventName} from "./v-internal-event-name";
 import {VInjectable} from "../injector/v-injectable-decorator";
 
-@VInjectable({ singleton: true })
+@VInjectable({singleton: true})
 export class VInternalEventbus {
 
     private _subscribers: { [eventName: string]: any } = [];

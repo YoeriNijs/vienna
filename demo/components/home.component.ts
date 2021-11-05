@@ -26,7 +26,7 @@ import {User} from "../model/user";
             <true>
                 <div class="member-area">
                     <span>Hi there, {{ userName }}!</span>
-                    <app-dashboard></app-dashboard>
+                    <app-dashboard @emit="titleChange => changeNavbarTitle(title)"></app-dashboard>
                     <div class="btn-menu">
                         <button @click="logoff()">Log off</button>
                     </div>
@@ -116,5 +116,10 @@ export class HomeComponent implements VInit {
     logoff(): void {
         this.loginService.logoff();
         this.isLoggedIn = false;
+    }
+
+    changeNavbarTitle(newTitle: string) {
+        console.log('change', newTitle);
+        this.navbarTitle = newTitle;
     }
 }

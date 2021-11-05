@@ -3,8 +3,9 @@ import {VComponentType} from "../../component/v-component-type";
 import {VInternalHtmlAttribute} from "../v-internal-html-attribute";
 import {VInternalAttacherMethods} from "./v-internal-attacher-methods";
 import {VInternalHtmlAttributeMap} from "../v-internal-html-attribute-map";
+import {findMethodNameInElement} from "./v-internal-attacher-util";
 
-export class VInternalEventAttacher implements VInternalAttacher {
+export class VInternalDomEventAttacher implements VInternalAttacher {
     accept(component: VComponentType, shadowRoot: ShadowRoot): boolean {
         return shadowRoot.children && VInternalHtmlAttributeMap.some(attr =>
             shadowRoot.querySelectorAll<HTMLElement>(`[${attr.internalClientAttrName}]`));
@@ -21,7 +22,7 @@ export class VInternalEventAttacher implements VInternalAttacher {
         const methodName = el.dataset[attr.internalAttrName];
         Array.from(shadow.children)
             .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
-            .map((shadowEl: HTMLElement) => this.findMethodNameInElement(shadowEl, attr, methodName))
+            .map((shadowEl: HTMLElement) => findMethodNameInElement(shadowEl, attr, methodName))
             .filter((shadowEl) => shadowEl)
             .forEach((shadowEl: HTMLElement) => {
                 shadowEl.addEventListener(attr.domEvent, () => {
@@ -30,25 +31,4 @@ export class VInternalEventAttacher implements VInternalAttacher {
                 });
             });
     }
-
-    private findMethodNameInElement(element: HTMLElement, attr: VInternalHtmlAttribute, methodName: string): HTMLElement | undefined {
-        const inCurrent = element.dataset[attr.internalAttrName] === methodName;
-        if (inCurrent) {
-            return element;
-        }
-
-        if (element.hasChildNodes()) {
-            const children = Array.from(element.children);
-            for (let i = 0; i < children.length; i++) {
-                const child = children[i] as HTMLElement;
-                const inChild = this.findMethodNameInElement(child, attr, methodName);
-                if (inChild) {
-                    return inChild;
-                }
-            }
-        }
-
-        return undefined;
-    }
-
 }

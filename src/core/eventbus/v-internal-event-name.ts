@@ -1,4 +1,5 @@
 export enum VInternalEventName {
+    EMIT = 'emit',
     NAVIGATED = 'navigation',
     RENDERING_STARTED = 'rendering-started',
     RENDERING_FINISHED = 'rendering-finished',

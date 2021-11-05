@@ -16,8 +16,9 @@ import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VInternalPropTransformer} from "./transformers/controller/v-internal-prop-transformer";
 import {VInternalHtmlAttributeTransformer} from "./transformers/html/v-internal-html-attribute-transformer";
 import {VInternalAttacher} from "./attachers/v-internal-attacher";
-import {VInternalEventAttacher} from "./attachers/v-internal-event-attacher";
+import {VInternalDomEventAttacher} from "./attachers/v-internal-dom-event-attacher";
 import {VInternalBindAttacher} from "./attachers/v-internal-bind-attacher";
+import {VInternalEmitAttacher} from "./attachers/v-internal-emit-attacher";
 
 type InternalLifeCycleHook = 'init' | 'destroy' | 'unknown';
 
@@ -77,7 +78,8 @@ export class VInternalRenderer {
             ];
             private _attachers: VInternalAttacher[] = [
                 new VInternalBindAttacher(),
-                new VInternalEventAttacher()
+                new VInternalDomEventAttacher(),
+                new VInternalEmitAttacher()
             ]
 
             constructor() {
@@ -137,7 +139,7 @@ export class VInternalRenderer {
                 }
             }
 
-            private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement): void {
+            private callInternalMethod(component: VComponentType, methodName: string, htmlElement?: HTMLElement, data?: any): void {
                 const componentPrototype = Object.getPrototypeOf(component) || {};
                 const componentPrototypePrototype = Object.getPrototypeOf(componentPrototype) || {};
                 const methods = Object.getOwnPropertyNames(componentPrototypePrototype);
@@ -150,18 +152,23 @@ export class VInternalRenderer {
                 const indexOfFirstParenthesis = methodName.indexOf('(');
                 const indexOfLastParenthesis = methodName.indexOf(')');
                 if (indexOfFirstParenthesis !== -1 && indexOfLastParenthesis !== -1) {
-                    // First, we find the actual values for the variables that we have some references for
-                    const actualValues = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
-                        .split(',')
-                        .filter(v => v.length > 0)
-                        .map(v => {
-                            const template = new VInternalTemplate(v);
-                            return VInternalTemplateEngine.render(template, component);
-                        });
-                    methodVariables.push(...actualValues);
+                    if (data) {
+                        methodVariables.push(data);
+                        methodName = methodName.substring(0, indexOfFirstParenthesis);
+                    } else {
+                        // First, we find the actual values for the variables that we have some references for
+                        const actualValues = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
+                            .split(',')
+                            .filter(v => v.length > 0)
+                            .map(v => {
+                                const template = new VInternalTemplate(v);
+                                return VInternalTemplateEngine.render(template, component);
+                            });
+                        methodVariables.push(...actualValues);
 
-                    // Then, just replace the method name by the name without arguments
-                    methodName = methodName.substring(0, indexOfFirstParenthesis);
+                        // Then, just replace the method name by the name without arguments
+                        methodName = methodName.substring(0, indexOfFirstParenthesis);
+                    }
                 }
 
                 const methodIndex = methods.indexOf(methodName);

@@ -1,4 +1,6 @@
 import {VComponent} from '../../src';
+import {VEmitter} from "../../src/core/binding/v-emitter";
+import {VEmit} from "../../src/core/binding/v-emit";
 
 @VComponent({
     selector: 'app-dashboard',
@@ -22,11 +24,20 @@ import {VComponent} from '../../src';
                 </li>
             </v-repeat>
         </ul>
+        <br />
+        <button @click="changeTitle()">Change title</button>
 	`,
 })
 export class DashboardComponent {
+    @VEmit('titleChange')
+    titleChange: VEmitter<string> = new VEmitter<string>();
+    
     menuItems = [
         {name: 'personal', link: '#/personal'},
         {name: 'settings', link: '#/settings?message=Settings with param from navigation'}
     ];
+
+    changeTitle(): void {
+        this.titleChange.publish('New title from dashboard');
+    }
 }

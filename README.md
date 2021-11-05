@@ -21,7 +21,6 @@ npm install vienna-ts
 
 # Todo
 
-- Implement input bindings from component variable
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
   instead of all)
 - Add unit tests
