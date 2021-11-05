@@ -119,7 +119,6 @@ export class HomeComponent implements VInit {
     }
 
     changeNavbarTitle(newTitle: string) {
-        console.log('change', newTitle);
         this.navbarTitle = newTitle;
     }
 }
