@@ -6,8 +6,8 @@
 
 ## Because small code is also nice
 
-Vienna is a small framework under active development and, for me, just a way to discover how frameworks like Angular
-actually work under the hood. Vienna is based on some core fundamentals of Angular.
+Vienna is a small framework under active development and, for me, just a way to discover how frameworks like Angular actually work under the
+hood. Vienna is based on some core fundamentals of Angular.
 
 This is just one big WIP. Please, forgive my ugly code, lack of unit tests and documentation, and so on.
 
@@ -21,15 +21,15 @@ npm install vienna-ts
 
 # Todo
 
-- Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
-  instead of all)
+- Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id instead of all)
 - Add unit tests
-- Work with global styling somehow (e.g. Constructable Stylesheet Objects,
-  see https://wicg.github.io/construct-stylesheets/)
-- Support query params
-- Fix direct route bug
+- Work with global styling somehow (e.g. Constructable Stylesheet Objects, see https://wicg.github.io/construct-stylesheets/)
 - Use Rollup instead of Webpack since it generates a much smaller bundle size
-- Fix Init hook so it works without callback
+
+# Known issues
+
+- VProp is leaking state when routing to subcomponent that has input binding
+- VInit does not work without callback yet
 
 # Ideas
 
