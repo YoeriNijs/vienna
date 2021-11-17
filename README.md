@@ -13,11 +13,43 @@ This is just one big WIP. Please, forgive my ugly code, lack of unit tests and d
 
 See demo app to see how the framework works.
 
-# Install
+# Table of Contents (work in progress)
+
+1. [Install Vienna](#install)
+2. [Set up base application](#set-up-base-application)
+
+## Install
 
 ```
 npm install vienna-ts
 ```
+
+## Set up base application
+
+In order to get started with Vienna, you need a root class that holds the `VApplication` decorator. This root class is responsible for all
+declarations, routes and other application wide configuration properties. At the moment, declarations and routes are mandatory, so:
+
+application.ts
+
+```
+@VApplication({
+    declarations: [],
+    routes: []
+})
+export class DemoApplication {}
+```
+
+<b>Don't forget to actually declare the application class. Otherwise, your app won't run!</b>
+
+Currently, the `VApplication` decorator accepts a so-called `VApplicationConfig`. In this config, you can specify the following:
+
+- `declarations`: mandatory. Holds all Vienna components that you want to use in your application. See the component chapter for more
+  information.
+- `routes`: mandatory. Holds all Vienna routes for your application. See route chapter for more information.
+- `routeNotFoundStrategy`: optional. Can be used to specify another strategy if a route is not found. Currently, Vienna accepts two
+  strategies:
+    - `Ignore`: ignore the invalid route and just stay on the current page.
+    - `Root`: navigate user back to the root route of the Vienna application if the route is invalid.
 
 # Todo
 
