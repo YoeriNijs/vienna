@@ -17,6 +17,7 @@ See demo app to see how the framework works.
 
 1. [Install Vienna](#install)
 2. [Set up base application](#set-up-base-application)
+3. [Create components](#create-components)
 
 ## Install
 
@@ -29,14 +30,14 @@ npm install vienna-ts
 In order to get started with Vienna, you need a root class that holds the `VApplication` decorator. This root class is responsible for all
 declarations, routes and other application wide configuration properties. At the moment, declarations and routes are mandatory, so:
 
-application.ts
+`application.ts`
 
 ```
 @VApplication({
     declarations: [],
     routes: []
 })
-export class DemoApplication {}
+export class Application {}
 ```
 
 <b>Don't forget to actually declare the application class. Otherwise, your app won't run!</b>
@@ -50,6 +51,37 @@ Currently, the `VApplication` decorator accepts a so-called `VApplicationConfig`
   strategies:
     - `Ignore`: ignore the invalid route and just stay on the current page.
     - `Root`: navigate user back to the root route of the Vienna application if the route is invalid.
+
+## Create components
+Vienna is based on the concept of components. One is able to create various components. All of these hold their own logic, their own styling and so on. A component is able to use other components.
+
+To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector (that needs to consist of two parts, separated by a dash), some styles, and html. For instance:
+
+`my-component.ts`
+```
+@VComponent({
+    selector: 'my-component',
+    styles: [`
+      span {
+        background-color: red;
+        color: white;
+      }
+    `],
+    html: '<span>Hello there!</span>'
+})
+export class MyComponent {}
+```
+
+Then, just declare the new component in your application root by appending it to the declarations array:
+
+`application.ts`
+```
+@VApplication({
+    declarations: [MyComponent],
+    routes: []
+})
+export class Application {}
+```
 
 # Todo
 
