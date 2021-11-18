@@ -29,11 +29,16 @@ export class VInternalRenderer {
     constructor(options: VInternalRendererOptions) {
         this._eventBus = options.eventBus;
         this._view = document.createElement(options.selector);
-        const body = document.querySelector('body');
-        if (body) {
-            body.appendChild(this._view);
+
+        const rootElementSelector = options.rootElementSelector || 'body';
+        const rootElement = document.querySelector(rootElementSelector);
+        if (rootElement) {
+            while (rootElement.firstChild) {
+                rootElement.removeChild(rootElement.firstChild);
+            }
+            rootElement.append(this._view);
         } else {
-            throw new VRenderError('No body tag found');
+            throw new VRenderError(`Missing or invalid root element '${rootElementSelector}'!`);
         }
     }
 

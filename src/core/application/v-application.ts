@@ -23,7 +23,8 @@ export function VApplication(config: VApplicationConfig) {
                 this._eventBus = eventBus;
                 this._mainRenderer = new VInternalRenderer({
                     selector: 'v-app-renderer',
-                    eventBus: this._eventBus
+                    eventBus: this._eventBus,
+                    rootElementSelector: config.rootElementSelector
                 });
                 this._declarations = config.declarations.map((c: Type<VComponentType>) => this._proxyMapper.map(c, eventBus));
                 this._routes = config.routes;

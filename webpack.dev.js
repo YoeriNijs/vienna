@@ -9,6 +9,7 @@ module.exports = merge(common, {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Vienna',
+            template: 'demo/index.html'
         }),
     ],
     devServer: {

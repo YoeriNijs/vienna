@@ -34,6 +34,7 @@ import {SettingsComponent} from "./components/settings.component";
         },
     ],
     routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT,
+    rootElementSelector: '#vienna-root'
 })
 export class DemoApplication {
 }
