@@ -66,7 +66,7 @@ Vienna is based on the concept of components. A component is a small piece of co
 is able to create various components, and a component is able to make use of other components.
 
 To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector (that needs to consist
-of at least two parts, separated by a dash), some styles, and html. For instance:
+of at least two parts and is hyphen-separated), some styles, and html. For instance:
 
 `my-component.ts`
 
