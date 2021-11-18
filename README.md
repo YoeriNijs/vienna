@@ -15,9 +15,17 @@ See demo app to see how the framework works.
 
 # Table of Contents (work in progress)
 
-1. [Install Vienna](#install)
-2. [Set up base application](#set-up-base-application)
-3. [Create components](#create-components)
+- [Install Vienna](#install)
+- [Set up base application](#set-up-base-application)
+- [Component creation](#create-components)
+- [Component lifecycle hooks](#component-lifecycle-hooks)
+- [Conditional segments](#conditional-segments)
+    - [VCheck](#vcheck)
+    - [VRepeat](#vrepeat)
+- [Routes](#routes)
+    - [Route data](#route-data)
+    - [Route params](#route-params)
+    - [Guards](#route-guards)
 
 ## Install
 
@@ -28,7 +36,7 @@ npm install vienna-ts
 ## Set up base application
 
 In order to get started with Vienna, you need a root class that holds the `VApplication` decorator. This root class is responsible for all
-declarations, routes and other application wide configuration properties. At the moment, declarations and routes are mandatory, so:
+declarations, routes and other application wide configuration. At the moment, declarations and routes are mandatory, so:
 
 `application.ts`
 
@@ -44,20 +52,24 @@ export class Application {}
 
 Currently, the `VApplication` decorator accepts a so-called `VApplicationConfig`. In this config, you can specify the following:
 
-- `declarations`: mandatory. Holds all Vienna components that you want to use in your application. See the component chapter for more
-  information.
-- `routes`: mandatory. Holds all Vienna routes for your application. See route chapter for more information.
-- `routeNotFoundStrategy`: optional. Can be used to specify another strategy if a route is not found. Currently, Vienna accepts two
+- `declarations` (mandatory): holds all Vienna components that you want to use in your application.
+- `routes` (mandatory): holds all Vienna routes for your application.
+- `routeNotFoundStrategy` (optional): can be used to specify another strategy if a route is not found. Currently, Vienna accepts two
   strategies:
     - `Ignore`: ignore the invalid route and just stay on the current page.
     - `Root`: navigate user back to the root route of the Vienna application if the route is invalid.
+- `rootElementSelector` (optional): can be used to specify which root element should be used by Vienna as application root. Default: 'body'.
 
 ## Create components
-Vienna is based on the concept of components. One is able to create various components. All of these hold their own logic, their own styling and so on. A component is able to use other components.
 
-To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector (that needs to consist of two parts, separated by a dash), some styles, and html. For instance:
+Vienna is based on the concept of components. A component is a small piece of code that holds it's own encapsulated logic and styling. One
+is able to create various components, and a component is able to make use of other components.
+
+To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector (that needs to consist
+of at least two parts, separated by a dash), some styles, and html. For instance:
 
 `my-component.ts`
+
 ```
 @VComponent({
     selector: 'my-component',
@@ -75,6 +87,7 @@ export class MyComponent {}
 Then, just declare the new component in your application root by appending it to the declarations array:
 
 `application.ts`
+
 ```
 @VApplication({
     declarations: [MyComponent],
@@ -82,6 +95,202 @@ Then, just declare the new component in your application root by appending it to
 })
 export class Application {}
 ```
+
+Currently, the styles array only accepts strings. The same holds for the html part: it only accepts a string for now.
+
+## Component lifecycle hooks
+
+It is possible to use a component lifecycle hook to perform some logic. Vienna supports two hooks at the moment:
+
+- `VInit`: Will be executed when the component is rendered in the view.
+- `VDestroy`: Will be executed when the component is removed from the view.
+
+If you want to use these hooks, just implement the corresponding interface (i.e. `VInit` or `VDestroy`). For example:
+
+`my-component.ts`
+
+```
+@VComponent({
+    selector: 'my-component',
+    styles: [],
+    html: `Hello world!`
+})
+export class MyComponent implements VInit, VDestroy {
+  vInit(): void {
+    alert('I am executed when this component is rendered!');
+  }
+  
+  vDestroy(): void {
+    alert('I am executed when this component is removed!');
+  }
+}
+```
+
+## Conditional segments
+
+Conditional segments can help you to enrich your html by adding some view logic.
+
+### VCheck
+
+With VCheck, you can specify when an element should be rendered by checking a value or function. It is mandatory to add at least one true or
+one false element, but you do not need to declare both. The true and false elements should hold one html element at the minimum.
+
+The most simple way to use VCheck is to refer to a component field:
+
+`my-component.ts`
+
+```
+@VComponent({
+    selector: 'my-component',
+    styles: [],
+    html: `
+      <v-check if="{{ isLoggedIn }}">
+        <true>
+          <span>You are logged in!</span>
+        </true>
+        <false>
+          <span>You are not logged in!</span>
+        </false>
+      </v-check>
+    `
+})
+export class MyComponent {
+  isLoggedIn = true;
+}
+```
+
+It is also possible to perform a method call prior to rendering:
+
+`my-component.ts`
+
+```
+@VComponent({
+    selector: 'my-component',
+    styles: [],
+    html: `
+      <v-check if="isLoggedIn()">
+        <true>
+          <span>You are logged in!</span>
+        </true>
+        <false>
+          <span>You are not logged in!</span>
+        </false>
+      </v-check>
+    `
+})
+export class MyComponent {
+  isLoggedIn(): boolean {
+      return true;
+  }
+}
+```
+
+### VRepeat
+
+With VRepeat, you can easily multiply elements. It is also possible to use a variable for every element that you render. For instance:
+
+`my-component.ts`
+
+```
+@VComponent({
+    selector: 'my-component',
+    styles: [],
+    html: `
+      <v-repeat let="{{ i }}" for="['first', 'second', 'third']">
+          <span>{{ i }}</span>
+      </v-repeat>
+    `
+})
+export class MyComponent {}
+```
+
+It is also possible to make use of a component array:
+
+`my-component.ts`
+
+```
+@VComponent({
+    selector: 'my-component',
+    styles: [],
+    html: `
+      <v-repeat let="{{ person }}" for="{{ persons }}">
+          <span>{{ person.name }}</span>
+          <span>{{ person.age }}</span>
+      </v-repeat>
+    `
+})
+export class MyComponent {
+  persons = [{name: 'Bert', age: 30}, {name: 'Ernie', age: 60}];
+}
+```
+
+## Routes
+
+In order to use your Vienna application, you need to specify routes. With these routes, Vienna knows which components it should render for
+the corresponding paths.
+
+To create a route, just add it to the `VApplication` decorator. The path and component properties are mandatory. For instance:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [HomeComponent, AboutComponent],
+    routes: [
+      { path: '/', component: HomeComponent },
+      { path: '/about', component: AboutComponent }
+    ]
+})
+export class Application {}
+```
+
+Besides the path and component properties, the `VRoute` interface accepts the following optional values:
+
+- `data` (optional): key-value based map to specify some custom values for that specific route.
+- `guards` (optional): implementations of the `VRouteGuard` interface that allow you to control the accessibility of a route based on a
+  custom condition.
+
+### Route data
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [HomeComponent],
+    routes: [
+      { path: '/', component: HomeComponent, data: { titleOverride: 'My custom title override' } }
+    ]
+})
+export class Application {}
+```
+
+In order to access the route data, you need to inject the `VActivatedRoute` in the constructor of your component:
+
+`home-component.ts`
+
+```
+@VComponent({
+    selector: 'home-component',
+    styles: [],
+    html: `<span>{{ title }}</span>`
+})
+export class HomeComponent {
+
+    title = '';
+    
+    constructor(private activatedRoute: VActivatedRoute) {
+        this.activatedRoute.data(data => this.title = data.titleOverride);
+    }
+}
+```
+
+### Route guards
+
+To be implemented
+
+### Route params
+
+To be implemented
 
 # Todo
 
