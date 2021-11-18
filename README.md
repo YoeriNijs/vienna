@@ -48,6 +48,21 @@ declarations, routes and other application wide configuration. At the moment, de
 export class Application {}
 ```
 
+To get started, just create a [component](#create-components) and add the component to your declarations. Furthermore, specify the root
+route by adding a [route](#routes) that holds the root path:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [HomeComponent],
+    routes: [
+      { path: '/', component: HomeComponent }
+    ]
+})
+export class Application {}
+```
+
 <b>Don't forget to actually declare the application class. Otherwise, your app won't run!</b>
 
 Currently, the `VApplication` decorator accepts a so-called `VApplicationConfig`. In this config, you can specify the following:
@@ -252,6 +267,8 @@ Besides the path and component properties, the `VRoute` interface accepts the fo
 
 ### Route data
 
+Optional key-value based map to specify some custom values for a specific route.
+
 `application.ts`
 
 ```
@@ -285,6 +302,8 @@ export class HomeComponent {
 ```
 
 ### Route guards
+
+Optional implementations of the `VRouteGuard` interface that allow you to control the accessibility of a route based on a custom condition.
 
 To be implemented
 
