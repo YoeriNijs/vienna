@@ -16,6 +16,6 @@ export class SettingsComponent {
 
     constructor(private activatedRoute: VActivatedRoute) {
         this.activatedRoute.data((data: RouteData) => this.footerText = data.footerText);
-        this.activatedRoute.params((params => this.message = params.message));
+        this.activatedRoute.params(params => this.message = params.message);
     }
 }
