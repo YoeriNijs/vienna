@@ -86,8 +86,8 @@ following:
 Vienna is based on the concept of components. A component is a small piece of code that holds it's own encapsulated
 logic and styling. One is able to create various components, and a component is able to make use of other components.
 
-To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector (
-that needs to consist of at least two parts and is hyphen-separated), some styles, and html. For instance:
+To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector 
+(that needs to consist of at least two parts and is hyphen-separated), some styles, and html. For instance:
 
 `my-component.ts`
 
@@ -365,7 +365,7 @@ moment, the template engine of Vienna supports the following events:
 - Click (@click)
 - Change (@change)
 
-To listen to an event on one element, just add the @-mark. For instance:
+To listen to an event on one element, just add the @ mark. For instance:
 
 `custom.component.ts`
 
@@ -501,7 +501,7 @@ export class AuthorizedGuard implements VRouteGuard {
 
     guard(route: VRoute): boolean {
         const userRole = this.loginService.role;
-        const authorizedForRole = (route.data as RouteData).authorizedForRole;
+        const authorizedForRole = route.data.authorizedForRole;
         return userRole && authorizedForRole && userRole === authorizedForRole
     }
 }
@@ -584,7 +584,7 @@ export class CustomService {...}
 
 ## Component testing
 
-Vienna is still under construction. However, there is a basic testbed available to test Vienna component with ease:
+Vienna is still under construction. However, there is a basic testbed available to test Vienna components with ease:
 
 ```
 @VComponent({
