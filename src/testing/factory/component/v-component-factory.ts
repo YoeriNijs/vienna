@@ -5,6 +5,7 @@ import {VInternalEventbus} from "../../../core/eventbus/v-internal-eventbus";
 import {Type, VInjector} from "../../../core/injector/v-injector";
 import {VInternalRendererOptions} from "../../../core/renderer/v-internal-renderer-options";
 import {VInternalRenderer} from "../../../core/renderer/v-internal-renderer";
+import {VInternalEventName} from "../../../core/eventbus/v-internal-event-name";
 
 export const vComponentFactory = <T extends VComponentType>(factoryOptions: VComponentFactoryOptions): () => VTestComponent<T> => {
     const providedComponentType: Type<T> = factoryOptions.component as Type<T>;
@@ -23,6 +24,9 @@ export const vComponentFactory = <T extends VComponentType>(factoryOptions: VCom
 
     const renderer = new VInternalRenderer(options);
     renderer.renderAllFromRootNode(component, [component]);
+
+    eventBus.subscribe(VInternalEventName.REBUILD, () =>
+        renderer.renderAllFromRootNode(component, [component]));
 
     return (): VTestComponent<T> => new VTestComponent<T>(component, eventBus);
 }

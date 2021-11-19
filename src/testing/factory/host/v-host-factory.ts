@@ -5,6 +5,7 @@ import {VInternalEventbus} from "../../../core/eventbus/v-internal-eventbus";
 import {Type, VInjector} from "../../../core/injector/v-injector";
 import {VInternalRendererOptions} from "../../../core/renderer/v-internal-renderer-options";
 import {VInternalRenderer} from "../../../core/renderer/v-internal-renderer";
+import {VInternalEventName} from "../../../core/eventbus/v-internal-event-name";
 
 const createHost = (html: string): VComponentType => {
     const hostOptions: VComponentOptions = {
@@ -19,7 +20,8 @@ const createHost = (html: string): VComponentType => {
 const createRenderer = (eventBus: VInternalEventbus): VInternalRenderer => {
     const options: VInternalRendererOptions = {
         selector: 'v-renderer',
-        eventBus: eventBus
+        eventBus: eventBus,
+        rootElementSelector: 'body' // explicit
     };
 
     return new VInternalRenderer(options);
@@ -28,8 +30,8 @@ const createRenderer = (eventBus: VInternalEventbus): VInternalRenderer => {
 export const vHostFactory = <T extends VComponentType>(factoryOptions: VHostFactoryOptions): () => VHostComponent => {
     const providedComponentType: Type<T> = factoryOptions.component as Type<T>;
     const providedComponent: T = VInjector.resolve<T>(providedComponentType, {singleton: false});
-    const componentOptions: VComponentOptions = (providedComponent as any).vComponentOptions
-        ? JSON.parse((providedComponent as any).vComponentOptions)
+    const componentOptions: VComponentOptions = providedComponent.vComponentOptions
+        ? JSON.parse(providedComponent.vComponentOptions)
         : {};
     const componentOptionsWithOpenMode: VComponentOptions = Object.assign({encapsulationMode: 'open'}, componentOptions);
     const component: T = {vComponentOptions: JSON.stringify(componentOptionsWithOpenMode), ...providedComponent};
@@ -38,6 +40,9 @@ export const vHostFactory = <T extends VComponentType>(factoryOptions: VHostFact
     const renderer = createRenderer(eventBus);
     const host = createHost(factoryOptions.hostHtml);
     renderer.renderAllFromRootNode(host, [host, component]);
+
+    eventBus.subscribe(VInternalEventName.REBUILD, () =>
+        renderer.renderAllFromRootNode(host, [host, component]));
 
     return (): VHostComponent => new VHostComponent(eventBus);
 }

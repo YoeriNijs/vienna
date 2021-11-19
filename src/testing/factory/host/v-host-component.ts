@@ -21,7 +21,10 @@ export class VHostComponent {
     }
 
     get component(): ShadowRoot {
-        return this.host.querySelector('body').children[0].shadowRoot;
+        console.log('1', (this.host.querySelector('app-component') as HTMLElement).querySelector('head style'));
+        console.log('2', this.host.querySelector('body').innerHTML);
+        console.log('3', this.host.querySelector('body').querySelector('app-component').shadowRoot);
+        return document.querySelector('app-component').shadowRoot;
     }
 
     get componentStyles(): string {
