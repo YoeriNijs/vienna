@@ -1,6 +1,6 @@
 {
   "name": "vienna-ts",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "A small frontend framework to build big things",
   "author": "Yoeri Nijs",
   "license": "GPL-3.0",
@@ -71,6 +71,7 @@
     "template": "keepachangelog",
     "unreleased": true,
     "commitLimit": false,
-    "hideCredit": true
+    "hideCredit": true,
+    "sortCommits": "date-desc"
   }
 }
