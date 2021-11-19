@@ -9,10 +9,6 @@
 Vienna is a small framework under active development and, for me, just a way to discover how frameworks like Angular
 actually work under the hood. Vienna is based on some core fundamentals of Angular.
 
-This is just one big WIP. Please, forgive my ugly code, lack of unit tests and documentation, and so on.
-
-See demo app to see how the framework works.
-
 # Table of Contents (work in progress)
 
 - [Install Vienna](#install)
