@@ -8,11 +8,17 @@ import {VInternalTemplateEngine} from "../../../template-engine/v-internal-templ
 
 const REGEX_REFERENCE_WITHOUT_BRACKETS = /{{|}}/;
 
+interface RepeatElementWithChildNodes {
+    element: Element;
+    childNodes: Node[];
+}
+
 export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
     transform(html: string, component: VComponentType): string {
         const parser = new DOMParser();
         let document = parser.parseFromString(html, 'text/html');
 
+        const repeatElementWithChildNodes: RepeatElementWithChildNodes[] = [];
         const repeatElements = document.getElementsByTagName('v-repeat');
         for (let repeatElement of repeatElements) {
             const letValue = this.extractLetValueFromElement(repeatElement);
@@ -35,8 +41,10 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
             }
 
             const repeatChildNodes: Node[] = Array.from(repeatElement.children).map(c => c.cloneNode(true));
-            repeatElement.replaceWith(...repeatChildNodes);
+            repeatElementWithChildNodes.push({element: repeatElement, childNodes: repeatChildNodes});
         }
+
+        repeatElementWithChildNodes.forEach(e => e.element.replaceWith(...e.childNodes));
 
         return document.head.innerHTML.trim() + document.body.innerHTML.trim();
     }
