@@ -1,4 +1,4 @@
-~~# Vienna (very alpha, still in development)
+# Vienna (very alpha, still in development)
 
 ![Vienna logo](https://raw.githubusercontent.com/YoeriNijs/vienna/main/img/logo.png)
 
