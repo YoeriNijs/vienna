@@ -23,12 +23,6 @@
     "postversion": "git push --no-verify && git push --tags --no-verify",
     "release": "sh scripts/release.sh"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run lint && npm run test",
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
-    }
-  },
   "files": [
     "lib/**/*"
   ],
