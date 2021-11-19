@@ -46,10 +46,26 @@ export function VApplication(config: VApplicationConfig) {
                 const root = this._declarations.find((declaredComponent) => declaredComponent instanceof (route.component as any));
                 if (root) {
                     this._mainRenderer.renderAllFromRootNode(root, this._declarations);
-                    this._eventBus.subscribe(VInternalEventName.REBUILD, () => this._mainRenderer.renderAllFromRootNode(root, this._declarations));
+                    this._eventBus.subscribe(VInternalEventName.REBUILD, () => this.rebuildFromRootNode(root));
                 } else {
                     throw new VRenderError(`Cannot find declaration for path '${route.path}'. Declare a class for this path in your Vienna application configuration.`);
                 }
+            }
+
+            private rebuildFromRootNode(root: VComponentType): void {
+                this.clearAllIntervals();
+                this.clearAllTimeouts();
+                this._mainRenderer.renderAllFromRootNode(root, this._declarations);
+            }
+
+            private clearAllTimeouts(): void {
+                let id = window.setTimeout(() => {}, 0);
+                while (id--) window.clearTimeout(id);
+            }
+
+            private clearAllIntervals(): void {
+                let id = window.setInterval(() => {}, 0);
+                while (id--) window.clearInterval(id);
             }
         }
 
