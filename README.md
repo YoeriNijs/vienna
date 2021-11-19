@@ -1,4 +1,4 @@
-# Vienna (very alpha, still in development)
+~~# Vienna (very alpha, still in development)
 
 ![Vienna logo](https://raw.githubusercontent.com/YoeriNijs/vienna/main/img/logo.png)
 
@@ -229,12 +229,20 @@ If you want to use these hooks, just implement the corresponding interface (i.e.
 
 ```
 
-@VComponent({ selector: 'my-component', styles: [], html: `Hello world!`
+@VComponent({ 
+  selector: 'my-component', 
+  styles: [], 
+  html: `Hello world!`
 })
-export class MyComponent implements VInit, VDestroy { vInit(): void { alert('I am executed when this component is
-rendered!'); }
+export class MyComponent implements VInit, VDestroy { 
+  vInit(): void { 
+    alert('I am executed when this component is rendered!'); 
+  }
 
-vDestroy(): void { alert('I am executed when this component is removed!'); } }
+  vDestroy(): void { 
+    alert('I am executed when this component is removed!'); 
+  } 
+}
 
 ```
 
@@ -254,18 +262,23 @@ The most simple way to use VCheck is to refer to a component field:
 
 ```
 
-@VComponent({ selector: 'my-component', styles: [], html: `
-<v-check if="{{ isLoggedIn }}">
-<true>
-<span>You are logged in!</span>
-</true>
-<false>
-<span>You are not logged in!</span>
-</false>
-</v-check>
-`
+@VComponent({ 
+  selector: 'my-component', 
+  styles: [], 
+  html: `
+    <v-check if="{{ isLoggedIn }}">
+      <true>
+        <span>You are logged in!</span>
+      </true>
+      <false>
+        <span>You are not logged in!</span>
+      </false>
+    </v-check>
+  `
 })
-export class MyComponent { isLoggedIn = true; }
+export class MyComponent { 
+  isLoggedIn = true; 
+}
 
 ```
 
@@ -275,18 +288,25 @@ It is also possible to perform a method call prior to rendering:
 
 ```
 
-@VComponent({ selector: 'my-component', styles: [], html: `
-<v-check if="isLoggedIn()">
-<true>
-<span>You are logged in!</span>
-</true>
-<false>
-<span>You are not logged in!</span>
-</false>
-</v-check>
-`
+@VComponent({ 
+  selector: 'my-component', 
+  styles: [], 
+  html: `
+    <v-check if="isLoggedIn()">
+      <true>
+        <span>You are logged in!</span>
+      </true>
+      <false>
+        <span>You are not logged in!</span>
+      </false>
+    </v-check>
+  `
 })
-export class MyComponent { isLoggedIn(): boolean { return true; } }
+export class MyComponent { 
+  isLoggedIn(): boolean { 
+    return true; 
+  } 
+}
 
 ```
 
@@ -299,11 +319,14 @@ For instance:
 
 ```
 
-@VComponent({ selector: 'my-component', styles: [], html: `
-<v-repeat let="{{ i }}" for="['first', 'second', 'third']">
-<span>{{ i }}</span>
-</v-repeat>
-`
+@VComponent({ 
+  selector: 'my-component', 
+  styles: [], 
+  html: `
+      <v-repeat let="{{ i }}" for="['first', 'second', 'third']">
+        <span>{{ i }}</span>
+      </v-repeat>
+  `
 })
 export class MyComponent {}
 
@@ -315,14 +338,22 @@ It is also possible to make use of a component array:
 
 ```
 
-@VComponent({ selector: 'my-component', styles: [], html: `
-<v-repeat let="{{ person }}" for="{{ persons }}">
-<span>{{ person.name }}</span>
-<span>{{ person.age }}</span>
-</v-repeat>
-`
+@VComponent({ 
+  selector: 'my-component', 
+  styles: [], 
+  html: `
+    <v-repeat let="{{ person }}" for="{{ persons }}">
+      <span>{{ person.name }}</span>
+      <span>{{ person.age }}</span>
+    </v-repeat>
+  `
 })
-export class MyComponent { persons = [{name: 'Bert', age: 30}, {name: 'Ernie', age: 60}]; }
+export class MyComponent { 
+  persons = [
+    { name: 'Bert', age: 30 }, 
+    { name: 'Ernie', age: 60 }
+  ]; 
+}
 
 ```
 
@@ -340,9 +371,16 @@ To listen to an event on one element, just add the @-mark. For instance:
 
 ```
 
-@VComponent({ selector: 'custom-component', styles: [], html: `<button @click='showAlert('Hello!')>Show alert</button>`
+@VComponent({ 
+  selector: 'custom-component', 
+  styles: [], 
+  html: `<button @click='showAlert('Hello!')>Show alert</button>`
 })
-export class HomeComponent { showAlert(message: string): void { alert(message); } }
+export class HomeComponent { 
+  showAlert(message: string): void { 
+    alert(message); 
+  }
+}
 
 ```
 
@@ -358,9 +396,12 @@ instance:
 
 ```
 
-@VApplication({ declarations: [HomeComponent, AboutComponent], routes: [
-{ path: '/', component: HomeComponent }, { path: '/about', component: AboutComponent }
-]
+@VApplication({ 
+  declarations: [HomeComponent, AboutComponent], 
+  routes: [
+    { path: '/', component: HomeComponent }, 
+    { path: '/about', component: AboutComponent }
+  ]
 })
 export class Application {}
 
@@ -380,9 +421,15 @@ Optional key-value based map to specify some custom values for a specific route.
 
 ```
 
-@VApplication({ declarations: [HomeComponent], routes: [
-{ path: '/', component: HomeComponent, data: { titleOverride: 'My custom title override' } }
-]
+@VApplication({ 
+  declarations: [HomeComponent], 
+  routes: [
+    { 
+      path: '/', 
+      component: HomeComponent, 
+      data: { titleOverride: 'My custom title override' } 
+    }
+  ]
 })
 export class Application {}
 
@@ -394,16 +441,17 @@ In order to access the route data, you need to inject the `VActivatedRoute` in t
 
 ```
 
-@VComponent({ selector: 'home-component', styles: [], html: `<span>{{ title }}</span>`
+@VComponent({ 
+  selector: 'home-component', 
+  styles: [], 
+  html: `<span>{{ title }}</span>`
 })
 export class HomeComponent {
-
     title = '';
     
     constructor(private activatedRoute: VActivatedRoute) {
         this.activatedRoute.data(data => this.title = data.titleOverride);
     }
-
 }
 
 ```
@@ -418,11 +466,9 @@ a custom condition.
 ```
 
 export class CookieGuard implements VRouteGuard {
-
     guard(): boolean {
         return sessionStorage.getItem('allowedToUseCookies') === 'true';
     }
-
 }
 
 ```
@@ -432,9 +478,12 @@ Then, add your guard to the route that you want to control:
 
 ```
 
-@VApplication({ declarations: [HomeComponent, ComponentWithAnalytics], routes: [
-{ path: '/', component: HomeComponent }, { path: '/lorem', component: ComponentWithAnalytics, guards: [CookieGuard] },
-]
+@VApplication({ 
+  declarations: [HomeComponent, ComponentWithAnalytics], 
+  routes: [
+    { path: '/', component: HomeComponent }, 
+    { path: '/lorem', component: ComponentWithAnalytics, guards: [CookieGuard] },
+  ]
 })
 export class Application {}
 
@@ -448,16 +497,13 @@ A guard can make use of the current route, by adding the `VRoute` as argument. F
 
 @VInjectable()
 export class AuthorizedGuard implements VRouteGuard {
-
-    constructor(protected loginService: LoginService) {
-    }
+    constructor(protected loginService: LoginService) {}
 
     guard(route: VRoute): boolean {
         const userRole = this.loginService.role;
         const authorizedForRole = (route.data as RouteData).authorizedForRole;
         return userRole && authorizedForRole && userRole === authorizedForRole
     }
-
 }
 
 ```
@@ -474,16 +520,17 @@ use the `VActivatedRoute`:
 
 ```
 
-@VComponent({ selector: 'dashboard-component', styles: [], html: `<span>{{ welcomeMsg }}</span>` // prints 'Hello there'
+@VComponent({ 
+  selector: 'dashboard-component', 
+  styles: [], 
+  html: `<span>{{ welcomeMsg }}</span>` // prints 'Hello there'
 })
 export class DashboardComponent {
-
     welcomeMsg = '';
     
     constructor(private activatedRoute: VActivatedRoute) {
         this.activatedRoute.params(params => this.welcomeMsg = params.message);
     }
-
 }
 
 ```
@@ -499,8 +546,10 @@ a dependency, like a service, in another class, like a component, you need to pr
 
 @VInjectable()
 export class CustomService {
-
-getHelloWorld(): string { return 'Hello world!'; } }
+  getHelloWorld(): string { 
+    return 'Hello world!'; 
+  } 
+}
 
 ```
 
@@ -508,16 +557,17 @@ getHelloWorld(): string { return 'Hello world!'; } }
 
 ```
 
-@VComponent({ selector: 'custom-component', styles: [], html: `<span>{{ message }}</span>` // prints 'Hello world!'
+@VComponent({ 
+  selector: 'custom-component', 
+  styles: [], 
+  html: `<span>{{ message }}</span>` // prints 'Hello world!'
 })
 export class CustomComponent {
-
     message = '';
     
     constructor(protected customService: CustomService) {
         this.message = customService.getHelloWorld();
     }
-
 }
 
 ```
@@ -596,4 +646,4 @@ describe('VComponentFactory', () => {
 - https://www.thinktecture.com/en/web-components/flaws/
 - https://hackernoon.com/how-to-create-new-template-engine-using-javascript-8f26313p
 - https://www.raresportan.com/object-change-detection/ (using Proxy)
-- https://fatfreeframework.com/3.7/views-and-templates (nice example of directive syntax)
+- https://fatfreeframework.com/3.7/views-and-templates (nice example of directive syntax)~~
