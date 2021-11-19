@@ -19,6 +19,7 @@ import {VInternalAttacher} from "./attachers/v-internal-attacher";
 import {VInternalDomEventAttacher} from "./attachers/v-internal-dom-event-attacher";
 import {VInternalBindAttacher} from "./attachers/v-internal-bind-attacher";
 import {VInternalEmitAttacher} from "./attachers/v-internal-emit-attacher";
+import {getDefinedOrElse} from "../util/v-internal-object-util";
 
 type InternalLifeCycleHook = 'init' | 'destroy' | 'unknown';
 
@@ -31,15 +32,13 @@ export class VInternalRenderer {
         this._view = document.createElement(options.selector);
 
         const rootElementSelector = options.rootElementSelector || 'body';
-        const rootElement = document.querySelector(rootElementSelector);
-        if (rootElement) {
-            while (rootElement.firstChild) {
-                rootElement.removeChild(rootElement.firstChild);
-            }
-            rootElement.append(this._view);
-        } else {
+        const rootElement = getDefinedOrElse(document.querySelector(rootElementSelector), () => {
             throw new VRenderError(`Missing or invalid root element '${rootElementSelector}'!`);
+        });
+        while (rootElement.firstChild) {
+            rootElement.removeChild(rootElement.firstChild);
         }
+        rootElement.append(this._view);
     }
 
     public renderAllFromRootNode(component: unknown & VComponentType, allComponents: VComponentType[]) {

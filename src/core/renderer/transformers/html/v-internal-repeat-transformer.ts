@@ -34,8 +34,8 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
                 this.appendNewChildren(repeatElement, iterationValues, letValue);
             }
 
-            Array.from(repeatElement.children).forEach(c => repeatElement.parentElement.append(c));
-            repeatElement.parentElement.removeChild(repeatElement);
+            const repeatChildNodes: Node[] = Array.from(repeatElement.children).map(c => c.cloneNode(true));
+            repeatElement.replaceWith(...repeatChildNodes);
         }
 
         return document.head.innerHTML.trim() + document.body.innerHTML.trim();

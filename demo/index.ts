@@ -7,6 +7,7 @@ import {PersonalComponent} from "./components/personal.component";
 import {AboutComponent} from "./components/about.component";
 import {CanActivatePersonalGuard} from "./guards/can-activate-personal.guard";
 import {SettingsComponent} from "./components/settings.component";
+import {TestComponent} from "./components/test.component";
 
 @VApplication({
     declarations: [
@@ -16,10 +17,11 @@ import {SettingsComponent} from "./components/settings.component";
         HomeComponent,
         NavbarComponent,
         PersonalComponent,
-        SettingsComponent
+        SettingsComponent,
+        TestComponent
     ],
     routes: [
-        {path: '/', component: HomeComponent},
+        {path: '/', component: TestComponent},
         {path: '/about', component: AboutComponent},
         {
             path: '/settings',
