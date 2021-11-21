@@ -20,6 +20,8 @@ import {VInternalDomEventAttacher} from "./attachers/v-internal-dom-event-attach
 import {VInternalBindAttacher} from "./attachers/v-internal-bind-attacher";
 import {VInternalEmitAttacher} from "./attachers/v-internal-emit-attacher";
 import {getDefinedOrElse} from "../util/v-internal-object-util";
+import {VInternalEventRebuildData} from "../eventbus/v-internal-event-rebuild-data";
+import {V_INTERNAL_COMPONENT_ID} from "../component/v-component";
 
 type InternalLifeCycleHook = 'init' | 'destroy' | 'unknown';
 
@@ -92,20 +94,16 @@ export class VInternalRenderer {
                 const mode = options.encapsulationMode ? options.encapsulationMode : 'closed';
                 this._shadow = this.attachShadow({mode});
 
+                eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, (data: VInternalEventRebuildData) => {
+                    data.dirtyElementIds.forEach(dirtyElementId => this.rerenderDirtyElement(dirtyElementId));
+                });
+
                 this.render();
             }
 
             render() {
-                // Transform internal component state
-                const component = this._controllerTransformers
-                    .filter(transformer => transformer.accept(componentType, this.attributes))
-                    .reduce((component, transformer) =>
-                        transformer.transform(component, this.attributes), componentType);
-
-                // Transform visible component view
-                const html = this._htmlTransformers.reduce((html, transformer) => {
-                    return transformer.transform(html, component, this.attributes)
-                }, options.html);
+                const component = this.transformInternalComponentState();
+                const html = this.transformComponentView(component, options.html);
 
                 // Attach supported attribute directives
                 const parser = new DOMParser();
@@ -127,6 +125,19 @@ export class VInternalRenderer {
 
                 // Call init lifecycle hook
                 this.callLifeCycleHook('init', component);
+            }
+
+            private transformComponentView(component: VComponentType, componentHtml: string) {
+                return this._htmlTransformers.reduce((html, transformer) => {
+                    return transformer.transform(html, component, this.attributes)
+                }, componentHtml);
+            }
+
+            private transformInternalComponentState() {
+                return this._controllerTransformers
+                    .filter(transformer => transformer.accept(componentType, this.attributes))
+                    .reduce((component, transformer) =>
+                        transformer.transform(component, this.attributes), componentType);
             }
 
             private callLifeCycleHook(hook: InternalLifeCycleHook, component: VComponentType): void {
@@ -185,6 +196,17 @@ export class VInternalRenderer {
                         return method(methodVariables);
                     }
                     return method();
+                }
+            }
+
+            private rerenderDirtyElement(dirtyElementId: string) {
+                const parser = new DOMParser();
+                const document = parser.parseFromString(options.html, 'text/html');
+                const original = document.querySelector(`[${V_INTERNAL_COMPONENT_ID}="${dirtyElementId}"]`);
+                const current = this._shadow.querySelector(`[${V_INTERNAL_COMPONENT_ID}="${dirtyElementId}"]`);
+                if (original && current) {
+                    this.transformInternalComponentState();
+                    current.innerHTML = this.transformComponentView(componentType, original.innerHTML);
                 }
             }
         }

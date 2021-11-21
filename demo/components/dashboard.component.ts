@@ -26,7 +26,7 @@ import {VEmit} from "../../src/core/binding/v-emit";
         </ul>
         <br />
         <button @click="changeTitle()">Change title</button>
-	`,
+	`
 })
 export class DashboardComponent {
     @VEmit('titleChange')
@@ -34,7 +34,8 @@ export class DashboardComponent {
 
     menuItems = [
         {name: 'personal', link: '#/personal'},
-        {name: 'settings', link: '#/settings?message=Settings with param from navigation'}
+        {name: 'settings', link: '#/settings?message=Settings with param from navigation'},
+        {name: 'counter', link: '#/counter'}
     ];
 
     changeTitle(): void {

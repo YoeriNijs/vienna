@@ -7,6 +7,7 @@ import {PersonalComponent} from "./components/personal.component";
 import {AboutComponent} from "./components/about.component";
 import {CanActivatePersonalGuard} from "./guards/can-activate-personal.guard";
 import {SettingsComponent} from "./components/settings.component";
+import {CounterComponent} from "./components/counter.component";
 
 @VApplication({
     declarations: [
@@ -16,11 +17,13 @@ import {SettingsComponent} from "./components/settings.component";
         HomeComponent,
         NavbarComponent,
         PersonalComponent,
-        SettingsComponent
+        SettingsComponent,
+        CounterComponent
     ],
     routes: [
         {path: '/', component: HomeComponent},
         {path: '/about', component: AboutComponent},
+        {path: '/counter', component: CounterComponent},
         {
             path: '/settings',
             component: SettingsComponent,
@@ -31,7 +34,7 @@ import {SettingsComponent} from "./components/settings.component";
             component: PersonalComponent,
             data: {authorizedForRole: 'user'},
             guards: [CanActivatePersonalGuard]
-        },
+        }
     ],
     routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT,
     rootElementSelector: '#vienna-root'

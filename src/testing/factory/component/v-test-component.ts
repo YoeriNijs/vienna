@@ -1,4 +1,4 @@
-import {VComponentOptions, VComponentType} from "../../../core";
+import {V_INTERNAL_COMPONENT_ID, VComponentOptions, VComponentType} from "../../../core";
 import {VInternalEventbus} from "../../../core/eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../../../core/eventbus/v-internal-event-name";
 
@@ -17,7 +17,9 @@ export class VTestComponent<T extends VComponentType> {
 
     get component(): ShadowRoot {
         const options: VComponentOptions = JSON.parse(this._component.vComponentOptions);
-        return document.querySelector(options.selector).shadowRoot;
+        const shadowRoot = document.querySelector(options.selector).shadowRoot;
+        Array.from(shadowRoot.children).forEach(c => this.removeUniqueId(c));
+        return shadowRoot;
     }
 
     get styles(): string {
@@ -25,7 +27,7 @@ export class VTestComponent<T extends VComponentType> {
     }
 
     get html(): string {
-        return this.component.querySelector('body').innerHTML;
+        return this.component.querySelector('body').children[0].innerHTML;
     }
 
     query(selector: string): HTMLElement {
@@ -34,5 +36,13 @@ export class VTestComponent<T extends VComponentType> {
 
     queryAll(selector: string): HTMLElement[] {
         return Array.from(this.component.querySelectorAll(selector)).map(node => node as HTMLElement);
+    }
+
+    private removeUniqueId(element: Element): Element {
+        element.removeAttribute(V_INTERNAL_COMPONENT_ID);
+        if (element.hasChildNodes()) {
+            Array.from(element.children).forEach(c => this.removeUniqueId(c));
+        }
+        return element;
     }
 }
