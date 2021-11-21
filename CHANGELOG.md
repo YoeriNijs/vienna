@@ -5,10 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.1.0
+## [0.1.5](https://github.com/YoeriNijs/vienna/compare/0.1.4...0.1.5)
 
 ### Commits
 
+- fix(renderer): rerender only dirty elements [`9ae112f`](https://github.com/YoeriNijs/vienna/commit/9ae112fb183acb2709619d90793da8a8f29ce44a)
+
+## [0.1.4](https://github.com/YoeriNijs/vienna/compare/0.1.2...0.1.4) - 2021-11-19
+
+### Commits
+
+- fix(v-application): destroy old setInterval and setTimeout functions when a rebuild is triggered [`6e3d542`](https://github.com/YoeriNijs/vienna/commit/6e3d5427301209412c306d5bdb606b86684335fb)
+- docs(readme): fix some typo's [`9940fca`](https://github.com/YoeriNijs/vienna/commit/9940fcaf2bc4079c785fb5fd10bc58b720149144)
+- fix(package.json): new release with updated docs [`b0007a6`](https://github.com/YoeriNijs/vienna/commit/b0007a6ec8389ed0e7209d32a5b5a93168ead7fc)
+
+## [0.1.2](https://github.com/YoeriNijs/vienna/compare/0.1.1...0.1.2) - 2021-11-19
+
+### Commits
+
+- docs(readme): fix readme [`788b277`](https://github.com/YoeriNijs/vienna/commit/788b2770af0b7008a5b1dfde547203210e186b87)
+
+## [0.1.1](https://github.com/YoeriNijs/vienna/compare/0.1.0...0.1.1) - 2021-11-19
+
+### Commits
+
+- docs(readme): fix readme format [`7bcb7e2`](https://github.com/YoeriNijs/vienna/commit/7bcb7e2c836162e8ba68f61df1e330380cc33a4b)
+
+## 0.1.0 - 2021-11-19
+
+### Commits
+
+- docs(changelog): update changelog [`3a77d6c`](https://github.com/YoeriNijs/vienna/commit/3a77d6cf6b83c8419f9cfd3a3b9b9ba169b163d4)
 - fix(release.sh): working on new release script, not tested yet [`ab2eb7b`](https://github.com/YoeriNijs/vienna/commit/ab2eb7b1fd677312e3eede700d5541f25308c703)
 - docs(readme): update [`edfb38f`](https://github.com/YoeriNijs/vienna/commit/edfb38fc18209dd20b6b7b8b3fc6e76baadfff66)
 - docs(readme): update readme with more documentation [`c9a22d4`](https://github.com/YoeriNijs/vienna/commit/c9a22d440561c3e1a963dcde34250fe78be29923)
