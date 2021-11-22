@@ -1,7 +1,6 @@
-import {VInternalHtmlAttribute} from "./v-internal-html-attribute";
+import {VInternalHtmlAttributeMap} from "../v-internal-html-attribute-map";
 
-export const VInternalHtmlAttributeMap: VInternalHtmlAttribute[] = [
-    // Dom events
+const expectedMapping: any[] = [
     { clientAttrName: '@abort', internalClientAttrName: 'data-v-abort', internalAttrName: 'vAbort', domEvent: 'abort'},
     { clientAttrName: '@afterPrint', internalClientAttrName: 'data-v-after-print', internalAttrName: 'vAfterPrint', domEvent: 'afterprint'},
     { clientAttrName: '@animationEnd', internalClientAttrName: 'data-v-animation-end', internalAttrName: 'vAnimationEnd', domEvent: 'animationend'},
@@ -79,8 +78,12 @@ export const VInternalHtmlAttributeMap: VInternalHtmlAttribute[] = [
     { clientAttrName: "@volumeChange", internalClientAttrName: "data-v-volume-change", internalAttrName: "vVolumeChange", domEvent: "volumechange" },
     { clientAttrName: "@waiting", internalClientAttrName: "data-v-waiting", internalAttrName: "vWaiting", domEvent: "waiting" },
     { clientAttrName: "@wheel", internalClientAttrName: "data-v-wheel", internalAttrName: "vWheel", domEvent: "wheel" },
-
-    // Vienna events
     { clientAttrName: '@bind', internalClientAttrName: 'data-v-bind', internalAttrName: 'vBind'},
     { clientAttrName: '@emit', internalClientAttrName: 'data-v-emit', internalAttrName: 'vEmit'}
 ];
+
+describe('VInternalHtmlAttributeMap', () => {
+   it('should map properly', () => {
+       expect(VInternalHtmlAttributeMap).toEqual(expectedMapping);
+   });
+});
