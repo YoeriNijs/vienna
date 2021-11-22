@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.5](https://github.com/YoeriNijs/vienna/compare/0.1.4...0.1.5)
+## [0.2.0](https://github.com/YoeriNijs/vienna/compare/0.1.4...0.2.0)
 
 ### Commits
 
+- feat(attribute mapping): support all dom events as attributes [`8291151`](https://github.com/YoeriNijs/vienna/commit/8291151b1582eba2af9bf2819073bafa9fd889a3)
+- docs(changelog): update changelog [`ab032bc`](https://github.com/YoeriNijs/vienna/commit/ab032bcf751aac988f97235821c9ed78bfec62ee)
 - fix(renderer): rerender only dirty elements [`9ae112f`](https://github.com/YoeriNijs/vienna/commit/9ae112fb183acb2709619d90793da8a8f29ce44a)
 
 ## [0.1.4](https://github.com/YoeriNijs/vienna/compare/0.1.2...0.1.4) - 2021-11-19
