@@ -7,6 +7,7 @@ import {VInternalTemplate} from "../template-engine/v-internal-template";
 import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
 import {VInternalEventRebuildData} from "../eventbus/v-internal-event-rebuild-data";
 import {V_INTERNAL_COMPONENT_ID} from "../component/v-component";
+import {VInternalRevocableProxy} from "./v-internal-revocable-proxy";
 
 /**
  * Responsible for creating proxy zones. These zones hold traps that are set to detect component changes. By using traps,
@@ -18,10 +19,10 @@ export class VInternalProxyMapper {
         // Util class
     }
 
-    map(_componentType: Type<VComponentType>, _eventBus: VInternalEventbus): VComponentType {
-        const component = VInjector.resolve<VComponentType>(_componentType);
+    map(componentType: Type<VComponentType>, _eventBus: VInternalEventbus): VInternalRevocableProxy<VComponentType> {
+        const component = VInjector.resolve<VComponentType>(componentType, { singleton: false });
         const proxyZone = this.createProxyZone(_eventBus);
-        return new Proxy(component, proxyZone);
+        return Proxy.revocable<VComponentType>(component, proxyZone);
     }
 
     private createProxyZone(eventBus: VInternalEventbus) {

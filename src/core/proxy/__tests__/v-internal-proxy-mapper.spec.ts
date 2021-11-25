@@ -32,9 +32,9 @@ describe('VInternalProxyMapper', () => {
         let rebuild = false;
 
         eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
-        const proxy = mapper.map(ProxyMapperComponent, eventBus);
+        const revocableProxy = mapper.map(ProxyMapperComponent, eventBus);
 
-        proxy.checked = true;
+        revocableProxy.proxy.checked = true;
         expect(rebuild).toBe(false);
     });
 
@@ -42,11 +42,11 @@ describe('VInternalProxyMapper', () => {
         let rebuild = false;
         eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
 
-        const proxy = mapper.map(ProxyMapperComponent, eventBus);
+        const revocableProxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
         eventBus.publish(VInternalEventName.RENDERING_STARTED);
 
-        proxy.checked = true;
+        revocableProxy.proxy.checked = true;
         expect(rebuild).toBe(false);
     });
 
@@ -54,10 +54,10 @@ describe('VInternalProxyMapper', () => {
         let rebuild = false;
         eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
 
-        const proxy = mapper.map(ProxyMapperComponent, eventBus);
+        const revocableProxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
 
-        proxy.checked = true;
+        revocableProxy.proxy.checked = true;
         expect(rebuild).toBe(true);
     });
 
@@ -67,13 +67,13 @@ describe('VInternalProxyMapper', () => {
             rebuildPartially = data.dirtyElementIds.includes('dirtyId');
         });
 
-        const proxy = mapper.map(ProxyMapperComponent, eventBus);
+        const revocableProxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
 
         const data: VInternalEventRebuildData = {dirtyElementIds: ['dirtyId']};
         eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
 
-        proxy.checked = true;
+        revocableProxy.proxy.checked = true;
         expect(rebuildPartially).toBe(true);
     });
 
@@ -81,13 +81,13 @@ describe('VInternalProxyMapper', () => {
         let rebuild = true;
         eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
 
-        const proxy = mapper.map(ProxyMapperComponent, eventBus);
+        const revocableProxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
 
         const data: VInternalEventRebuildData = {dirtyElementIds: []};
         eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
 
-        proxy.checked = true;
+        revocableProxy.proxy.checked = true;
         expect(rebuild).toBe(true);
     });
 });

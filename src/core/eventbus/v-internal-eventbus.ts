@@ -13,10 +13,14 @@ export class VInternalEventbus {
     }
 
     subscribe<T>(eventName: VInternalEventName, callback: (data?: T) => void): void {
+        const v = (data: any) => {
+            console.log("eventName", eventName);
+            callback(data);
+        }
         if (this._subscribers[eventName]) {
-            this._subscribers[eventName].push(callback);
+            this._subscribers[eventName].push(v);
         } else {
-            this._subscribers[eventName] = [callback];
+            this._subscribers[eventName] = [v];
         }
     }
 }

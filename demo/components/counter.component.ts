@@ -1,7 +1,7 @@
-import {VComponent, VInit} from "../../src";
+import {VComponent, VDestroy, VInit} from "../../src";
 
 @VComponent({
-    selector: 'test-component',
+    selector: 'counter-component',
     styles: [`
         .wrapper {
             display: flex;
@@ -17,12 +17,18 @@ import {VComponent, VInit} from "../../src";
         </div>
     `
 })
-export class CounterComponent implements VInit {
+export class CounterComponent implements VInit, VDestroy {
     textInput: HTMLInputElement;
     count: number = 0;
 
+    private interval: any;
+
     vInit(): void {
-        setInterval(() => this.count += 1);
+        this.interval = setInterval(() => this.count += 1, 2000);
+    }
+
+    vDestroy(): void {
+        clearInterval(this.interval);
     }
 
     showAlert(): void {
