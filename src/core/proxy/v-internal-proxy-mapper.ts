@@ -19,7 +19,7 @@ export class VInternalProxyMapper {
     }
 
     map(_componentType: Type<VComponentType>, _eventBus: VInternalEventbus): VComponentType {
-        const component = VInjector.resolve<VComponentType>(_componentType);
+        const component = VInjector.resolve<VComponentType>(_componentType, { singleton: false });
         const proxyZone = this.createProxyZone(_eventBus);
         return new Proxy(component, proxyZone);
     }

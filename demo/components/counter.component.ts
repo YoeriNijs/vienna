@@ -1,4 +1,4 @@
-import {VComponent, VInit} from "../../src";
+import {VComponent, VDestroy, VInit} from "../../src";
 
 @VComponent({
     selector: 'test-component',
@@ -17,12 +17,20 @@ import {VComponent, VInit} from "../../src";
         </div>
     `
 })
-export class CounterComponent implements VInit {
+export class CounterComponent implements VInit, VDestroy {
+
     textInput: HTMLInputElement;
     count: number = 0;
 
+    private countInterval: any;
+
     vInit(): void {
-        setInterval(() => this.count += 1);
+        this.countInterval = setInterval(() => this.count += 1);
+    }
+
+    vDestroy(): void {
+        clearInterval(this.countInterval);
+        this.count = 0;
     }
 
     showAlert(): void {
