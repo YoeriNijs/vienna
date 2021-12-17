@@ -25,16 +25,11 @@ type InternalLifeCycleHook = 'init' | 'destroy' | 'unknown';
 
 export class VInternalComponentBuilder {
 
-    private static OBSERVED_ATTRIBUTES: string[] = [];
-
     private constructor() {
         // Util
     }
 
     static buildAndDefineWebComponents(componentTypes: VComponentType[], eventBus: VInternalEventbus) {
-        // Reset previous observed attributes first
-        VInternalComponentBuilder.OBSERVED_ATTRIBUTES = [];
-
         componentTypes.forEach(componentType => {
             if (!componentType.vComponentOptions) {
                 throw new VRenderError('Component is not a Vienna Component');
@@ -72,12 +67,7 @@ export class VInternalComponentBuilder {
                         data.dirtyElementIds.forEach(dirtyElementId => this.rerenderDirtyElement(dirtyElementId));
                     });
 
-                    this.observeAttributes();
                     this.render();
-                }
-
-                static get observedAttributes(): string[] {
-                    return VInternalComponentBuilder.OBSERVED_ATTRIBUTES;
                 }
 
                 render() {
@@ -109,11 +99,8 @@ export class VInternalComponentBuilder {
                     this.callLifeCycleHook('destroy', componentType);
                 }
 
-                attributeChangedCallback(name: string, oldValue: any, newValue: any): void {
-                    this.forceRebuild();
-                }
-
                 private forceRebuild(): void {
+                    this.callLifeCycleHook('destroy', componentType);
                     eventBus.publish(VInternalEventName.REBUILD);
                 }
 
@@ -198,13 +185,6 @@ export class VInternalComponentBuilder {
                         this.transformInternalComponentState();
                         current.innerHTML = this.transformComponentView(componentType, original.innerHTML);
                     }
-                }
-
-                private observeAttributes(): void {
-                    Array.from(this.attributes)
-                        .map(attr => attr.name)
-                        .filter(name => !VInternalComponentBuilder.OBSERVED_ATTRIBUTES.some(v => v === name))
-                        .forEach(name => VInternalComponentBuilder.OBSERVED_ATTRIBUTES.push(name));
                 }
             }
 

@@ -30,7 +30,6 @@ export class CounterComponent implements VInit, VDestroy {
 
     vDestroy(): void {
         clearInterval(this.countInterval);
-        this.count = 0;
     }
 
     showAlert(): void {
