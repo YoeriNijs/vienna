@@ -7,7 +7,7 @@ import {VInternalRouterOptions} from "./v-internal-router-options";
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
 
-export class VRouter {
+export class VInternalRouter {
     private _routes: VRoute[] = [];
 
     constructor(private options: VInternalRouterOptions) {
@@ -18,7 +18,7 @@ export class VRouter {
         window.addEventListener('hashchange', () => this.navigate());
     }
 
-    addRoute(route: VRoute): VRouter {
+    addRoute(route: VRoute): VInternalRouter {
         this._routes.push(route);
         return this;
     }
@@ -60,6 +60,8 @@ export class VRouter {
 
     private dispatchNavigationAction(route: VRoute): void {
         const eventBus: VInternalEventbus = this.options.eventBus;
+        eventBus.unsubscribe(VInternalEventName.ROUTE_DATA);
+        eventBus.unsubscribe(VInternalEventName.ROUTE_PARAMS);
         eventBus.publish<VRoute>(VInternalEventName.NAVIGATED, route);
     }
 

@@ -4,7 +4,7 @@ import {VInjectable} from "../injector/v-injectable-decorator";
 @VInjectable({singleton: true})
 export class VInternalEventbus {
 
-    private _subscribers: { [eventName: string]: any } = [];
+    private _subscribers: { [eventName: string]: any } = {};
 
     publish<T>(eventName: VInternalEventName, data?: T): void {
         if (this._subscribers[eventName]) {
@@ -18,5 +18,14 @@ export class VInternalEventbus {
         } else {
             this._subscribers[eventName] = [callback];
         }
+    }
+
+    unsubscribe(eventName: VInternalEventName): void {
+        this._subscribers[eventName] = [];
+    }
+
+    resubscribe<T>(eventName: VInternalEventName, callback: (data?: T) => void): void {
+        this.unsubscribe(eventName);
+        this.subscribe(eventName, callback);
     }
 }

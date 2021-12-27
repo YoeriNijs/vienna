@@ -18,40 +18,28 @@ export class VInternalProxyMapper {
         // Util class
     }
 
-    map(_componentType: Type<VComponentType>, _eventBus: VInternalEventbus): VComponentType {
-        const component = VInjector.resolve<VComponentType>(_componentType, { singleton: false });
-        const proxyZone = this.createProxyZone(_eventBus);
-        return new Proxy(component, proxyZone);
+    map(componentType: Type<VComponentType>, eventBus: VInternalEventbus): VComponentType {
+        const component = VInjector.resolve<VComponentType>(componentType, {singleton: false});
+        const proxyZone = this.createProxyZone(eventBus);
+        return new Proxy(Object.assign(component), proxyZone);
     }
 
     private createProxyZone(eventBus: VInternalEventbus) {
-        let isRenderingFinished = false;
-        eventBus.subscribe(VInternalEventName.RENDERING_STARTED, () => isRenderingFinished = false);
-        eventBus.subscribe(VInternalEventName.RENDERING_FINISHED, () => isRenderingFinished = true);
-        eventBus.subscribe(VInternalEventName.REBUILD_CHECK, (data: VInternalEventRebuildData) => {
-            if (isRenderingFinished) {
-                // Only rebuild the app when rendering is finished, otherwise this results in a indefinite loop. Not
-                // sure if this is the way to go, but it works for now (YN).
-                if (data.dirtyElementIds.length < 1) {
-                    eventBus.publish(VInternalEventName.REBUILD);
-                } else {
-                    eventBus.publish(VInternalEventName.REBUILD_PARTIALLY, data);
-                }
-            }
-        })
+        this.initRenderHooks(eventBus);
+
         return {
             set: (component: VComponentType, prop: any, newValue: any) => {
                 const oldValue = component[prop];
-                if (oldValue !== undefined && oldValue !== newValue) {
-                    const data: VInternalEventRebuildData = this.findUniqueElementIdsToRebuild(component);
-
-                    // We have a change detected. First, write the new value.
-                    component[prop] = newValue;
-
-                    // Okay, check if we can rebuild the app already.
-                    eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
+                if (oldValue === newValue) {
+                    return true; // Just indicate that the value is okay
                 }
+
+                // We have a change detected. First, write the new value.
                 component[prop] = newValue;
+
+                // Okay, check if we can rebuild the app already.
+                const data = this.findUniqueElementIdsToRebuild(component);
+                eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
 
                 return true; // Just indicate that the value has been set
             }
@@ -86,6 +74,23 @@ export class VInternalProxyMapper {
         const document = parser.parseFromString(options.html, 'text/html');
         Array.from(document.children).forEach((el: HTMLElement) => findElementIds(el));
 
-        return {dirtyElementIds};
+        return {component, dirtyElementIds};
+    }
+
+    private initRenderHooks(eventBus: VInternalEventbus): void {
+        let isRenderingFinished = false;
+        eventBus.resubscribe(VInternalEventName.RENDERING_STARTED, () => isRenderingFinished = false);
+        eventBus.resubscribe(VInternalEventName.RENDERING_FINISHED, () => isRenderingFinished = true);
+        eventBus.resubscribe(VInternalEventName.REBUILD_CHECK, (data: VInternalEventRebuildData) => {
+            if (isRenderingFinished) {
+                // Only rebuild the app when rendering is finished, otherwise this results in a indefinite loop. Not
+                // sure if this is the way to go, but it works for now (YN).
+                if (data.dirtyElementIds.length < 1) {
+                    eventBus.publish(VInternalEventName.REBUILD);
+                } else {
+                    eventBus.publish(VInternalEventName.REBUILD_PARTIALLY, data);
+                }
+            }
+        });
     }
 }

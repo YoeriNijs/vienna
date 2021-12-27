@@ -5,7 +5,7 @@ import {VEmit} from "../../src/core/binding/v-emit";
 @VComponent({
     selector: 'app-dashboard',
     styles: [`
-        :host { 
+        ul { 
             display: flex; 
             flex-direction: column;
         }

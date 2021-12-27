@@ -45,3 +45,18 @@ export const getDefinedOrElse = <T>(obj: T, fn: () => void): T => {
         fn();
     }
 }
+
+export const doWhenDefined = <T>(obj: T, fn: (v?: T) => void): void => {
+    if (obj !== undefined && obj !== null) {
+        fn(obj);
+    }
+}
+
+export const getAllMethods = (obj: any): string[] => {
+    let properties = new Set()
+    let currentObj = obj
+    do {
+        Object.getOwnPropertyNames(currentObj).map(item => properties.add(item))
+    } while ((currentObj = Object.getPrototypeOf(currentObj)))
+    return [...properties.keys()].filter((item: any) => typeof obj[item] === 'function') as unknown[] as string[];
+}

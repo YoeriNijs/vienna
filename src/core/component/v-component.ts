@@ -1,4 +1,5 @@
 import {VComponentOptions} from './v-component-options';
+import {VInternalApplicationSelectors} from "../application/v-internal-application-selectors";
 
 export const V_INTERNAL_COMPONENT_ID = 'v-id';
 
@@ -8,14 +9,13 @@ export function VComponent(options: VComponentOptions) {
             constructor(...args: any[]) {
                 super(...args);
 
-                // Create unique id for every element in our view. With this id, it is much easier to just render the element
-                // for change detection later, instead of rendering the whole component over and over again (YN).
-                options.html = createUniqueIdForEveryElement(options.html);
-
+                // We need to override the html with unique id's for every element, so we can easily execute change
+                // detection without slowing down performance
+                const optionsOverride = {...options, html: createUniqueIdForEveryElement(options.html)};
                 Object.defineProperty(this, 'vComponentOptions', {
-                    value: JSON.stringify(options),
+                    value: JSON.stringify(optionsOverride),
                     configurable: false,
-                    writable: false,
+                    writable: false
                 });
             }
         };
@@ -35,17 +35,10 @@ const appendUniqueId = (element: Element): void => {
 const createUniqueIdForEveryElement = (html: string): string => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-    Array.from(doc.children).forEach(c => appendUniqueId(c));
 
-    // Clone body to add unique id to it as well
-    const clonedBody = doc.body.cloneNode(true);
-    const clonedBodyWrapper = doc.createElement('div');
-    clonedBodyWrapper.append(clonedBody);
-    appendUniqueId(clonedBodyWrapper);
+    const wrapper = doc.createElement(VInternalApplicationSelectors.V_COMPONENT_WRAPPER);
+    wrapper.append(doc.body.cloneNode(true));
+    appendUniqueId(wrapper);
 
-    // Replace previous body by wrapper
-    doc.body.innerHTML = '';
-    doc.body.appendChild(clonedBodyWrapper);
-
-    return doc.body.innerHTML;
+    return wrapper.outerHTML;
 }

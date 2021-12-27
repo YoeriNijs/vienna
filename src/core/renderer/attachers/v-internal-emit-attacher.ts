@@ -55,7 +55,7 @@ export class VInternalEmitAttacher implements VInternalAttacher {
             const data = internalEmitterData.data;
             if (internalEmitterData.callerName === caller) {
                 methods.callInternalMethod(component, methodName, elements[0], data);
-                methods.forceRebuild(); // Re-render since view may have changed
+                methods.forceRerendering(); // Re-render since view may have changed
             }
         });
     }

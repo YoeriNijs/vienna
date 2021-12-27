@@ -1,5 +1,6 @@
-import {VActivatedRoute, VComponent} from "../../src";
+import {VActivatedRoute, VComponent, VInit} from "../../src";
 import {RouteData} from "../model/route-data";
+import {RouteParams} from "../model/route-params";
 
 @VComponent({
     selector: 'app-settings',
@@ -10,12 +11,15 @@ import {RouteData} from "../model/route-data";
         <app-footer>{{ footerText }}</app-footer>
     `
 })
-export class SettingsComponent {
+export class SettingsComponent implements VInit {
     message: string;
     footerText: string;
 
     constructor(private activatedRoute: VActivatedRoute) {
+    }
+
+    vInit(): void {
+        this.activatedRoute.params((params: RouteParams) => this.message = params.message);
         this.activatedRoute.data((data: RouteData) => this.footerText = data.footerText);
-        this.activatedRoute.params(params => this.message = params.message);
     }
 }

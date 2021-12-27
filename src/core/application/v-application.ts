@@ -1,4 +1,3 @@
-import {VRouter} from '../router/v-router';
 import {VInternalRenderer} from '../renderer/v-internal-renderer';
 import {VRoute} from '../router/v-route';
 import {VApplicationConfig} from './v-application-config';
@@ -8,28 +7,30 @@ import {VComponentType} from '../component/v-component-type';
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VInternalRouterOptions} from "../router/v-internal-router-options";
-import {VInternalProxyMapper} from "../proxy/v-internal-proxy-mapper";
+import {VInternalApplicationSelectors} from "./v-internal-application-selectors";
+import {VInternalRouter} from "../router/v-internal-router";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
         class InternalVApplication {
-            private readonly _proxyMapper = new VInternalProxyMapper();
             private readonly _eventBus: VInternalEventbus;
             private readonly _mainRenderer: VInternalRenderer;
-            private readonly _declarations: VComponentType[];
+            private readonly _declarationTypes: Type<VComponentType>[];
             private readonly _routes: VRoute[];
 
             constructor(private eventBus: VInternalEventbus) {
                 this._eventBus = eventBus;
                 this._mainRenderer = new VInternalRenderer({
-                    selector: 'v-app-renderer',
+                    selector: VInternalApplicationSelectors.V_APP_RENDERER,
                     eventBus: this._eventBus,
                     rootElementSelector: config.rootElementSelector
                 });
-                this._declarations = config.declarations.map((c: Type<VComponentType>) => this._proxyMapper.map(c, eventBus));
+                this._declarationTypes = config.declarations;
                 this._routes = config.routes;
 
-                this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => this.renderComponentForRoute(route));
+                this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
+                    this.renderComponentForRoute(route)
+                });
                 this.initializeRouter();
             }
 
@@ -38,34 +39,21 @@ export function VApplication(config: VApplicationConfig) {
                     eventBus: this._eventBus,
                     routeNotFoundStrategy: config.routeNotFoundStrategy
                 };
-                const router = new VRouter(routerOptions);
+                const router = new VInternalRouter(routerOptions);
                 this._routes.forEach(route => router.addRoute(route));
             }
 
             private renderComponentForRoute(route: VRoute): void {
-                const root = this._declarations.find((declaredComponent) => declaredComponent instanceof (route.component as any));
-                if (root) {
-                    this._mainRenderer.renderAllFromRootNode(root, this._declarations);
-                    this._eventBus.subscribe(VInternalEventName.REBUILD, () => this.rebuildFromRootNode(root));
+                const rootNode = this._declarationTypes.find(declaration => declaration === route.component);
+                if (rootNode) {
+                    this._mainRenderer.renderAllFromRootNode(rootNode, this._declarationTypes);
+                    this._eventBus.unsubscribe(VInternalEventName.REBUILD);
+                    this._eventBus.subscribe(VInternalEventName.REBUILD, () => {
+                        this._mainRenderer.renderAllFromRootNode(rootNode, this._declarationTypes)
+                    });
                 } else {
                     throw new VRenderError(`Cannot find declaration for path '${route.path}'. Declare a class for this path in your Vienna application configuration.`);
                 }
-            }
-
-            private rebuildFromRootNode(root: VComponentType): void {
-                this.clearAllIntervals();
-                this.clearAllTimeouts();
-                this._mainRenderer.renderAllFromRootNode(root, this._declarations);
-            }
-
-            private clearAllTimeouts(): void {
-                let id = window.setTimeout(() => {}, 0);
-                while (id--) window.clearTimeout(id);
-            }
-
-            private clearAllIntervals(): void {
-                let id = window.setInterval(() => {}, 0);
-                while (id--) window.clearInterval(id);
             }
         }
 

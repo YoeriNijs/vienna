@@ -78,17 +78,24 @@ export class HomeComponent implements VInit {
     }
 
     vInit(): void {
-        this.usernameLogin.focus();
+        this.updateLoginStatus();
+        if (!this.isLoggedIn) {
+            this.usernameLogin.focus();
+        }
     }
 
     login(): void {
         if (this.userService.isRegistered(this.usernameLogin.value, this.passwordLogin.value)) {
             this.loginService.login(this.usernameLogin.value);
-            this.userName = this.loginService.username;
-            this.isLoggedIn = true;
+            this.updateLoginStatus();
         } else {
             alert('Invalid credentials!');
         }
+    }
+
+    logoff(): void {
+        this.loginService.logoff();
+        this.updateLoginStatus();
     }
 
     register(): void {
@@ -113,12 +120,12 @@ export class HomeComponent implements VInit {
         alert('User created!');
     }
 
-    logoff(): void {
-        this.loginService.logoff();
-        this.isLoggedIn = false;
-    }
-
     changeNavbarTitle(newTitle: string) {
         this.navbarTitle = newTitle;
+    }
+
+    private updateLoginStatus(): void {
+        this.isLoggedIn = this.loginService.isLoggedIn;
+        this.userName = this.loginService.username;
     }
 }

@@ -15,7 +15,7 @@ export class VInternalDomEventAttacher implements VInternalAttacher {
         VInternalHtmlAttributeMap.forEach(attr => {
             const elements = shadow.querySelectorAll<HTMLElement>(`[${attr.internalClientAttrName}]`);
             Array.from(elements).forEach(el => this.addEventListener(el, attr, shadow, methods, component));
-        })
+        });
     }
 
     private addEventListener(el: HTMLElement, attr: VInternalHtmlAttribute, shadow: ShadowRoot, methods: VInternalAttacherMethods, component: VComponentType) {
@@ -27,7 +27,7 @@ export class VInternalDomEventAttacher implements VInternalAttacher {
             .forEach((shadowEl: HTMLElement) => {
                 shadowEl.addEventListener(attr.domEvent, () => {
                     methods.callInternalMethod(component, methodName, shadowEl);
-                    methods.forceRebuild(); // Re-render since view may have changed
+                    methods.forceRerendering(); // Re-render since view may have changed
                 });
             });
     }

@@ -1,6 +1,7 @@
 import {V_INTERNAL_COMPONENT_ID, VComponentOptions, VComponentType} from "../../../core";
 import {VInternalEventbus} from "../../../core/eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../../../core/eventbus/v-internal-event-name";
+import {VInternalApplicationSelectors} from "../../../core/application/v-internal-application-selectors";
 
 export class VTestComponent<T extends VComponentType> {
     private readonly _component: T;
@@ -11,10 +12,6 @@ export class VTestComponent<T extends VComponentType> {
         this._eventBus = eventBus;
     }
 
-    detectChanges(): void {
-        this._eventBus.publish(VInternalEventName.REBUILD);
-    }
-
     get component(): ShadowRoot {
         const options: VComponentOptions = JSON.parse(this._component.vComponentOptions);
         const shadowRoot = document.querySelector(options.selector).shadowRoot;
@@ -23,11 +20,21 @@ export class VTestComponent<T extends VComponentType> {
     }
 
     get styles(): string {
-        return this.component.querySelector('head style').innerHTML;
+        const styles = this.component.querySelectorAll('style');
+        return Array.from(styles).reduce((prev, current) => prev + current.innerHTML, '');
     }
 
     get html(): string {
-        return this.component.querySelector('body').children[0].innerHTML;
+        return this.component.innerHTML
+            .replace('<style>', '')
+            .replace('</style>', '')
+            .replace(this.styles, '')
+            .replace(`<${VInternalApplicationSelectors.V_COMPONENT_WRAPPER}>`, '')
+            .replace(`</${VInternalApplicationSelectors.V_COMPONENT_WRAPPER}>`, '')
+    }
+
+    detectChanges(): void {
+        this._eventBus.publish(VInternalEventName.REBUILD);
     }
 
     query(selector: string): HTMLElement {

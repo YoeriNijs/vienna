@@ -86,7 +86,7 @@ following:
 Vienna is based on the concept of components. A component is a small piece of code that holds it's own encapsulated
 logic and styling. One is able to create various components, and a component is able to make use of other components.
 
-To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector 
+To create a component in Vienna, you need the `VComponent` decorator. A component holds three properties: a selector
 (that needs to consist of at least two parts and is hyphen-separated), some styles, and html. For instance:
 
 `my-component.ts`
@@ -359,7 +359,8 @@ export class MyComponent {
 
 ## Event binding
 
-Vienna is created to create web applications with ease. Of course, event binding is supported in the Vienna template engine. It supports the following dom events:
+Vienna is created to create web applications with ease. Of course, event binding is supported in the Vienna template
+engine. It supports the following dom events:
 
 - Abort (@abort)
 - Afterprint (@afterPrint)
@@ -707,6 +708,7 @@ describe('VComponentFactory', () => {
 
 # Known issues
 
+- Event listener (such as click) may stop intervals and timeouts in same component
 - VProp is leaking state when routing to subcomponent that has input binding
 - VInit does not work without callback yet
 

@@ -70,7 +70,7 @@ describe('VInternalProxyMapper', () => {
         const proxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
 
-        const data: VInternalEventRebuildData = {dirtyElementIds: ['dirtyId']};
+        const data: VInternalEventRebuildData = {component: ProxyMapperComponent, dirtyElementIds: ['dirtyId']};
         eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
 
         proxy.checked = true;
@@ -84,7 +84,7 @@ describe('VInternalProxyMapper', () => {
         const proxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
 
-        const data: VInternalEventRebuildData = {dirtyElementIds: []};
+        const data: VInternalEventRebuildData = {component: ProxyMapperComponent, dirtyElementIds: []};
         eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
 
         proxy.checked = true;

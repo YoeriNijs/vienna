@@ -17,7 +17,7 @@ describe('VComponentFactory', () => {
 
     beforeEach(() => {
         const createComponent = vComponentFactory<AppComponent>({
-            component: AppComponent,
+            component: AppComponent
         });
         component = createComponent();
     });

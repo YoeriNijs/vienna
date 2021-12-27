@@ -5,7 +5,7 @@ import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VRouteData} from "./v-route-data";
 import {VRouteParams} from "./v-route-params";
 
-@VInjectable()
+@VInjectable({singleton: true})
 export class VActivatedRoute {
 
     private _eventBus: VInternalEventbus;
@@ -16,6 +16,10 @@ export class VActivatedRoute {
         eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
             this.setParams();
             this.setData(route);
+
+            // Unsubscribe old route subscriptions since they are outdated
+            eventBus.unsubscribe(VInternalEventName.ROUTE_DATA);
+            eventBus.unsubscribe(VInternalEventName.ROUTE_PARAMS);
         });
     }
 
