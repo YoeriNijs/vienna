@@ -29,11 +29,7 @@ export class CounterComponent implements VInit, VDestroy {
     private countInterval: any;
 
     vInit(): void {
-        console.log('init');
-        this.countInterval = setInterval(() => {
-            this.count += 1;
-            console.log('count')
-        }, 2000);
+        this.countInterval = setInterval(() => this.count += 1, 2000);
     }
 
     vDestroy(): void {
