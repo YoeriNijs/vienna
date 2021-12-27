@@ -5,16 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.3](https://github.com/YoeriNijs/vienna/compare/0.2.3...0.2.3)
-
-### Commits
-
-- refactor(demo counter): cleanup counter component [`b604086`](https://github.com/YoeriNijs/vienna/commit/b604086242afd017845d6379f4b2fac754afb78a)
-
 ## [0.2.3](https://github.com/YoeriNijs/vienna/compare/0.2.2...0.2.3) - 2021-12-27
 
 ### Commits
 
+- refactor(demo counter): cleanup counter component [`b604086`](https://github.com/YoeriNijs/vienna/commit/b604086242afd017845d6379f4b2fac754afb78a)
 - fix(renderer): fix multiple bugs in renderer [`4c49ff0`](https://github.com/YoeriNijs/vienna/commit/4c49ff0415393934de9406262f4064e233b7de10)
 
 ## [0.2.2](https://github.com/YoeriNijs/vienna/compare/0.2.1...0.2.2) - 2021-12-17
