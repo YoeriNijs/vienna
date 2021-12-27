@@ -5,10 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0](https://github.com/YoeriNijs/vienna/compare/0.1.4...0.2.0)
+## [0.2.3](https://github.com/YoeriNijs/vienna/compare/0.2.3...0.2.3)
 
 ### Commits
 
+- refactor(demo counter): cleanup counter component [`b604086`](https://github.com/YoeriNijs/vienna/commit/b604086242afd017845d6379f4b2fac754afb78a)
+
+## [0.2.3](https://github.com/YoeriNijs/vienna/compare/0.2.2...0.2.3) - 2021-12-27
+
+### Commits
+
+- fix(renderer): fix multiple bugs in renderer [`4c49ff0`](https://github.com/YoeriNijs/vienna/commit/4c49ff0415393934de9406262f4064e233b7de10)
+
+## [0.2.2](https://github.com/YoeriNijs/vienna/compare/0.2.1...0.2.2) - 2021-12-17
+
+### Commits
+
+- fix(renderer): remove observed attributes since it is causing performance issues [`0e72834`](https://github.com/YoeriNijs/vienna/commit/0e728341d7f643d5b8539f5f203a0c85f300b8f7)
+
+## [0.2.1](https://github.com/YoeriNijs/vienna/compare/0.2.0...0.2.1) - 2021-12-17
+
+### Commits
+
+- fix(package.json): new release with latest bugfixes [`3c5694f`](https://github.com/YoeriNijs/vienna/commit/3c5694f3f03336b337a36c4705525f340391dca5)
+- fix(renderer): call VDestroy inside renderer when web component is disconnected from the dom [`e4cbe50`](https://github.com/YoeriNijs/vienna/commit/e4cbe5059b776dc606c96ceddc113a2da23198d6)
+- Replace double quotes by single quotes [`115aef0`](https://github.com/YoeriNijs/vienna/commit/115aef089435ff6ee302c1cc34a2861f8037d93d)
+
+## [0.2.0](https://github.com/YoeriNijs/vienna/compare/0.1.4...0.2.0) - 2021-11-22
+
+### Commits
+
+- chore(package.json): release 0.2.0 [`e42b1b1`](https://github.com/YoeriNijs/vienna/commit/e42b1b12aa311e43be4255e43955869817a23b8e)
 - feat(attribute mapping): support all dom events as attributes [`8291151`](https://github.com/YoeriNijs/vienna/commit/8291151b1582eba2af9bf2819073bafa9fd889a3)
 - docs(changelog): update changelog [`ab032bc`](https://github.com/YoeriNijs/vienna/commit/ab032bcf751aac988f97235821c9ed78bfec62ee)
 - fix(renderer): rerender only dirty elements [`9ae112f`](https://github.com/YoeriNijs/vienna/commit/9ae112fb183acb2709619d90793da8a8f29ce44a)
