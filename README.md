@@ -4,10 +4,10 @@
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-## Because small code is also nice
+## Do great things with this tiny framework
 
-Vienna is a small framework under active development and, for me, just a way to discover how frameworks like Angular
-actually work under the hood. Vienna is based on some core fundamentals of Angular.
+Vienna is a small framework under active development. It is based on some core concepts of
+the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) frameworks.
 
 # Table of Contents (work in progress)
 
@@ -35,6 +35,8 @@ actually work under the hood. Vienna is based on some core fundamentals of Angul
 ```
 npm install vienna-ts
 ```
+
+Or start with the [starter template](https://github.com/YoeriNijs/vienna-starter-template) right away.
 
 ## Set up application
 
