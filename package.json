@@ -1,6 +1,6 @@
 {
   "name": "vienna-ts",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A small frontend framework to build big things",
   "author": "Yoeri Nijs",
   "license": "GPL-3.0",
@@ -8,8 +8,8 @@
     "type": "git",
     "url": "git@github.com:YoeriNijs/vienna.git"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/vienna.js",
+  "types": "lib/src/index.d.ts",
   "scripts": {
     "prepare": "npm run build && husky install",
     "demo": "webpack serve --open --config webpack.dev.js",
