@@ -40,7 +40,6 @@ jobs:
           git tag -a "$NEW_FRAMEWORK_VERSION" -m "Release $NEW_FRAMEWORK_VERSION"
           git push --tags --no-verify
 
-      - name: release
       - run: npm ci
       - run: npm publish
         env:
