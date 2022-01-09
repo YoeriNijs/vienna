@@ -21,7 +21,6 @@
     "test:watch": "jest --watch --config ./jest.config.js",
     "prepublishOnly": "npm test && npm run lint",
     "version": "auto-changelog -p",
-    "postversion": "git push --no-verify && git push --tags --no-verify",
     "release": "sh scripts/release.sh"
   },
   "files": [
