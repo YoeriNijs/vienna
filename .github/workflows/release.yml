@@ -1,4 +1,4 @@
-name: Publish Package to npmjs
+name: Publish Package
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ jobs:
   sanity-check:
     uses: yoerinijs/vienna/.github/workflows/sanity_checks.yml@main
 
-  build:
+  Release:
     runs-on: ubuntu-latest
     needs: sanity-check
     steps:
