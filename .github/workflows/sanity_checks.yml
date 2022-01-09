@@ -1,5 +1,5 @@
 name: On Push
-on: [ push ]
+on: [ push, pull_request ]
 jobs:
   Sanity-Checks:
     runs-on: ubuntu-latest
