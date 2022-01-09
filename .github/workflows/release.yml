@@ -1,0 +1,43 @@
+name: Publish Package to npmjs
+on:
+  release:
+    types: [ created ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: setup
+        run: |
+          npm version patch
+          npm run build
+
+      - name: setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: commit
+        run: |
+          NEW_FRAMEWORK_VERSION=$(cat package.json \
+            | grep version \
+            | head -1 \
+            | awk -F: '{ print $2 }' \
+            | sed 's/[",]//g' \
+            | tr -d '[[:space:]]')
+          git tag -a "$NEW_FRAMEWORK_VERSION" -m "Release $NEW_FRAMEWORK_VERSION"
+          git add .
+          git commit -m "feat(package.json): release '$NEW_FRAMEWORK_VERSION'"
+          git push origin master
+
+      - name: release
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
