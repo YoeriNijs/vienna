@@ -19,7 +19,7 @@
   ],
   "rules": {
     "no-mixed-spaces-and-tabs": "warn",
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
     "no-case-declarations": "warn"
   }
 }
