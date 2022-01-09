@@ -19,6 +19,7 @@ jobs:
 
       - name: setup
         run: |
+          npm install
           npm version patch --no-git-tag-version
           npm run build
 

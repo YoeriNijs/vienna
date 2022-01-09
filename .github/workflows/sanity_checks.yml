@@ -1,6 +1,5 @@
 name: On Push
 on: [
-    push,
     pull_request,
     workflow_call
 ]
