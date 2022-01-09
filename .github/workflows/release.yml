@@ -38,7 +38,7 @@ jobs:
             | tr -d '[[:space:]]')
           git add package.json CHANGELOG.md
           git commit -m "feat(package.json): release '$NEW_FRAMEWORK_VERSION'" --no-verify
-          git push origin master --no-verify
+          git push origin main --no-verify
           git tag -a "$NEW_FRAMEWORK_VERSION" -m "Release $NEW_FRAMEWORK_VERSION"
           git push --tags --no-verify
 
