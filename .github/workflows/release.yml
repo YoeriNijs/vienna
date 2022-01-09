@@ -7,12 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-          
+
       - name: setup
         run: |
           npm version patch
@@ -31,10 +30,11 @@ jobs:
             | awk -F: '{ print $2 }' \
             | sed 's/[",]//g' \
             | tr -d '[[:space:]]')
+          git add package.json CHANGELOG.md
+          git commit -m "feat(package.json): release '$NEW_FRAMEWORK_VERSION'" --no-verify
+          git push origin master --no-verify
           git tag -a "$NEW_FRAMEWORK_VERSION" -m "Release $NEW_FRAMEWORK_VERSION"
-          git add .
-          git commit -m "feat(package.json): release '$NEW_FRAMEWORK_VERSION'"
-          git push origin master
+          git push --tags --no-verify
 
       - name: release
       - run: npm ci
