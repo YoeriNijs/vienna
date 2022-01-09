@@ -4,7 +4,7 @@ on:
     types: [ created ]
 jobs:
   sanity-check:
-    uses: yoerinijs/vienna/.github/workflows/sanity_checks@main
+    uses: yoerinijs/vienna/.github/workflows/sanity_checks.yml@main
 
   build:
     runs-on: ubuntu-latest
