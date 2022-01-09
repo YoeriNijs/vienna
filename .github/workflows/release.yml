@@ -3,8 +3,12 @@ on:
   release:
     types: [ created ]
 jobs:
+  sanity-check:
+    uses: yoerinijs/vienna/.github/workflows/sanity_checks@main
+
   build:
     runs-on: ubuntu-latest
+    needs: sanity-check
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -14,7 +18,7 @@ jobs:
 
       - name: setup
         run: |
-          npm version patch
+          npm version patch --no-git-tag-version
           npm run build
 
       - name: setup git config
