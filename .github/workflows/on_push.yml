@@ -11,5 +11,8 @@ jobs:
           npm install
       - name: Unit tests
         run: |
-          npm run test
+          npm run test:ci
+      - name: Lint
+        run: |
+          npm run lint
       - run: echo "🍏 This job's status is ${{ job.status }}."

@@ -17,6 +17,7 @@
     "lint": "eslint ./src/**/*.ts",
     "lint:fix": "eslint ./src/**/*.ts --fix",
     "test": "jest --config ./jest.config.js",
+    "test:ci": "jest --ci --detectOpenHandles --config ./jest.config.js",
     "test:watch": "jest --watch --config ./jest.config.js",
     "prepublishOnly": "npm test && npm run lint",
     "version": "auto-changelog -p && git add CHANGELOG.md",
