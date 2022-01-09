@@ -713,6 +713,8 @@ describe('VComponentFactory', () => {
 - Event listener (such as click) may stop intervals and timeouts in same component
 - VProp is leaking state when routing to subcomponent that has input binding
 - VInit does not work without callback yet
+- Running tests with vComponentFactory may cause Jest open handles issue. As a workaround, you can enable fake timers in
+  the Jest config or explicitly disable real timers in your tests (do not forget to re-enable them!).
 
 # Ideas
 

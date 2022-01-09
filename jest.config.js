@@ -10,5 +10,6 @@ module.exports = {
     coverageDirectory: "coverage",
     setupFiles: [
         "<rootDir>/src/testing/util/v-internal-setup-document.ts"
-    ]
+    ],
+    timers: "fake"
 };
