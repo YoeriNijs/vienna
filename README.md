@@ -398,7 +398,6 @@ engine. It supports the following dom events:
 - Input (@input)
 - Invalid (@invalid)
 - KeyDown (@keyDown)
-- KeyPress (@keyPress)
 - KeyUp (@keyUp)
 - Load (@load)
 - LoadedData (@loadedData)
@@ -441,7 +440,7 @@ engine. It supports the following dom events:
 - Waiting (@waiting)
 - Wheel (@wheel)
 
-To listen to an event on one element, just add the @ mark. For instance:
+To listen to an event on one element, just add the @mark. For instance:
 
 `custom.component.ts`
 
@@ -458,6 +457,12 @@ export class HomeComponent {
   }
 }
 
+```
+
+If you want to listen to keyboard events, you can pass the key name. This holds for `keyDown`, `keyDown`.
+
+```
+<div @keyDown.Enter="doSomething"></div>
 ```
 
 ## Routes

@@ -7,7 +7,10 @@ export class VInternalHtmlAttributeTransformer implements VInternalHtmlTransform
     }
 
     transform(html: string): string {
-        return VInternalHtmlAttributeMap.reduce((transformedHtml, attr) =>
-            VInternalHtmlAttributeTransformer.replaceAll(transformedHtml, attr.clientAttrName, attr.internalClientAttrName), html);
+        return VInternalHtmlAttributeMap.reduce((transformedHtml, attr) => {
+            const from = attr.clientAttrName.toLowerCase();
+            const to = attr.internalClientAttrName;
+            return VInternalHtmlAttributeTransformer.replaceAll(transformedHtml, from, to);
+        }, html);
     }
 }
