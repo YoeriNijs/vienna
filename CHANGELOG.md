@@ -5,10 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.7](https://github.com/YoeriNijs/vienna/compare/0.2.6...0.2.7)
+## [0.2.8](https://github.com/YoeriNijs/vienna/compare/0.2.7...0.2.8)
+
+### Merged
+
+- Add support for keys in keyDown and keyUp events [`#10`](https://github.com/YoeriNijs/vienna/pull/10)
 
 ### Commits
 
+- fix(attribute map): fix internal attribute map tests [`acbb750`](https://github.com/YoeriNijs/vienna/commit/acbb750442853faa7ba88b868e814f20c83a97d0)
+- fix(event listeners): support key for keyUp and keyDown event [`90e3554`](https://github.com/YoeriNijs/vienna/commit/90e35548a9acc9c875579b149774fb36b5d8264c)
+
+## [0.2.7](https://github.com/YoeriNijs/vienna/compare/0.2.6...0.2.7) - 2022-01-09
+
+### Commits
+
+- feat(package.json): release '0.2.7' [`1028db2`](https://github.com/YoeriNijs/vienna/commit/1028db2552aadb9091ae70f22f3cf3797b4075e7)
 - ci(github actions): fetch depth zero [`da9cb01`](https://github.com/YoeriNijs/vienna/commit/da9cb0186160821f0aac83d6401d3dbd4778cd1e)
 
 ## [0.2.6](https://github.com/YoeriNijs/vienna/compare/0.2.5...0.2.6) - 2022-01-09
