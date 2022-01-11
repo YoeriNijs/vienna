@@ -61,8 +61,8 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
         ];
         private _attachers: VInternalAttacher[] = [
             new VInternalBindAttacher(),
-            new VInternalDomEventAttacher(),
-            new VInternalEmitAttacher()
+            new VInternalEmitAttacher(),
+            new VInternalDomEventAttacher()
         ]
 
         connectedCallback() {
@@ -81,6 +81,8 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 this._component[vInit]();
                 this.updateHtml(this._component, shadowRoot);
             }
+
+            this.attachBindings(this._component, shadowRoot);
 
             eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, (data: VInternalEventRebuildData) => {
                 // Notify subscribers that we are currently rendering something
@@ -144,7 +146,10 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 .filter(a => a.accept(component, shadowRoot))
                 .forEach(a => a.attach(component, shadowRoot, {
                     callInternalMethod: this.callInternalMethod,
-                    forceRerendering: () => this.updateHtml(component, shadowRoot)
+                    forceRerendering: () => {
+                        this.updateHtml(component, shadowRoot);
+                        this.attachBindings(component, shadowRoot);
+                    }
                 }));
         }
 
@@ -152,7 +157,6 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             const options: VComponentOptions = JSON.parse(component.vComponentOptions);
             shadowRoot.innerHTML = this._htmlTransformers.reduce((html, transformer) =>
                 transformer.transform(html, component, this.attributes), options.html);
-            this.attachBindings(this._component, shadowRoot);
         }
 
         private rerenderPartialHtml(shadowRoot: ShadowRoot, componentState: VComponentType, dirtyElementId: string) {

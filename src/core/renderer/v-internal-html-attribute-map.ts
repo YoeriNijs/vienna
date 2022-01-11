@@ -36,9 +36,6 @@ export const VInternalHtmlAttributeMap: VInternalHtmlAttribute[] = [
     { clientAttrName: '@hashChange', internalClientAttrName: 'data-v-hash-change', internalAttrName: 'vHashChange', domEvent: 'hashchange'},
     { clientAttrName: '@input', internalClientAttrName: 'data-v-input', internalAttrName: 'vInput', domEvent: 'input'},
     { clientAttrName: '@invalid', internalClientAttrName: 'data-v-invalid', internalAttrName: 'vInvalid', domEvent: 'invalid' },
-    { clientAttrName: '@keyDown', internalClientAttrName: 'data-v-key-down', internalAttrName: 'vKeyDown', domEvent: 'keydown' },
-    { clientAttrName: '@keyPress', internalClientAttrName: 'data-v-key-press', internalAttrName: 'vKeyPress', domEvent: 'keypress' },
-    { clientAttrName: '@keyUp', internalClientAttrName: 'data-v-key-up', internalAttrName: 'vKeyUp', domEvent: 'keyup' },
     { clientAttrName: '@load', internalClientAttrName: 'data-v-load', internalAttrName: 'vLoad', domEvent: 'load' },
     { clientAttrName: '@loadedData', internalClientAttrName: 'data-v-loaded-data', internalAttrName: 'vLoadedData', domEvent: 'loadeddata' },
     { clientAttrName: '@loadedMetadata', internalClientAttrName: 'data-v-loaded-metadata', internalAttrName: 'vLoadedMetadata', domEvent: 'loadedmetadata' },
@@ -79,6 +76,10 @@ export const VInternalHtmlAttributeMap: VInternalHtmlAttribute[] = [
     { clientAttrName: '@volumeChange', internalClientAttrName: 'data-v-volume-change', internalAttrName: 'vVolumeChange', domEvent: 'volumechange' },
     { clientAttrName: '@waiting', internalClientAttrName: 'data-v-waiting', internalAttrName: 'vWaiting', domEvent: 'waiting' },
     { clientAttrName: '@wheel', internalClientAttrName: 'data-v-wheel', internalAttrName: 'vWheel', domEvent: 'wheel' },
+
+    // Keyboard events
+    { clientAttrName: '@keyDown', internalClientAttrName: 'data-v-key-down', internalAttrName: 'vKeyDown', domEvent: 'keydown' },
+    { clientAttrName: '@keyUp', internalClientAttrName: 'data-v-key-up', internalAttrName: 'vKeyUp', domEvent: 'keyup' },
 
     // Vienna events
     { clientAttrName: '@bind', internalClientAttrName: 'data-v-bind', internalAttrName: 'vBind'},
