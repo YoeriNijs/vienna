@@ -84,7 +84,7 @@ following:
   root. Default: 'body'.
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
   - `styles`: an array of strings, which should contain plain css.
-  - `links`: an array of so-called `VGlobalStyleLink`, that contain hrefs to remote stylesheets.
+  - `links`: an array of so-called `VGlobalStyleLink`, that contain hrefs to remote stylesheets. Thus, every href should start with 'http'.
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
 
