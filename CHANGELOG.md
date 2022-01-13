@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.8](https://github.com/YoeriNijs/vienna/compare/0.2.7...0.2.8)
+## [0.2.9](https://github.com/YoeriNijs/vienna/compare/0.2.8...0.2.9)
+
+### Merged
+
+- feat(renderer): support global styles [`#12`](https://github.com/YoeriNijs/vienna/pull/12)
+- feat(renderer): support global styles [`#11`](https://github.com/YoeriNijs/vienna/pull/11)
+
+### Commits
+
+- fix(renderer): redundant check [`1480840`](https://github.com/YoeriNijs/vienna/commit/1480840ea5ce35b8e75da2f79769baf15ce66b81)
+- fix(renderer): check for valid http link [`165f565`](https://github.com/YoeriNijs/vienna/commit/165f565f9d53f66b9413b18fa1d63e6154d32879)
+
+## [0.2.8](https://github.com/YoeriNijs/vienna/compare/0.2.7...0.2.8) - 2022-01-11
 
 ### Merged
 
@@ -13,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.8' [`09e40d8`](https://github.com/YoeriNijs/vienna/commit/09e40d8520ddecb9fdc3e79a7b3256e6c36099b9)
 - fix(attribute map): fix internal attribute map tests [`acbb750`](https://github.com/YoeriNijs/vienna/commit/acbb750442853faa7ba88b868e814f20c83a97d0)
 - fix(event listeners): support key for keyUp and keyDown event [`90e3554`](https://github.com/YoeriNijs/vienna/commit/90e35548a9acc9c875579b149774fb36b5d8264c)
 
