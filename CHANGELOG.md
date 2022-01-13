@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.9](https://github.com/YoeriNijs/vienna/compare/0.2.8...0.2.9)
+## [0.2.10](https://github.com/YoeriNijs/vienna/compare/0.2.9...0.2.10)
+
+### Merged
+
+- fix(renderer): add global styles again when the element is re-rendered [`#13`](https://github.com/YoeriNijs/vienna/pull/13)
+
+## [0.2.9](https://github.com/YoeriNijs/vienna/compare/0.2.8...0.2.9) - 2022-01-13
 
 ### Merged
 
@@ -14,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.9' [`1e08d0c`](https://github.com/YoeriNijs/vienna/commit/1e08d0cf1bbc7713811d1d40c0c6f23500c08301)
 - fix(renderer): redundant check [`1480840`](https://github.com/YoeriNijs/vienna/commit/1480840ea5ce35b8e75da2f79769baf15ce66b81)
 - fix(renderer): check for valid http link [`165f565`](https://github.com/YoeriNijs/vienna/commit/165f565f9d53f66b9413b18fa1d63e6154d32879)
 
