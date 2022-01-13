@@ -27,6 +27,7 @@ the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) f
     - [Route data](#route-data)
     - [Route params](#route-params)
     - [Guards](#route-guards)
+    - [Route redirects](#route-redirects)
 - [Dependency injection](#dependency-injection)
 - [Component testing](#component-testing)
 
@@ -473,7 +474,7 @@ To listen to an event on one element, just add the @mark. For instance:
   styles: [], 
   html: `<button @click='showAlert('Hello!')>Show alert</button>`
 })
-export class HomeComponent { 
+export class CustomComponent { 
   showAlert(message: string): void { 
     alert(message); 
   }
@@ -637,6 +638,39 @@ export class DashboardComponent {
 }
 
 ```
+
+### Route redirects
+It is very likely that an application needs to redirect to another internal or external path. Of course, it is possible to provide
+a valid href in the view. However, sometimes you want to create a redirect that is not visible in your view. For this, you can use the 
+`VRouteRedirect` helper class.
+
+The VRouteRedirect supports to redirect options:
+- `redirectTo`: redirects to an internal or external path. In order to navigate to another Vienna path, just provide the prefix '#' (e.g. `#/my-vienna-path`). Of course, you can navigate to an external domain as well. Just pass the complete url as-is (e.g. `https://www.some-external-site.com`). Optionally, you can specify whether you want to open the link in another window.
+- `redirectToRoot`: just navigates to the root component of the Vienna app (of course, you must have a valid root path for that).
+
+The VRouteRedirect is an injectable, which means that you can inject it in your constructor:
+
+`custom.component.ts`
+
+```
+
+@VComponent({ 
+  selector: 'custom-component', 
+  styles: [], 
+  html: ``
+})
+export class CustomComponent implements VInit { 
+  
+  constructor(private routeRedirect: VRouteRedirect) {}
+  
+  vInit(): void {
+    setTimeout(() => this.routeRedirect.redirectTo('#/another-vienna-path', true), 2000)); // 'true' means new window here
+  }
+}
+
+```
+
+
 
 ## Dependency injection
 

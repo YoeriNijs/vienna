@@ -78,12 +78,15 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
 
             const vInit = getAllMethods(componentType.prototype).find(m => m === 'vInit');
             if (vInit) {
+                this.attachBindings(this._component, shadowRoot);
                 this._component[vInit] = componentType.prototype[vInit];
                 this._component[vInit]();
                 this.updateHtml(this._component, shadowRoot);
+                this.attachBindings(this._component, shadowRoot);
+            } else {
+                this.attachBindings(this._component, shadowRoot);
             }
 
-            this.attachBindings(this._component, shadowRoot);
             this.prependGlobalStyles(globalStyles, shadowRoot);
 
             eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, (data: VInternalEventRebuildData) => {
