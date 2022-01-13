@@ -25,6 +25,7 @@ import {VInternalTemplate} from "../template-engine/v-internal-template";
 import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
 import {isEmpty} from "pincet";
 import {VComponentEncapsulationMode} from "../component/v-component-encapsulation";
+import {VGlobalStyles} from "../application/v-global-styles";
 
 interface ComponentAndType {
     type: Type<VComponentType>;
@@ -41,7 +42,7 @@ const emptyMethod = () => {
 };
 
 const createComponentClass = (componentType: Type<VComponentType>, eventBus: VInternalEventbus,
-                              encapsulationModeOverride: VComponentEncapsulationMode) => {
+                              encapsulationModeOverride: VComponentEncapsulationMode, globalStyles: VGlobalStyles) => {
     return class VInternalViennaComponent extends HTMLElement {
         private readonly _proxyMapper = new VInternalProxyMapper();
 
@@ -83,6 +84,7 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             }
 
             this.attachBindings(this._component, shadowRoot);
+            this.prependGlobalStyles(globalStyles, shadowRoot);
 
             eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, (data: VInternalEventRebuildData) => {
                 // Notify subscribers that we are currently rendering something
@@ -216,6 +218,33 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 return method();
             }
         }
+
+        private prependGlobalStyles(globalStyles: VGlobalStyles, shadowRoot: ShadowRoot) {
+            if (!globalStyles) {
+                return;
+            }
+
+            // Add inline styles
+            if (globalStyles.styles) {
+                const styleElement = document.createElement('style');
+                const styles = globalStyles.styles.reduce((prev, curr) => prev.concat(curr), '');
+                styleElement.innerHTML = styles.replace(/\s\s+/g, ' '); // Remove redundant whitespaces
+                shadowRoot.prepend(styleElement);
+            }
+
+            // Add remote stylesheets
+            if (globalStyles.links) {
+                globalStyles.links
+                    .map(r => r.href)
+                    .map(href => {
+                        const linkedStylesheet = document.createElement('link');
+                        linkedStylesheet.rel = 'stylesheet';
+                        linkedStylesheet.href = href;
+                        return linkedStylesheet;
+                    })
+                    .forEach(link => shadowRoot.prepend(link));
+            }
+        }
     };
 }
 
@@ -223,12 +252,14 @@ export class VInternalRenderer {
 
     private readonly _eventBus: VInternalEventbus;
     private readonly _view: HTMLElement;
+    private readonly _globalStyles: VGlobalStyles;
     private readonly _encapsulationModeOverride: "open" | "closed";
     private readonly _proxyMapper: VInternalProxyMapper = new VInternalProxyMapper();
 
     constructor(options: VInternalRendererOptions) {
         this._eventBus = options.eventBus;
         this._view = document.createElement(options.selector);
+        this._globalStyles = options.globalStyles;
         this._encapsulationModeOverride = options.encapsulationModeOverride || null;
 
         const rootElementSelector = options.rootElementSelector || 'body';
@@ -279,7 +310,7 @@ export class VInternalRenderer {
 
         const isCustomElementUndefined = !window.customElements.get(selector);
         if (isCustomElementUndefined) {
-            const clazz = createComponentClass(componentAndType.type, eventBus, this._encapsulationModeOverride);
+            const clazz = createComponentClass(componentAndType.type, eventBus, this._encapsulationModeOverride, this._globalStyles);
             window.customElements.define(selector, clazz);
         }
     }

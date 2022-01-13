@@ -82,6 +82,28 @@ following:
     - `Root`: navigate user back to the root route of the Vienna application if the route is invalid.
 - `rootElementSelector` (optional): can be used to specify which root element should be used by Vienna as application
   root. Default: 'body'.
+- `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
+  - `styles`: an array of strings, which should contain plain css.
+  - `links`: an array of so-called `VGlobalStyleLink`, that contain hrefs to remote stylesheets.
+
+For instance, if you want to use [Bulma](https://bulma.io), just add the following:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [HomeComponent],
+    routes: [
+      { path: '/', component: HomeComponent }
+    ],
+    globalStyles: {
+      links: [
+        { href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css' }
+      ]
+    }
+})
+export class Application {}
+```
 
 ## Create components
 
@@ -459,7 +481,7 @@ export class HomeComponent {
 
 ```
 
-If you want to listen to keyboard events, you can pass the key name. This holds for `keyDown`, `keyDown`.
+If you want to listen to keyboard events, you can pass the key name. This holds for `keyDown` and `keyUp`.
 
 ```
 <div @keyDown.Enter="doSomething"></div>
@@ -709,8 +731,6 @@ describe('VComponentFactory', () => {
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
   instead of all)
 - Add unit tests
-- Work with global styling somehow (e.g. Constructable Stylesheet Objects,
-  see https://wicg.github.io/construct-stylesheets/)
 - Use Rollup instead of Webpack since it generates a much smaller bundle size
 
 # Known issues

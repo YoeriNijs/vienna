@@ -23,7 +23,8 @@ export function VApplication(config: VApplicationConfig) {
                 this._mainRenderer = new VInternalRenderer({
                     selector: VInternalApplicationSelectors.V_APP_RENDERER,
                     eventBus: this._eventBus,
-                    rootElementSelector: config.rootElementSelector
+                    rootElementSelector: config.rootElementSelector,
+                    globalStyles: config.globalStyles
                 });
                 this._declarationTypes = config.declarations;
                 this._routes = config.routes;

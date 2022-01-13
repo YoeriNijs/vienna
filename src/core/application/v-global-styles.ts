@@ -1,6 +1,6 @@
-import {VGlobalStyleRemote} from "./v-global-style-remote";
+import {VGlobalStyleLink} from "./v-global-style-link";
 
-export interface VGlobalStyle {
+export interface VGlobalStyles {
     styles?: string[];
-    remotes?: VGlobalStyleRemote[];
+    links?: VGlobalStyleLink[];
 }
