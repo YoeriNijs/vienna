@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.10](https://github.com/YoeriNijs/vienna/compare/0.2.9...0.2.10)
+## [0.2.11](https://github.com/YoeriNijs/vienna/compare/0.2.10...0.2.11)
+
+### Merged
+
+- feat(redirect): implement route redirect helper [`#14`](https://github.com/YoeriNijs/vienna/pull/14)
+
+## [0.2.10](https://github.com/YoeriNijs/vienna/compare/0.2.9...0.2.10) - 2022-01-13
 
 ### Merged
 
 - fix(renderer): add global styles again when the element is re-rendered [`#13`](https://github.com/YoeriNijs/vienna/pull/13)
+
+### Commits
+
+- feat(package.json): release '0.2.10' [`21bef5c`](https://github.com/YoeriNijs/vienna/commit/21bef5cd431399abaaf7e62346006452a07a1caf)
 
 ## [0.2.9](https://github.com/YoeriNijs/vienna/compare/0.2.8...0.2.9) - 2022-01-13
 

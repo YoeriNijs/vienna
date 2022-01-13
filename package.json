@@ -1,6 +1,6 @@
 {
   "name": "vienna-ts",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "A small frontend framework to build big things",
   "author": "Yoeri Nijs",
   "license": "GPL-3.0",
