@@ -1,3 +1,3 @@
-export interface VGlobalStyleRemote {
+export interface VGlobalStyleLink {
     href: string;
 }
