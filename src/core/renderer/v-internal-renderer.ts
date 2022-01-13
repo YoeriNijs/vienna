@@ -151,6 +151,7 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                     forceRerendering: () => {
                         this.updateHtml(component, shadowRoot);
                         this.attachBindings(component, shadowRoot);
+                        this.prependGlobalStyles(globalStyles, shadowRoot);
                     }
                 }));
         }
