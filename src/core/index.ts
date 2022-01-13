@@ -1,6 +1,8 @@
 // Public Vienna framework api
 export * from './application/v-application';
 export * from './application/v-application-config';
+export * from './application/v-global-style-link';
+export * from './application/v-global-styles';
 
 export * from './binding/v-emit';
 export * from './binding/v-emitter';
@@ -23,3 +25,4 @@ export * from './router/v-route';
 export * from './router/v-route-data';
 export * from './router/v-route-not-found-strategy';
 export * from './router/v-route-params';
+export * from './router/v-route-redirect';
