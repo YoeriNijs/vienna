@@ -236,7 +236,7 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             if (globalStyles.links) {
                 globalStyles.links
                     .map(r => r.href)
-                    .filter(href => href.length > 0 && href.startsWith('http'))
+                    .filter(href => href.startsWith('http'))
                     .map(href => {
                         const linkedStylesheet = document.createElement('link');
                         linkedStylesheet.rel = 'stylesheet';
