@@ -85,8 +85,8 @@ following:
 - `rootElementSelector` (optional): can be used to specify which root element should be used by Vienna as application
   root. Default: 'body'.
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
-  - `styles`: an array of strings, which should contain plain css.
-  - `links`: an array of so-called `VGlobalStyleLink`, that contain hrefs to remote stylesheets. Thus, every href should start with 'http'.
+  - `style`: just plain css.
+  - `href`: a href to a remote stylesheet. Thus, a href should start with 'http'.
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
 
@@ -98,11 +98,10 @@ For instance, if you want to use [Bulma](https://bulma.io), just add the followi
     routes: [
       { path: '/', component: HomeComponent }
     ],
-    globalStyles: {
-      links: [
-        { href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css' }
-      ]
-    }
+    globalStyles: [
+      { href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css' },
+      { style: 'body { padding: 10px; }' }
+    ]
 })
 export class Application {}
 ```
