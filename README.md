@@ -9,6 +9,8 @@
 Vienna is a small framework under active development. It is based on some core concepts of
 the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) frameworks.
 
+Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
+
 # Table of Contents (work in progress)
 
 - [Install Vienna](#install)
