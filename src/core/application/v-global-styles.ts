@@ -1,6 +1,4 @@
 import {VGlobalStyleLink} from "./v-global-style-link";
+import {VGlobalInlineStyle} from "./v-global-inline-style";
 
-export interface VGlobalStyles {
-    styles?: string[];
-    links?: VGlobalStyleLink[];
-}
+export type VGlobalStyles = (VGlobalStyleLink | VGlobalInlineStyle)[];

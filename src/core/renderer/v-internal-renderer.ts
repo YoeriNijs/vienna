@@ -25,6 +25,8 @@ import {VInternalTemplate} from "../template-engine/v-internal-template";
 import {VInternalTemplateEngine} from "../template-engine/v-internal-template-engine";
 import {isEmpty} from "pincet";
 import {VComponentEncapsulationMode} from "../component/v-component-encapsulation";
+import {VGlobalStyleLink} from "../application/v-global-style-link";
+import {VGlobalInlineStyle} from "../application/v-global-inline-style";
 import {VGlobalStyles} from "../application/v-global-styles";
 
 interface ComponentAndType {
@@ -229,26 +231,26 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             }
 
             // Add inline styles
-            if (globalStyles.styles) {
+            const inlineStyles = globalStyles.filter((g: any) => g.style)
+                .map((s: VGlobalInlineStyle) => s.style)
+                .reduce((prev, curr) => prev.concat(curr), '');
+            if (inlineStyles && inlineStyles.length > 0) {
                 const styleElement = document.createElement('style');
-                const styles = globalStyles.styles.reduce((prev, curr) => prev.concat(curr), '');
-                styleElement.innerHTML = styles.replace(/\s\s+/g, ' '); // Remove redundant whitespaces
+                styleElement.innerHTML = inlineStyles.replace(/\s\s+/g, ' '); // Remove redundant whitespaces
                 shadowRoot.prepend(styleElement);
             }
 
             // Add remote stylesheets
-            if (globalStyles.links) {
-                globalStyles.links
-                    .map(r => r.href)
-                    .filter(href => href.startsWith('http'))
-                    .map(href => {
-                        const linkedStylesheet = document.createElement('link');
-                        linkedStylesheet.rel = 'stylesheet';
-                        linkedStylesheet.href = href;
-                        return linkedStylesheet;
-                    })
-                    .forEach(link => shadowRoot.prepend(link));
-            }
+            globalStyles.filter((g: any) => g.href)
+                .map((l: VGlobalStyleLink) => l.href)
+                .filter(href => href.startsWith('http'))
+                .map(href => {
+                    const linkedStylesheet = document.createElement('link');
+                    linkedStylesheet.rel = 'stylesheet';
+                    linkedStylesheet.href = href;
+                    return linkedStylesheet;
+                })
+                .forEach(link => shadowRoot.prepend(link));
         }
     };
 }
