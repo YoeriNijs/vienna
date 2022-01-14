@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.15](https://github.com/YoeriNijs/vienna/compare/0.2.14...0.2.15)
+## [0.2.16](https://github.com/YoeriNijs/vienna/compare/0.2.15...0.2.16)
+
+### Merged
+
+- docs(readme): add link to new demo app [`#19`](https://github.com/YoeriNijs/vienna/pull/19)
+
+## [0.2.15](https://github.com/YoeriNijs/vienna/compare/0.2.14...0.2.15) - 2022-01-14
 
 ### Merged
 
 - refactor(event attacher): key name and variable should be lowercase [`#18`](https://github.com/YoeriNijs/vienna/pull/18)
+
+### Commits
+
+- feat(package.json): release '0.2.15' [`c262f58`](https://github.com/YoeriNijs/vienna/commit/c262f586e79c9b4d6812a60d1e7fefc36461bdaa)
 
 ## [0.2.14](https://github.com/YoeriNijs/vienna/compare/0.2.13...0.2.14) - 2022-01-14
 
