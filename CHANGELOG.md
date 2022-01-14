@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.14](https://github.com/YoeriNijs/vienna/compare/0.2.13...0.2.14)
+## [0.2.15](https://github.com/YoeriNijs/vienna/compare/0.2.14...0.2.15)
+
+### Merged
+
+- refactor(event attacher): key name and variable should be lowercase [`#18`](https://github.com/YoeriNijs/vienna/pull/18)
+
+## [0.2.14](https://github.com/YoeriNijs/vienna/compare/0.2.13...0.2.14) - 2022-01-14
 
 ### Merged
 
@@ -13,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.14' [`77242e2`](https://github.com/YoeriNijs/vienna/commit/77242e2b8d73e43693c6d7473c916e595c89eb86)
 - fix(proxy mapper): whole rebuild is unneeded in proxy mapper [`816043b`](https://github.com/YoeriNijs/vienna/commit/816043b4221c3a9968023efc222315a8885e4412)
 
 ## [0.2.13](https://github.com/YoeriNijs/vienna/compare/0.2.12...0.2.13) - 2022-01-14
