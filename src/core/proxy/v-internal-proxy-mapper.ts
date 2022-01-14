@@ -37,16 +37,31 @@ export class VInternalProxyMapper {
                 // We have a change detected. First, write the new value.
                 component[prop] = newValue;
 
-                // Okay, check if we can rebuild the app already.
-                const data = this.findUniqueElementIdsToRebuild(component);
-                eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
+                // Next, check exactly which element we need to re-render
+                let data = this.createDataWithDirtyHtmlElementIds(component);
+                if (data.dirtyElementIds.length > 0) {
+                    // View is dirty. Re-render dirty elements.
+                    eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
+                } else {
+                    // View is pristine, but controller is dirty. Re-render entire component by upper v-id.
+                    const options: VComponentOptions = JSON.parse(data.component.vComponentOptions);
+                    const parser = new DOMParser();
+                    const document = parser.parseFromString(options.html, 'text/html');
+                    if (document.body && document.body.children.length > 0) {
+                        const componentId = document.body.children[0].attributes.getNamedItem(V_INTERNAL_COMPONENT_ID);
+                        if (componentId && componentId.value) {
+                            data = {...data, dirtyElementIds: [componentId.value] };
+                        }
+                    }
+                    eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
+                }
 
                 return true; // Just indicate that the value has been set
             }
         };
     }
 
-    private findUniqueElementIdsToRebuild(component: VComponentType): VInternalEventRebuildData {
+    private createDataWithDirtyHtmlElementIds(component: VComponentType): VInternalEventRebuildData {
         const dirtyElementIds: string[] = [];
 
         const findElementIds = (element: HTMLElement): void => {
