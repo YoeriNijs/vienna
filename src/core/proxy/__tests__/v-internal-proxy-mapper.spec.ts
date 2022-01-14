@@ -28,19 +28,19 @@ describe('VInternalProxyMapper', () => {
         expect(proxy).toBeDefined();
     });
 
-    it('should not rebuild when rendering has finished', () => {
+    it('should not rebuild partially when rendering has finished', () => {
         let rebuild = false;
 
-        eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
+        eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, () => rebuild = true);
         const proxy = mapper.map(ProxyMapperComponent, eventBus);
 
         proxy.checked = true;
         expect(rebuild).toBe(false);
     });
 
-    it('should not rebuild when rendering has re-started', () => {
+    it('should not rebuild partially when rendering has re-started', () => {
         let rebuild = false;
-        eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
+        eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, () => rebuild = true);
 
         const proxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
@@ -50,9 +50,9 @@ describe('VInternalProxyMapper', () => {
         expect(rebuild).toBe(false);
     });
 
-    it('should rebuild when rendering has finished', () => {
+    it('should rebuild partially when rendering has finished', () => {
         let rebuild = false;
-        eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
+        eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, () => rebuild = true);
 
         const proxy = mapper.map(ProxyMapperComponent, eventBus);
         eventBus.publish(VInternalEventName.RENDERING_FINISHED);
@@ -64,7 +64,7 @@ describe('VInternalProxyMapper', () => {
     it('should rebuild partially when rendering has finished and dirty element id exists', () => {
         let rebuildPartially = false;
         eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, (data: VInternalEventRebuildData) => {
-            rebuildPartially = data.dirtyElementIds.includes('dirtyId');
+            rebuildPartially = data.dirtyElementIds.length === 1; // Dirty element should be the v-id
         });
 
         const proxy = mapper.map(ProxyMapperComponent, eventBus);
@@ -75,19 +75,5 @@ describe('VInternalProxyMapper', () => {
 
         proxy.checked = true;
         expect(rebuildPartially).toBe(true);
-    });
-
-    it('should rebuild as a whole when rendering has finished and dirty element id does not exist', () => {
-        let rebuild = true;
-        eventBus.subscribe(VInternalEventName.REBUILD, () => rebuild = true);
-
-        const proxy = mapper.map(ProxyMapperComponent, eventBus);
-        eventBus.publish(VInternalEventName.RENDERING_FINISHED);
-
-        const data: VInternalEventRebuildData = {component: ProxyMapperComponent, dirtyElementIds: []};
-        eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
-
-        proxy.checked = true;
-        expect(rebuild).toBe(true);
     });
 });
