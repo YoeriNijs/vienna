@@ -6,25 +6,28 @@ import {VRouteGuard} from "./v-route-guard";
 import {VInternalRouterOptions} from "./v-internal-router-options";
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
+import {VRouteNotFoundRedirect} from "./v-route-not-found-redirect";
+import {VInvalidRouteStrategyException} from "./v-invalid-route-strategy-exception";
 
 export class VInternalRouter {
-    private _routes: VRoute[] = [];
 
-    constructor(private options: VInternalRouterOptions) {
-        window.location.href = window.location.hash.slice(1) === '/'
-            ? '#'
-            : `#/${window.location.hash.slice(1)}` || '#';
+    constructor(private options: VInternalRouterOptions) {}
 
+    private static isRouteNotFoundRedirectStrategy(strategy: VRouteNotFoundStrategy | VRouteNotFoundRedirect): strategy is VRouteNotFoundRedirect {
+        const s = strategy as any;
+        return s && s.path && s.path.startsWith('/');
+    }
+
+    start(): void {
+        // Navigate to initial route
+        this.navigate();
+
+        // Listen to route changes
         window.addEventListener('hashchange', () => this.navigate());
     }
 
-    addRoute(route: VRoute): VInternalRouter {
-        this._routes.push(route);
-        return this;
-    }
-
     private navigate(): void {
-        const url = window.location.hash.slice(1) || '/';
+        const url = window.location.hash || '/';
         const route = this.findRoute(url);
         if (route === null) {
             this.handleRouteNotFound(url);
@@ -38,16 +41,22 @@ export class VInternalRouter {
     }
 
     private handleRouteNotFound(url: string): void {
-        if (this.options.routeNotFoundStrategy === VRouteNotFoundStrategy.IGNORE) {
+        const strategy = this.options.routeNotFoundStrategy;
+        if (VInternalRouter.isRouteNotFoundRedirectStrategy(strategy)) {
+            window.location.href = `#${strategy.path}`;
+        } else if (strategy === VRouteNotFoundStrategy.IGNORE) {
             throw new VNoRouteException(`No route found for url '${url}'`);
+        } else if (strategy === VRouteNotFoundStrategy.ROOT) {
+            window.location.href = '#/';
         } else {
-            // Default or root: navigate to root
-            window.location.href = '#';
+            const invalidStrategy = strategy ? JSON.stringify(strategy) : 'none';
+            throw new VInvalidRouteStrategyException(`Invalid route strategy: '${invalidStrategy}'`);
         }
     }
 
     private findRoute(url: string): VRoute {
-        const resolvedRoute = this._routes.find((r) => {
+        url = url.startsWith('#') ? url.substring(1, url.length) : url;
+        const resolvedRoute = this.options.routes.find((r) => {
             const paramIndex = url.indexOf('?');
             if (paramIndex === -1) {
                 return r.path === url;
