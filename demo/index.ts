@@ -1,4 +1,4 @@
-import {VApplication, VRouteNotFoundStrategy} from '../src';
+import {VApplication} from '../src';
 import {DashboardComponent} from './components/dashboard.component';
 import {HomeComponent} from './components/home.component';
 import {FooterComponent} from "./components/footer.component";
@@ -36,7 +36,7 @@ import {CounterComponent} from "./components/counter.component";
             guards: [CanActivatePersonalGuard]
         }
     ],
-    routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT,
+    routeNotFoundStrategy: { path: '/settings' },
     rootElementSelector: '#vienna-root'
 })
 export class DemoApplication {

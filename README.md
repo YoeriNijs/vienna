@@ -78,9 +78,10 @@ following:
 - `declarations` (mandatory): holds all Vienna components that you want to use in your application.
 - `routes` (mandatory): holds all Vienna routes for your application.
 - `routeNotFoundStrategy` (optional): can be used to specify another strategy if a route is not found. Currently, Vienna
-  accepts two strategies:
-    - `Ignore`: ignore the invalid route and just stay on the current page.
-    - `Root`: navigate user back to the root route of the Vienna application if the route is invalid.
+  accepts three strategies:
+    - `Ignore`: enum. If configured, the invalid route will be ignored and the user stays on the current page.
+    - `Root`: enum. If configured, the user will be navigated back to the root route the Vienna application.
+    - `VRouteNotFoundRedirect`: object that holds a path field. The router will send the user to the configured path. The path should start with '/'. Example object: `{ path: '/not-found' }`.
 - `rootElementSelector` (optional): can be used to specify which root element should be used by Vienna as application
   root. Default: 'body'.
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:

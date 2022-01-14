@@ -6,7 +6,6 @@ import {VRenderError} from "../renderer/v-render-error";
 import {VComponentType} from '../component/v-component-type';
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
-import {VInternalRouterOptions} from "../router/v-internal-router-options";
 import {VInternalApplicationSelectors} from "./v-internal-application-selectors";
 import {VInternalRouter} from "../router/v-internal-router";
 
@@ -36,12 +35,12 @@ export function VApplication(config: VApplicationConfig) {
             }
 
             private initializeRouter() {
-                const routerOptions: VInternalRouterOptions = {
+                const router = new VInternalRouter({
                     eventBus: this._eventBus,
+                    routes: this._routes,
                     routeNotFoundStrategy: config.routeNotFoundStrategy
-                };
-                const router = new VInternalRouter(routerOptions);
-                this._routes.forEach(route => router.addRoute(route));
+                });
+                router.start();
             }
 
             private renderComponentForRoute(route: VRoute): void {
