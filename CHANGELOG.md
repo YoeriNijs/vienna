@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.12](https://github.com/YoeriNijs/vienna/compare/0.2.11...0.2.12)
+## [0.2.13](https://github.com/YoeriNijs/vienna/compare/0.2.12...0.2.13)
+
+### Merged
+
+- refactor(global styles): refactor global styles object so that it is … [`#16`](https://github.com/YoeriNijs/vienna/pull/16)
+
+### Commits
+
+- refactor(global styles): refactor global styles object so that it is just an array [`e23f959`](https://github.com/YoeriNijs/vienna/commit/e23f959669e495036c60e9434a0f7edcf1a4efe5)
+
+## [0.2.12](https://github.com/YoeriNijs/vienna/compare/0.2.11...0.2.12) - 2022-01-14
 
 ### Merged
 
@@ -13,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.12' [`27c9528`](https://github.com/YoeriNijs/vienna/commit/27c95283a5a5c182e37143c636df8691ba36914b)
 - chore(demo app): revert route not found strategy in demo app [`8e5ae1c`](https://github.com/YoeriNijs/vienna/commit/8e5ae1c9f4a642e46de075876d08f3c24dd6c4a0)
 
 ## [0.2.11](https://github.com/YoeriNijs/vienna/compare/0.2.10...0.2.11) - 2022-01-13
