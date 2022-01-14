@@ -5,11 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.11](https://github.com/YoeriNijs/vienna/compare/0.2.10...0.2.11)
+## [0.2.12](https://github.com/YoeriNijs/vienna/compare/0.2.11...0.2.12)
+
+### Merged
+
+- feat(router): make it possible to configure path when route is not found [`#15`](https://github.com/YoeriNijs/vienna/pull/15)
+
+### Commits
+
+- chore(demo app): revert route not found strategy in demo app [`8e5ae1c`](https://github.com/YoeriNijs/vienna/commit/8e5ae1c9f4a642e46de075876d08f3c24dd6c4a0)
+
+## [0.2.11](https://github.com/YoeriNijs/vienna/compare/0.2.10...0.2.11) - 2022-01-13
 
 ### Merged
 
 - feat(redirect): implement route redirect helper [`#14`](https://github.com/YoeriNijs/vienna/pull/14)
+
+### Commits
+
+- feat(package.json): release '0.2.11' [`9235fd8`](https://github.com/YoeriNijs/vienna/commit/9235fd86eb0fe1cfbd5de689aaae0092ca98d23e)
 
 ## [0.2.10](https://github.com/YoeriNijs/vienna/compare/0.2.9...0.2.10) - 2022-01-13
 
