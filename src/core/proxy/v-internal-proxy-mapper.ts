@@ -98,13 +98,9 @@ export class VInternalProxyMapper {
         eventBus.resubscribe(VInternalEventName.RENDERING_FINISHED, () => isRenderingFinished = true);
         eventBus.resubscribe(VInternalEventName.REBUILD_CHECK, (data: VInternalEventRebuildData) => {
             if (isRenderingFinished) {
-                // Only rebuild the app when rendering is finished, otherwise this results in a indefinite loop. Not
+                // Only rebuild when rendering is finished, otherwise this results in a indefinite loop. Not
                 // sure if this is the way to go, but it works for now (YN).
-                if (data.dirtyElementIds.length < 1) {
-                    eventBus.publish(VInternalEventName.REBUILD);
-                } else {
-                    eventBus.publish(VInternalEventName.REBUILD_PARTIALLY, data);
-                }
+                eventBus.publish(VInternalEventName.REBUILD_PARTIALLY, data);
             }
         });
     }
