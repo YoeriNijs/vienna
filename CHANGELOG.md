@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.13](https://github.com/YoeriNijs/vienna/compare/0.2.12...0.2.13)
+## [0.2.14](https://github.com/YoeriNijs/vienna/compare/0.2.13...0.2.14)
+
+### Merged
+
+- fix(proxy mapper): re-render entire component when controller is dirty [`#17`](https://github.com/YoeriNijs/vienna/pull/17)
+
+### Commits
+
+- fix(proxy mapper): whole rebuild is unneeded in proxy mapper [`816043b`](https://github.com/YoeriNijs/vienna/commit/816043b4221c3a9968023efc222315a8885e4412)
+
+## [0.2.13](https://github.com/YoeriNijs/vienna/compare/0.2.12...0.2.13) - 2022-01-14
 
 ### Merged
 
@@ -13,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.13' [`c572c59`](https://github.com/YoeriNijs/vienna/commit/c572c59da22040efed788b0ed2ff196aa50efe07)
 - refactor(global styles): refactor global styles object so that it is just an array [`e23f959`](https://github.com/YoeriNijs/vienna/commit/e23f959669e495036c60e9434a0f7edcf1a4efe5)
 
 ## [0.2.12](https://github.com/YoeriNijs/vienna/compare/0.2.11...0.2.12) - 2022-01-14
