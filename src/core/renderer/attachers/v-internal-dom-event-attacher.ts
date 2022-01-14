@@ -49,7 +49,7 @@ export class VInternalDomEventAttacher implements VInternalAttacher {
 
     private listen(variable: string, shadowEl: HTMLElement, attr: VInternalHtmlAttribute, methods: VInternalAttacherMethods, component: VComponentType, methodName: string) {
         const keyboardListener = (event: KeyboardEvent) => {
-            if (event.key === variable) {
+            if (event.key.toLowerCase() === variable.toLowerCase()) {
                 shadowEl.removeEventListener(attr.domEvent, keyboardListener);
                 methods.callInternalMethod(component, methodName, shadowEl);
                 methods.forceRerendering(); // Re-render since view may have changed

@@ -485,7 +485,7 @@ export class CustomComponent {
 If you want to listen to keyboard events, you can pass the key name. This holds for `keyDown` and `keyUp`.
 
 ```
-<div @keyDown.Enter="doSomething"></div>
+<div @keyDown.enter="doSomething"></div>
 ```
 
 ## Routes
