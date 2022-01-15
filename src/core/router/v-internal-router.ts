@@ -28,16 +28,13 @@ export class VInternalRouter {
 
     private navigate(): void {
         const url = window.location.hash || '/';
-        const route = this.findRoute(url);
-        if (route === null) {
-            this.handleRouteNotFound(url);
-        } else {
-            this.isAllowedToNavigateTo(route).then(yes => {
-                if (yes) {
-                    this.dispatchNavigationAction(route);
-                }
-            });
-        }
+        this.findRoute(url).then(route => {
+            if (route === null) {
+                this.handleRouteNotFound(url);
+            } else {
+                this.dispatchNavigationAction(route);
+            }
+        });
     }
 
     private handleRouteNotFound(url: string): void {
@@ -54,9 +51,66 @@ export class VInternalRouter {
         }
     }
 
-    private findRoute(url: string): VRoute {
+    private findRoute(url: string): Promise<VRoute | null> {
         url = url.startsWith('#') ? url.substring(1, url.length) : url;
-        const resolvedRoute = this.options.routes.find((r) => {
+        const segments = url.split('/')
+            .filter(v => v && v.length > 0)
+            .map(v => `/${v}`);
+
+        if (!segments || segments.length < 1) {
+            segments.push('/'); // Navigate to root instead
+        }
+
+        let previouslyVisitedRoute: VRoute = null;
+        return segments.reduce((resolvedRoute, segment) => {
+            return resolvedRoute.then(route => {
+                if (route === null) {
+                    return Promise.resolve(null);
+                } else {
+                    if (route === previouslyVisitedRoute) {
+                        return Promise.resolve(previouslyVisitedRoute);
+                    }
+                    return this.findCurrentRoute(segment, route).then(currentRoute => {
+                        const segmentIndex = segments.indexOf(segment);
+                        const hasChildren = segmentIndex < segments.length - 1;
+                        return currentRoute && hasChildren
+                            ? this.findChildRoute(currentRoute, segments, segmentIndex)
+                                .then(child => previouslyVisitedRoute = child)
+                            : Promise.resolve(currentRoute)
+                                .then(current => previouslyVisitedRoute = current)
+                    });
+                }
+            })
+        }, Promise.resolve(undefined));
+    }
+
+    private findCurrentRoute(segment: string, context: VRoute): Promise<VRoute | null> {
+        const children = context && context.children || this.options.routes;
+        const route = this.findRouteForSegment(segment, children);
+        return this.isAllowedToNavigateTo(route)
+            .then(isAllowed => isAllowed
+                ? Promise.resolve(route)
+                : Promise.resolve(null));
+    }
+
+    private findChildRoute(parent: VRoute, segments: string[], segmentIndex: number): Promise<VRoute | null> {
+        return this.isAllowedToNavigateTo(parent)
+            .then(isAllowedForParent => {
+                const childSegment = segments[segmentIndex + 1];
+                const child = this.findRouteForSegment(childSegment, parent.children);
+                return isAllowedForParent && child
+                    ? this.isAllowedToNavigateTo(child)
+                        .then(isAllowedForChild => isAllowedForChild
+                            ? Promise.resolve(child)
+                            : Promise.resolve(null))
+                    : isAllowedForParent
+                        ? Promise.resolve(parent)
+                        : Promise.resolve(null);
+            });
+    }
+
+    private findRouteForSegment(url: string, routes: VRoute[]): VRoute | null {
+        const resolvedRoute = routes.find((r) => {
             const paramIndex = url.indexOf('?');
             if (paramIndex === -1) {
                 return r.path === url;

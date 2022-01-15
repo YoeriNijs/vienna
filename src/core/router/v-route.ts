@@ -6,5 +6,6 @@ export interface VRoute {
     path: string;
     component: object;
     data?: VRouteData;
-    guards?: Type<VRouteGuard>[]
+    guards?: Type<VRouteGuard>[];
+    children?: VRoute[];
 }
