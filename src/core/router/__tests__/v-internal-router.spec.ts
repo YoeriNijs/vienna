@@ -126,7 +126,7 @@ describe('VInternalRouter', () => {
             }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
 
-        it('should fire VInvalidRouteStrategyException if one guard is false', async () => {
+        it('should fire VInvalidRouteStrategyException if one guard of set is false', async () => {
             eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
             setup('/custom-component', {
                 routes: [
@@ -342,7 +342,7 @@ describe('VInternalRouter', () => {
             });
         });
 
-        it('should navigate if subroute is configured and parents have true guards', done => {
+        it('should navigate if subroute is configured and all parents have true guards', done => {
             eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
                 expect(r.path).toEqual('/child2');
                 done();
@@ -404,10 +404,12 @@ describe('VInternalRouter', () => {
                     {
                         path: '/parent',
                         component: jest.fn(),
+                        guards: [TrueGuard],
                         children: [
                             {
                                 path: '/child1',
                                 component: jest.fn(),
+                                guards: [TrueGuard],
                                 children: [
                                     {
                                         path: '/child2',
