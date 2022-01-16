@@ -18,23 +18,16 @@ export class VInternalRouter {
         return s && s.path && s.path.startsWith('/');
     }
 
-    start(): void {
-        // Navigate to initial route
-        this.navigate();
-
-        // Listen to route changes
-        window.addEventListener('hashchange', () => this.navigate());
+    start(): Promise<void> {
+        return this.navigate()
+            .then(() => window.addEventListener('hashchange', () => this.navigate()))
     }
 
-    private navigate(): void {
+    private navigate(): Promise<void> {
         const url = window.location.hash || '/';
-        this.findRoute(url).then(route => {
-            if (route === null) {
-                this.handleRouteNotFound(url);
-            } else {
-                this.dispatchNavigationAction(route);
-            }
-        });
+        return this.findRoute(url).then(route => route === null
+            ? this.handleRouteNotFound(url)
+            : this.dispatchNavigationAction(route));
     }
 
     private handleRouteNotFound(url: string): void {
@@ -61,30 +54,39 @@ export class VInternalRouter {
             segments.push('/'); // Navigate to root instead
         }
 
-        let previouslyVisitedRoute: VRoute = null;
+        let parentRoute: VRoute = null;
         return segments.reduce((resolvedRoute, segment) => {
             return resolvedRoute.then(route => {
+                const segmentIndex = segments.indexOf(segment);
+                const hasChildren = segmentIndex < segments.length - 1;
                 if (route === null) {
                     return Promise.resolve(null);
-                } else {
-                    if (route === previouslyVisitedRoute) {
-                        return Promise.resolve(previouslyVisitedRoute);
-                    }
-                    return this.findCurrentRoute(segment, route).then(currentRoute => {
-                        const segmentIndex = segments.indexOf(segment);
-                        const hasChildren = segmentIndex < segments.length - 1;
-                        return currentRoute && hasChildren
+                } else if (hasChildren) {
+                    return this.findRouteWithAuthCheck(segment, parentRoute)
+                        .then(currentRoute => currentRoute
                             ? this.findChildRoute(currentRoute, segments, segmentIndex)
-                                .then(child => previouslyVisitedRoute = child)
-                            : Promise.resolve(currentRoute)
-                                .then(current => previouslyVisitedRoute = current)
-                    });
+                                .then(child => parentRoute = child === null ? null : currentRoute)
+                            : Promise.resolve(null));
+                } else if (parentRoute === null) {
+                    return this.findRouteWithAuthCheck(segment, parentRoute)
+                        .then(currentRoute => parentRoute = currentRoute);
+                } else if (route === parentRoute) {
+                    return this.findRouteWithoutAuthCheck(segment, parentRoute);
+                } else {
+                    return this.findRouteWithoutAuthCheck(segment, parentRoute)
+                        .then(currentRoute => parentRoute = currentRoute);
                 }
             })
         }, Promise.resolve(undefined));
     }
 
-    private findCurrentRoute(segment: string, context: VRoute): Promise<VRoute | null> {
+    private findRouteWithoutAuthCheck(segment: string, context: VRoute): Promise<VRoute | null> {
+        const children = context && context.children || this.options.routes;
+        const route = this.findRouteForSegment(segment, children);
+        return Promise.resolve(route);
+    }
+
+    private findRouteWithAuthCheck(segment: string, context: VRoute): Promise<VRoute | null> {
         const children = context && context.children || this.options.routes;
         const route = this.findRouteForSegment(segment, children);
         return this.isAllowedToNavigateTo(route)
@@ -94,19 +96,13 @@ export class VInternalRouter {
     }
 
     private findChildRoute(parent: VRoute, segments: string[], segmentIndex: number): Promise<VRoute | null> {
-        return this.isAllowedToNavigateTo(parent)
-            .then(isAllowedForParent => {
-                const childSegment = segments[segmentIndex + 1];
-                const child = this.findRouteForSegment(childSegment, parent.children);
-                return isAllowedForParent && child
-                    ? this.isAllowedToNavigateTo(child)
-                        .then(isAllowedForChild => isAllowedForChild
-                            ? Promise.resolve(child)
-                            : Promise.resolve(null))
-                    : isAllowedForParent
-                        ? Promise.resolve(parent)
-                        : Promise.resolve(null);
-            });
+        const childSegment = segments[segmentIndex + 1];
+        const child = this.findRouteForSegment(childSegment, parent.children);
+        return child ? this.isAllowedToNavigateTo(child)
+                .then(isAllowedForChild => isAllowedForChild
+                    ? Promise.resolve(child)
+                    : Promise.resolve(null))
+            : Promise.resolve(parent);
     }
 
     private findRouteForSegment(url: string, routes: VRoute[]): VRoute | null {
@@ -129,6 +125,10 @@ export class VInternalRouter {
     }
 
     private isAllowedToNavigateTo(route: VRoute): Promise<boolean> {
+        if (!route) {
+            return Promise.resolve(false);
+        }
+
         const guards: Type<VRouteGuard>[] = route.guards || [];
         if (guards.length < 1) {
             return Promise.resolve(true);

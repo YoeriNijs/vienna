@@ -34,13 +34,13 @@ export function VApplication(config: VApplicationConfig) {
                 this.initializeRouter();
             }
 
-            private initializeRouter() {
+            private async initializeRouter() {
                 const router = new VInternalRouter({
                     eventBus: this._eventBus,
                     routes: this._routes,
                     routeNotFoundStrategy: config.routeNotFoundStrategy
                 });
-                router.start();
+                await router.start();
             }
 
             private renderComponentForRoute(route: VRoute): void {
