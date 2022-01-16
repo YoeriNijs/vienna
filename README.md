@@ -641,6 +641,9 @@ export class DashboardComponent {
 
 ```
 
+<b>Important:</b> if the guard returns false for some reason, the internal Vienna router handles the current route the same as a route that isn't found. In that case, the so-called
+`routeNotFoundStrategy` kicks in. You might want to adjust this strategy depending on your needs.
+
 ### Route redirects
 It is very likely that an application needs to redirect to another internal or external path. Of course, it is possible to provide
 a valid href in the view. However, sometimes you want to create a redirect that is not visible in your view. For this, you can use the 

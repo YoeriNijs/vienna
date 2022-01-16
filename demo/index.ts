@@ -8,10 +8,12 @@ import {AboutComponent} from "./components/about.component";
 import {CanActivatePersonalGuard} from "./guards/can-activate-personal.guard";
 import {SettingsComponent} from "./components/settings.component";
 import {CounterComponent} from "./components/counter.component";
+import {AboutMoreComponent} from "./components/about-more.component";
 
 @VApplication({
     declarations: [
         AboutComponent,
+        AboutMoreComponent,
         DashboardComponent,
         FooterComponent,
         HomeComponent,
@@ -21,9 +23,15 @@ import {CounterComponent} from "./components/counter.component";
         CounterComponent
     ],
     routes: [
-        {path: '/', component: HomeComponent},
-        {path: '/about', component: AboutComponent},
-        {path: '/counter', component: CounterComponent},
+        { path: '/', component: HomeComponent },
+        {
+            path: '/about',
+            component: AboutComponent,
+            children: [
+                { path: '/more', component: AboutMoreComponent }
+            ]
+        },
+        { path: '/counter', component: CounterComponent },
         {
             path: '/settings',
             component: SettingsComponent,

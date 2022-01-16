@@ -1,12 +1,12 @@
 import {VInternalRouter} from "../v-internal-router";
 import {VInternalRouterOptions} from "../v-internal-router-options";
 import {VInternalEventbus} from "../../eventbus/v-internal-eventbus";
+import {VRouteGuard} from "../v-route-guard";
+import {VInvalidRouteStrategyException} from "../v-invalid-route-strategy-exception";
 import {VRouteNotFoundStrategy} from "../v-route-not-found-strategy";
 import {VNoRouteException} from "../v-no-route-exception";
-import {VInvalidRouteStrategyException} from "../v-invalid-route-strategy-exception";
-import {VInternalEventName} from "../../eventbus/v-internal-event-name";
 import {VRoute} from "../v-route";
-import {VRouteGuard} from "../v-route-guard";
+import {VInternalEventName} from "../../eventbus/v-internal-event-name";
 
 class TrueGuard implements VRouteGuard {
     guard(): boolean {
@@ -39,52 +39,50 @@ describe('VInternalRouter', () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    const createWindow = (hash: string): void => {
+    const setup = (windowHash: string, options: Partial<VInternalRouterOptions> = {}): Promise<void> => {
         // eslint-disable-next-line no-undef
         global['window'] = Object.create(window);
         Object.defineProperty(window, 'location', {
-            value: { hash, href: jest.fn() }
+            value: { hash: windowHash, href: jest.fn() }
         });
 
         window.addEventListener = jest.fn();
-    }
 
-    const createRouter = (options: Partial<VInternalRouterOptions> = {}): void => {
         const router = new VInternalRouter(Object.assign({ eventBus, routes: [] }, options));
-        router.start();
-    }
-
-    const setupRouter = (hash: string, options: Partial<VInternalRouterOptions> = {}): void => {
-        createWindow(hash);
-        createRouter(options);
+        return router.start();
     }
 
     describe('Route not found strategies', () => {
-        it('should navigate to root if route is invalid and strategy is root', () => {
-            setupRouter('/invalid-route', { routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT });
-            expect(window.location.href).toEqual('#/');
+        it('should navigate to root if route is invalid and strategy is root', async () => {
+            setup('/invalid-route', { routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT })
+                .then(() => expect(window.location.href).toEqual('#/'))
+                .catch(e => fail(e));
         });
 
-        it('should ignore if route is invalid and strategy is ignore', () => {
-            const navigate = () => setupRouter('/invalid-route', { routeNotFoundStrategy: VRouteNotFoundStrategy.IGNORE });
-            expect(navigate).toThrow(new VNoRouteException('No route found for url \'/invalid-route\''));
+        it('should ignore if route is invalid and strategy is ignore', async () => {
+            setup('/invalid-route', { routeNotFoundStrategy: VRouteNotFoundStrategy.IGNORE })
+                .then(e => fail(e))
+                .catch(e => expect(e).toEqual(new VNoRouteException('No route found for url \'/invalid-route\'')));
         });
 
-        it('should navigate to configured path if route is invalid and strategy is path', () => {
-            setupRouter('/invalid-route', { routeNotFoundStrategy: { path: '/not-found' } });
-            expect(window.location.href).toEqual('#/not-found');
+        it('should navigate to configured path if route is invalid and strategy is path', async () => {
+            setup('/invalid-route', { routeNotFoundStrategy: { path: '/not-found' } })
+                .then(() => expect(window.location.href).toEqual('#/not-found'))
+                .catch(e => fail(e));
         });
 
-        it('should throw error if path if route is invalid and strategy is invalid path', () => {
-            const navigate = () => setupRouter('/invalid-route', { routeNotFoundStrategy: { path: 'not-found' } });
-            expect(navigate).toThrow(new VInvalidRouteStrategyException('Invalid route strategy: \'{"path":"not-found"}\''));
+        it('should throw error if path if route is invalid and strategy is invalid path', async () => {
+            setup('/invalid-route', { routeNotFoundStrategy: { path: 'not-found' } })
+                .then(e => fail(e))
+                .catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'{"path":"not-found"}\'')))
         });
 
         it.each(
             [undefined, null]
-        )('should throw error if path if route is invalid and strategy is %s', (strategy) => {
-            const navigate = () => setupRouter('/invalid-route', { routeNotFoundStrategy: strategy });
-            expect(navigate).toThrow(new VInvalidRouteStrategyException('Invalid route strategy: \'none\''));
+        )('should throw error if path if route is invalid and strategy is %s', async (strategy) => {
+            setup('/invalid-route', { routeNotFoundStrategy: strategy })
+                .then(e => fail(e))
+                .catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')))
         });
     });
 
@@ -94,9 +92,9 @@ describe('VInternalRouter', () => {
                 expect(r.path).toEqual('/custom-component');
                 done();
             });
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [ { path: '/custom-component', component: jest.fn() }]
-            });
+            }).catch(e => fail(e));
         });
 
         it('should navigate if route is configured and guard is true', done => {
@@ -104,7 +102,7 @@ describe('VInternalRouter', () => {
                 expect(r.path).toEqual('/custom-component');
                 done();
             });
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -112,12 +110,12 @@ describe('VInternalRouter', () => {
                         guards: [TrueGuard]
                     }
                 ]
-            });
+            }).catch(e => fail(e));
         });
 
-        it('should not navigate if route is configured and guard is false', () => {
+        it('should fire VInvalidRouteStrategyException if guard is false', async () => {
             eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -125,12 +123,12 @@ describe('VInternalRouter', () => {
                         guards: [FalseGuard]
                     }
                 ]
-            });
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
 
-        it('should not navigate if route is configured and one guard is false', () => {
+        it('should fire VInvalidRouteStrategyException if one guard of set is false', async () => {
             eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -138,7 +136,7 @@ describe('VInternalRouter', () => {
                         guards: [TrueGuard, FalseGuard, TrueGuard]
                     }
                 ]
-            });
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
 
         it('should navigate if route is configured and promise guard is true', done => {
@@ -146,7 +144,7 @@ describe('VInternalRouter', () => {
                 expect(r.path).toEqual('/custom-component');
                 done();
             });
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -154,12 +152,12 @@ describe('VInternalRouter', () => {
                         guards: [TruePromiseGuard]
                     }
                 ]
-            });
+            }).catch(e => fail(e));
         });
 
-        it('should not navigate if route is configured and promise guard is false', async () => {
+        it('should fire VInvalidRouteStrategyException if promise guard is false', async () => {
             eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -167,12 +165,12 @@ describe('VInternalRouter', () => {
                         guards: [FalsePromiseGuard]
                     }
                 ]
-            });
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
 
-        it('should not navigate if route is configured and one promise guard is false', async () => {
+        it('should fire VInvalidRouteStrategyException if one promise guard is false', async () => {
             eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -180,7 +178,7 @@ describe('VInternalRouter', () => {
                         guards: [TruePromiseGuard, FalsePromiseGuard, TruePromiseGuard]
                     }
                 ]
-            });
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
 
         it('should navigate if route is configured and all guards are true', done => {
@@ -188,7 +186,7 @@ describe('VInternalRouter', () => {
                 expect(r.path).toEqual('/custom-component');
                 done();
             });
-            setupRouter('/custom-component', {
+            setup('/custom-component', {
                 routes: [
                     {
                         path: '/custom-component',
@@ -196,7 +194,234 @@ describe('VInternalRouter', () => {
                         guards: [TruePromiseGuard, TrueGuard, TruePromiseGuard]
                     }
                 ]
+            }).catch(e => fail(e));
+        });
+    });
+
+    describe('Subroutes', () => {
+        it('should navigate if subroute is configured and parent and child have no guards', done => {
+           eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+               expect(r.path).toEqual('/child');
+               done();
+           });
+           setup('/parent/child', {
+               routes: [
+                   {
+                       path: '/parent',
+                       component: jest.fn(),
+                       children: [ { path: '/child', component: jest.fn() }]
+                   }
+               ]
+           });
+        });
+
+        it('should navigate if subroute is configured and parent has guard that is true', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/child');
+                done();
             });
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [ { path: '/child', component: jest.fn() }]
+                    }
+                ]
+            });
+        });
+
+        it('should fire VInvalidRouteStrategyException if subroute is configured and parent has guard that is false', async () => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [FalseGuard],
+                        children: [ { path: '/child', component: jest.fn() }]
+                    }
+                ]
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
+        });
+
+        it('should fire VInvalidRouteStrategyException if subroute is configured and parent has guard that is true and child has guard that is false', async () => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [ { path: '/child', component: jest.fn(), guards: [FalseGuard] }]
+                    }
+                ]
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
+        });
+
+        it('should fire VInvalidRouteStrategyException if subroute is configured and parent has guard that is promise false and child has guard that is true', async () => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [FalsePromiseGuard],
+                        children: [ { path: '/child', component: jest.fn(), guards: [TrueGuard] }]
+                    }
+                ]
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
+        });
+
+        it('should navigate if subroute is configured and parent has guard that is true and child has guard that is true', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/child');
+                done();
+            });
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [ { path: '/child', component: jest.fn(), guards: [TrueGuard] }]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate if subroute is configured and parent has guard that is promise true and child has guard that is true', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/child');
+                done();
+            });
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TruePromiseGuard],
+                        children: [ { path: '/child', component: jest.fn(), guards: [TrueGuard] }]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate if subroute is configured and parent has guard that is promise true and child has guard that is promise true', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/child');
+                done();
+            });
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TruePromiseGuard],
+                        children: [ { path: '/child', component: jest.fn(), guards: [TruePromiseGuard] }]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate if subroute is configured and parent has guard that is true and child has guard that is promise true', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/child');
+                done();
+            });
+            setup('/parent/child', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [ { path: '/child', component: jest.fn(), guards: [TruePromiseGuard] }]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate if subroute is configured and all parents have true guards', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/child2');
+                done();
+            });
+            setup('/parent/child1/child2', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [
+                            {
+                                path: '/child1',
+                                component: jest.fn(),
+                                guards: [TrueGuard],
+                                children: [
+                                    {
+                                        path: '/child2',
+                                        component: jest.fn()
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+        });
+
+        it('should fire VInvalidRouteStrategyException if subroute is configured and one of parents has false guard', async () => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
+            setup('/parent/child1/child2', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [
+                            {
+                                path: '/child1',
+                                component: jest.fn(),
+                                guards: [FalseGuard],
+                                children: [
+                                    {
+                                        path: '/child2',
+                                        component: jest.fn()
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
+        });
+
+        it('should fire VInvalidRouteStrategyException if subroute is configured and child has false guard', async () => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, () => fail('Should not be called'));
+            setup('/parent/child1/child2', {
+                routes: [
+                    {
+                        path: '/parent',
+                        component: jest.fn(),
+                        guards: [TrueGuard],
+                        children: [
+                            {
+                                path: '/child1',
+                                component: jest.fn(),
+                                guards: [TrueGuard],
+                                children: [
+                                    {
+                                        path: '/child2',
+                                        component: jest.fn(),
+                                        guards: [FalseGuard]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
     });
 });
