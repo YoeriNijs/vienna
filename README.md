@@ -519,6 +519,33 @@ Besides the path and component properties, the `VRoute` interface accepts the fo
 - `guards` (optional): implementations of the `VRouteGuard` interface that allow you to control the accessibility of a
   route based on a custom condition.
 
+Routes can be nested limitless. To create subroutes, just implement child routes. For example:
+
+`application.ts`
+
+```
+
+@VApplication({ 
+  declarations: [
+    HomeComponent, 
+    AboutComponent, 
+    ContactComponent
+  ], 
+  routes: [
+    { path: '/', component: HomeComponent }, 
+    { 
+      path: '/about', 
+      component: AboutComponent,
+      children: [
+        { path: '/contact', component: ContactComponent }, 
+      ]
+    }
+  ]
+})
+export class Application {}
+
+```
+
 ### Route data
 
 Optional key-value based map to specify some custom values for a specific route.
@@ -617,6 +644,9 @@ export class AuthorizedGuard implements VRouteGuard {
 Please note that this guard uses the `VInjectable` decorator for dependency injection. Without this decorator, we are
 unable to inject the LoginService. Please see dependency injection for more information.
 
+<b>Important:</b> if the guard returns false for some reason, the internal Vienna router handles the current route the same as a route that isn't found. In that case, the so-called
+`routeNotFoundStrategy` kicks in. You might want to adjust this strategy depending on your needs.
+
 ### Route params
 
 Consider the following url: `#/dashboard?message=Hello%20there`. In order to retrieve the query param 'message', you can
@@ -640,9 +670,6 @@ export class DashboardComponent {
 }
 
 ```
-
-<b>Important:</b> if the guard returns false for some reason, the internal Vienna router handles the current route the same as a route that isn't found. In that case, the so-called
-`routeNotFoundStrategy` kicks in. You might want to adjust this strategy depending on your needs.
 
 ### Route redirects
 It is very likely that an application needs to redirect to another internal or external path. Of course, it is possible to provide
@@ -767,6 +794,7 @@ describe('VComponentFactory', () => {
 
 # Todo
 
+- Implement route params (Idea: `/route{:param}/`)
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
   instead of all)
 - Add unit tests
