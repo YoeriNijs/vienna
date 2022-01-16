@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.17](https://github.com/YoeriNijs/vienna/compare/0.2.16...0.2.17)
+## [0.2.18](https://github.com/YoeriNijs/vienna/compare/0.2.17...0.2.18)
+
+### Merged
+
+- docs(readme): update docs [`#21`](https://github.com/YoeriNijs/vienna/pull/21)
+
+## [0.2.17](https://github.com/YoeriNijs/vienna/compare/0.2.16...0.2.17) - 2022-01-16
 
 ### Merged
 
@@ -13,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.17' [`baaf5d1`](https://github.com/YoeriNijs/vienna/commit/baaf5d1ce86b85e7ceeaa5b7b59f8db8c44de86a)
 - refactor(router tests): refactor some tests [`a14589a`](https://github.com/YoeriNijs/vienna/commit/a14589afd9972ac53253ecba138d7d766032f87b)
 - feat(subroutes): add unit tests + bugfixes [`f5912cd`](https://github.com/YoeriNijs/vienna/commit/f5912cddc61d70c30efb51bc631a57bf87d127ff)
 - docs(readme): update docs about guards [`d9dd515`](https://github.com/YoeriNijs/vienna/commit/d9dd5150844472ec1708088781eb11b7b44a61af)
