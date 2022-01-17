@@ -4,14 +4,17 @@ import {VInternalEventName} from "../../eventbus/v-internal-event-name";
 import {VRoute} from "../v-route";
 import {VRouteData} from "../v-route-data";
 import {VQueryParam} from "../v-query-param";
+import {VInternalRoutes} from "../v-internal-routes";
 
 describe('VActivatedRoute', () => {
     let eventBus: VInternalEventbus;
+    let internalRoutes: VInternalRoutes;
     let activatedRoute: VActivatedRoute;
 
     beforeEach(() => {
         eventBus = new VInternalEventbus();
-        activatedRoute = new VActivatedRoute(eventBus);
+        internalRoutes = new VInternalRoutes();
+        activatedRoute = new VActivatedRoute(eventBus, internalRoutes);
     });
 
     it('should update data if a navigation event occurs', () => {
