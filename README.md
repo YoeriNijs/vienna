@@ -519,6 +519,7 @@ Besides the path and component properties, the `VRoute` interface accepts the fo
 - `data` (optional): key-value based map to specify some custom values for that specific route.
 - `guards` (optional): implementations of the `VRouteGuard` interface that allow you to control the accessibility of a
   route based on a custom condition.
+- `children` (optional): an array of `VRoute` objects that represent nested routes.
 
 Routes can be nested limitless. To create subroutes, just implement child routes. For example:
 
@@ -845,7 +846,6 @@ describe('VComponentFactory', () => {
 
 # Todo
 
-- Implement route params (Idea: `/route{:param}/`)
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
   instead of all)
 - Add unit tests
