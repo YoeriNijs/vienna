@@ -5,11 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.18](https://github.com/YoeriNijs/vienna/compare/0.2.17...0.2.18)
+## [0.2.19](https://github.com/YoeriNijs/vienna/compare/0.2.18...0.2.19)
+
+### Merged
+
+- (feat) Route params [`#22`](https://github.com/YoeriNijs/vienna/pull/22)
+
+### Commits
+
+- Fix test [`d1d4fb9`](https://github.com/YoeriNijs/vienna/commit/d1d4fb9be8b2b7f50e67fe3b8beb96056b4135c7)
+- (feat) update docs about route params [`32ce572`](https://github.com/YoeriNijs/vienna/commit/32ce572cda9539d132ef0ac72a2d74d998d592ef)
+
+## [0.2.18](https://github.com/YoeriNijs/vienna/compare/0.2.17...0.2.18) - 2022-01-16
 
 ### Merged
 
 - docs(readme): update docs [`#21`](https://github.com/YoeriNijs/vienna/pull/21)
+
+### Commits
+
+- feat(package.json): release '0.2.18' [`a64b307`](https://github.com/YoeriNijs/vienna/commit/a64b3071c9f9d65ba69733a1d7142997005f20a0)
 
 ## [0.2.17](https://github.com/YoeriNijs/vienna/compare/0.2.16...0.2.17) - 2022-01-16
 
