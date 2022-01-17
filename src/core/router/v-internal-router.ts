@@ -135,6 +135,7 @@ export class VInternalRouter {
         const eventBus: VInternalEventbus = this.options.eventBus;
         eventBus.unsubscribe(VInternalEventName.ROUTE_DATA);
         eventBus.unsubscribe(VInternalEventName.ROUTE_PARAMS);
+        eventBus.unsubscribe(VInternalEventName.QUERY_PARAMS);
         eventBus.publish<VRoute>(VInternalEventName.NAVIGATED, route);
     }
 

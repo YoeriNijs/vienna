@@ -28,8 +28,7 @@ import {AboutMoreComponent} from "./components/about-more.component";
             path: '/about',
             component: AboutComponent,
             children: [
-                { path: '/more', component: AboutMoreComponent },
-                { path: '/:id', component: SettingsComponent }
+                { path: '/more', component: AboutMoreComponent }
             ]
         },
         { path: '/counter', component: CounterComponent },
