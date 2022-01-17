@@ -1,6 +1,7 @@
 export enum VInternalEventName {
     EMIT = 'emit',
     NAVIGATED = 'navigation',
+    QUERY_PARAMS = 'query-params',
     RENDERING_STARTED = 'rendering-started',
     RENDERING_FINISHED = 'rendering-finished',
     REBUILD = 'rebuild-full-app',

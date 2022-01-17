@@ -28,6 +28,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Routes](#routes)
     - [Route data](#route-data)
     - [Route params](#route-params)
+    - [Query params](#query-params)
     - [Guards](#route-guards)
     - [Route redirects](#route-redirects)
 - [Dependency injection](#dependency-injection)
@@ -648,6 +649,56 @@ unable to inject the LoginService. Please see dependency injection for more info
 `routeNotFoundStrategy` kicks in. You might want to adjust this strategy depending on your needs.
 
 ### Route params
+Consider the following url `#/blog/1` with the following route signature `#/blog/:id`. In order to retrieve the route param 'id', you can
+use the `VActivatedRoute` to retrieve a list of current `VRouteParam` values.
+
+A `VRouteParam` holds the following values:
+- `id`: the name of the route param name
+- `value`: the actual route param value
+
+`blog-post.component.ts`
+
+```
+
+@VComponent({ 
+  selector: 'blog-post-component', 
+  styles: [], 
+  html: `<span>{{ id }}</span>` // prints '1'
+})
+export class BlogPostComponent {
+    id = '';
+    
+    constructor(private activatedRoute: VActivatedRoute) {
+        this.activatedRoute.params(params => this.id = params.find(v => v.id === 'id');
+    }
+}
+
+```
+
+In order to add route params to Vienna, just pass them in your routes. For example:
+
+`application.ts`
+
+```
+
+@VApplication({ 
+  declarations: [HomeComponent, BlogComponent, BlogPostComponent], 
+  routes: [
+    { path: '/', component: HomeComponent }, 
+    { 
+      path: '/blog', 
+      component: BlogComponent,
+      children: [
+        { path: '/:id', component: BlogPostComponent, guards: [BlogPostIdGuard] }
+      ]
+    },
+  ]
+})
+export class Application {}
+
+```
+
+### Query params
 
 Consider the following url: `#/dashboard?message=Hello%20there`. In order to retrieve the query param 'message', you can
 use the `VActivatedRoute`:
@@ -665,7 +716,7 @@ export class DashboardComponent {
     welcomeMsg = '';
     
     constructor(private activatedRoute: VActivatedRoute) {
-        this.activatedRoute.params(params => this.welcomeMsg = params.message);
+        this.activatedRoute.queryParams(params => this.welcomeMsg = params.message);
     }
 }
 

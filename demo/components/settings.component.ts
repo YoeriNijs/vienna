@@ -1,4 +1,4 @@
-import {VActivatedRoute, VComponent, VInit} from "../../src";
+import {VActivatedRoute, VComponent, VInit, VRouteData, VRouteParam} from "../../src";
 import {RouteData} from "../model/route-data";
 import {RouteParams} from "../model/route-params";
 
@@ -19,7 +19,7 @@ export class SettingsComponent implements VInit {
     }
 
     vInit(): void {
-        this.activatedRoute.params((params: RouteParams) => this.message = params.message);
+        this.activatedRoute.queryParams((params: RouteParams) => this.message = params.message);
         this.activatedRoute.data((data: RouteData) => this.footerText = data.footerText);
     }
 }

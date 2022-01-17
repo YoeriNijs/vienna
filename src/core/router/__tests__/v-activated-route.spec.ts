@@ -3,15 +3,18 @@ import {VActivatedRoute} from "../v-activated-route";
 import {VInternalEventName} from "../../eventbus/v-internal-event-name";
 import {VRoute} from "../v-route";
 import {VRouteData} from "../v-route-data";
-import {VRouteParams} from "../v-route-params";
+import {VQueryParam} from "../v-query-param";
+import {VInternalRoutes} from "../v-internal-routes";
 
 describe('VActivatedRoute', () => {
     let eventBus: VInternalEventbus;
+    let internalRoutes: VInternalRoutes;
     let activatedRoute: VActivatedRoute;
 
     beforeEach(() => {
         eventBus = new VInternalEventbus();
-        activatedRoute = new VActivatedRoute(eventBus);
+        internalRoutes = new VInternalRoutes();
+        activatedRoute = new VActivatedRoute(eventBus, internalRoutes);
     });
 
     it('should update data if a navigation event occurs', () => {
@@ -32,35 +35,35 @@ describe('VActivatedRoute', () => {
         expect(lastKnownData).toEqual({});
     });
 
-    it('should update params if a navigation event occurs', () => {
+    it('should update queryParams if a navigation event occurs', () => {
         // eslint-disable-next-line no-undef
         Object.defineProperty(global, "window", {
             value: {location: {hash: '#?key=value'}}
         });
-        let lastKnownParams: VRouteParams = {};
-        activatedRoute.params(params => lastKnownParams = params);
+        let lastKnownParams: VQueryParam = {};
+        activatedRoute.queryParams(params => lastKnownParams = params);
         eventBus.publish(VInternalEventName.NAVIGATED, {});
         expect(lastKnownParams).toEqual({key: 'value'});
     });
 
-    it('should update multiple params', () => {
+    it('should update multiple queryParams', () => {
         // eslint-disable-next-line no-undef
         Object.defineProperty(global, "window", {
             value: {location: {hash: '#?key1=value1&key2=value2'}}
         });
-        let lastKnownParams: VRouteParams = {};
-        activatedRoute.params(params => lastKnownParams = params);
+        let lastKnownParams: VQueryParam = {};
+        activatedRoute.queryParams(params => lastKnownParams = params);
         eventBus.publish(VInternalEventName.NAVIGATED, {});
         expect(lastKnownParams).toEqual({key1: 'value1', key2: 'value2'});
     });
 
-    it('should reset params if there is none', () => {
+    it('should reset queryParams if there is none', () => {
         // eslint-disable-next-line no-undef
         Object.defineProperty(global, "window", {
             value: {location: {hash: '#'}}
         });
-        let lastKnownParams: VRouteParams = {key: 'value'};
-        activatedRoute.params(params => lastKnownParams = params);
+        let lastKnownParams: VQueryParam = {key: 'value'};
+        activatedRoute.queryParams(params => lastKnownParams = params);
         eventBus.publish(VInternalEventName.NAVIGATED, {});
         expect(lastKnownParams).toEqual({});
     });
