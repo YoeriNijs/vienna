@@ -76,7 +76,7 @@ describe('VInternalTemplateEngine', () => {
         it('should sanitize the template against xss attacks', () => {
             const evil = createTemplate('Normal text and {{ script }}');
             const result = VInternalTemplateEngine.render(evil, {script: '<script>alert(\'evil script\');</script>'});
-            expect(result).toEqual('Normal text and ');
+            expect(result).toEqual('Normal text and &lt;script&gt;alert(\'evil script\');&lt;/script&gt;');
         });
     });
 });
