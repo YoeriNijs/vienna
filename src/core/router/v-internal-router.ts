@@ -97,6 +97,9 @@ export class VInternalRouter {
 
     private findChildRoute(parent: VRoute, segments: string[], segmentIndex: number): Promise<VRoute | null> {
         const childSegment = segments[segmentIndex + 1];
+        if (!childSegment) {
+            return Promise.resolve(null);
+        }
         const child = this.findRouteForSegment(childSegment, parent.children);
         return child ? this.isAllowedToNavigateTo(child)
                 .then(isAllowedForChild => isAllowedForChild
@@ -106,6 +109,9 @@ export class VInternalRouter {
     }
 
     private findRouteForSegment(url: string, routes: VRoute[]): VRoute | null {
+        if (!url || !routes) {
+            return null;
+        }
         return this.findExactRoute(routes, url) || this.findRouteParam(routes);
     }
 

@@ -5,6 +5,7 @@ import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VRouteData} from "./v-route-data";
 import {VQueryParam} from "./v-query-param";
 import {VRouteParam} from "./v-route-param";
+import { filterXSS } from "xss";
 
 interface VInternalRouteParam {
     key: string;
@@ -57,7 +58,8 @@ export class VActivatedRoute {
             this._eventBus.publish(VInternalEventName.QUERY_PARAMS, {});
         } else {
             const partialLocation = window.location.hash.substring(firstQuestionMark, window.location.hash.length);
-            const searchParams = new URLSearchParams(partialLocation);
+            const sanitizedPartialLocation = filterXSS(partialLocation);
+            const searchParams = new URLSearchParams(sanitizedPartialLocation);
             const params = Object.fromEntries(searchParams.entries());
             this._eventBus.publish(VInternalEventName.QUERY_PARAMS, params);
         }
@@ -76,7 +78,7 @@ export class VActivatedRoute {
         const url = window.location.hash || '/';
         const segments = url.split('/')
             .filter(v => v && v.length > 0)
-            .map(v => `${v}`);
+            .map(v => filterXSS(v));
         const routeParams: VRouteParam[] = internalRouteParams
             .map(r => ({ id: r.key, value: segments[--r.index] }))
             .filter(v => v.value);
