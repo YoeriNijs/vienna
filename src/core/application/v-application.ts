@@ -39,7 +39,7 @@ export function VApplication(config: VApplicationConfig) {
             }
 
             private initializeActivatedRoute(): void {
-                this.activatedRoute.initialize(config.routes);
+                this.activatedRoute.initialize(this._routes);
             }
 
             private async initializeRouter() {
