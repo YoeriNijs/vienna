@@ -28,7 +28,8 @@ import {AboutMoreComponent} from "./components/about-more.component";
             path: '/about',
             component: AboutComponent,
             children: [
-                { path: '/more', component: AboutMoreComponent }
+                { path: '/more', component: AboutMoreComponent },
+                { path: '/:name', component: AboutMoreComponent }
             ]
         },
         { path: '/counter', component: CounterComponent },
