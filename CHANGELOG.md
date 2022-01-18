@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.23](https://github.com/YoeriNijs/vienna/compare/0.2.22...0.2.23)
+## [0.2.24](https://github.com/YoeriNijs/vienna/compare/0.2.23...0.2.24)
+
+### Merged
+
+- (fix)add xss protection + fixed some bugs in rendering of check elements [`#27`](https://github.com/YoeriNijs/vienna/pull/27)
+
+## [0.2.23](https://github.com/YoeriNijs/vienna/compare/0.2.22...0.2.23) - 2022-01-18
 
 ### Merged
 
 - (fix)route param fix [`#26`](https://github.com/YoeriNijs/vienna/pull/26)
+
+### Commits
+
+- feat(package.json): release '0.2.23' [`b0e2a77`](https://github.com/YoeriNijs/vienna/commit/b0e2a773a4af6d6c269552cad9d04c8a160ae6d2)
 
 ## [0.2.22](https://github.com/YoeriNijs/vienna/compare/0.2.21...0.2.22) - 2022-01-18
 
