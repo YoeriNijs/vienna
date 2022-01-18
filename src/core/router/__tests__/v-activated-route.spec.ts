@@ -8,13 +8,11 @@ import {VInternalRoutes} from "../v-internal-routes";
 
 describe('VActivatedRoute', () => {
     let eventBus: VInternalEventbus;
-    let internalRoutes: VInternalRoutes;
     let activatedRoute: VActivatedRoute;
 
     beforeEach(() => {
         eventBus = new VInternalEventbus();
-        internalRoutes = new VInternalRoutes();
-        activatedRoute = new VActivatedRoute(eventBus, internalRoutes);
+        activatedRoute = new VActivatedRoute(eventBus);
     });
 
     it('should update data if a navigation event occurs', () => {
