@@ -89,7 +89,7 @@ following:
   root. Default: 'body'.
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
   - `style`: just plain css.
-  - `href`: a href to a remote stylesheet. Thus, a href should start with 'http'.
+  - `href`: a link to a remote stylesheet. Thus, a href should start with 'http'. Also, it is possible to pass integrity and crossorigin values  (see below).
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
 
@@ -102,7 +102,11 @@ For instance, if you want to use [Bulma](https://bulma.io), just add the followi
       { path: '/', component: HomeComponent }
     ],
     globalStyles: [
-      { href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css' },
+      {
+        href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css',
+        integrity: "sha384-IJLmUY0f1ePPX6uSCJ9Bxik64/meJmjSYD7dHaJqTXXEBE4y+Oe9P2KBZa/z7p0Q",
+        crossOrigin: "anonymous"
+      }
       { style: 'body { padding: 10px; }' }
     ]
 })

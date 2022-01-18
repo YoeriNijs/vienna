@@ -242,12 +242,17 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
 
             // Add remote stylesheets
             globalStyles.filter((g: any) => g.href)
-                .map((l: VGlobalStyleLink) => l.href)
-                .filter(href => href.startsWith('http'))
-                .map(href => {
+                .filter((link: VGlobalStyleLink) => link.href.startsWith('http'))
+                .map((link: VGlobalStyleLink) => {
                     const linkedStylesheet = document.createElement('link');
                     linkedStylesheet.rel = 'stylesheet';
-                    linkedStylesheet.href = href;
+                    linkedStylesheet.href = link.href;
+                    if (link.integrity) {
+                        linkedStylesheet.integrity = link.integrity;
+                    }
+                    if (link.crossOrigin) {
+                        linkedStylesheet.crossOrigin = link.crossOrigin;
+                    }
                     return linkedStylesheet;
                 })
                 .forEach(link => shadowRoot.prepend(link));
