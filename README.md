@@ -670,7 +670,7 @@ export class BlogPostComponent {
     id = '';
     
     constructor(private activatedRoute: VActivatedRoute) {
-        this.activatedRoute.params(params => this.id = params.find(v => v.id === 'id');
+        this.activatedRoute.params(params => this.id = params.find(v => v.id === 'id'));
     }
 }
 
