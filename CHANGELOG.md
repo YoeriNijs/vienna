@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.25](https://github.com/YoeriNijs/vienna/compare/0.2.24...0.2.25)
+## [0.2.26](https://github.com/YoeriNijs/vienna/compare/0.2.25...0.2.26)
+
+### Merged
+
+- (feat)Add integrity and crossorigin values for remote styles [`#28`](https://github.com/YoeriNijs/vienna/pull/28)
+
+## [0.2.25](https://github.com/YoeriNijs/vienna/compare/0.2.24...0.2.25) - 2022-01-18
 
 ### Commits
 
+- feat(package.json): release '0.2.25' [`0f214fa`](https://github.com/YoeriNijs/vienna/commit/0f214fabb1e4f5d3f7ec7684051793f299c9fd84)
 - Update README.md [`703a5c3`](https://github.com/YoeriNijs/vienna/commit/703a5c394c6234a48d50fd8c8dfaf84b1cdec07d)
 
 ## [0.2.24](https://github.com/YoeriNijs/vienna/compare/0.2.23...0.2.24) - 2022-01-18
