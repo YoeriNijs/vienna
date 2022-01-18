@@ -4,7 +4,6 @@ import {VInternalEventName} from "../../eventbus/v-internal-event-name";
 import {VRoute} from "../v-route";
 import {VRouteData} from "../v-route-data";
 import {VQueryParam} from "../v-query-param";
-import {VInternalRoutes} from "../v-internal-routes";
 
 describe('VActivatedRoute', () => {
     let eventBus: VInternalEventbus;
@@ -19,7 +18,7 @@ describe('VActivatedRoute', () => {
         let lastKnownData = {};
         activatedRoute.data(data => lastKnownData = data);
         const route: VRoute = {path: '', component: {}, data: {someKey: 'someValue'}};
-        eventBus.publish(VInternalEventName.NAVIGATED, route);
+        eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
         expect(lastKnownData).toEqual({someKey: 'someValue'});
     });
 
@@ -29,7 +28,7 @@ describe('VActivatedRoute', () => {
     ])('should reset data if the navigation event does not hold data', data => {
         let lastKnownData: VRouteData = {someKey: 'someValue'};
         activatedRoute.data(data => lastKnownData = data);
-        eventBus.publish(VInternalEventName.NAVIGATED, data);
+        eventBus.publish(VInternalEventName.NAVIGATION_ENDED, data);
         expect(lastKnownData).toEqual({});
     });
 
@@ -40,7 +39,7 @@ describe('VActivatedRoute', () => {
         });
         let lastKnownParams: VQueryParam = {};
         activatedRoute.queryParams(params => lastKnownParams = params);
-        eventBus.publish(VInternalEventName.NAVIGATED, {});
+        eventBus.publish(VInternalEventName.NAVIGATION_ENDED, {});
         expect(lastKnownParams).toEqual({key: 'value'});
     });
 
@@ -51,7 +50,7 @@ describe('VActivatedRoute', () => {
         });
         let lastKnownParams: VQueryParam = {};
         activatedRoute.queryParams(params => lastKnownParams = params);
-        eventBus.publish(VInternalEventName.NAVIGATED, {});
+        eventBus.publish(VInternalEventName.NAVIGATION_ENDED, {});
         expect(lastKnownParams).toEqual({key1: 'value1', key2: 'value2'});
     });
 
@@ -62,7 +61,7 @@ describe('VActivatedRoute', () => {
         });
         let lastKnownParams: VQueryParam = {key: 'value'};
         activatedRoute.queryParams(params => lastKnownParams = params);
-        eventBus.publish(VInternalEventName.NAVIGATED, {});
+        eventBus.publish(VInternalEventName.NAVIGATION_ENDED, {});
         expect(lastKnownParams).toEqual({});
     });
 });
