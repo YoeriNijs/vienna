@@ -5,7 +5,6 @@ import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VRouteData} from "./v-route-data";
 import {VQueryParam} from "./v-query-param";
 import {VRouteParam} from "./v-route-param";
-import {VInternalRoutes} from "./v-internal-routes";
 
 interface VInternalRouteParam {
     key: string;
@@ -16,11 +15,12 @@ interface VInternalRouteParam {
 export class VActivatedRoute {
 
     private _eventBus: VInternalEventbus;
+    private _applicationRoutes: VRoute[] = [];
 
-    constructor(protected eventBus: VInternalEventbus, private internalRoutes: VInternalRoutes) {
+    constructor(protected eventBus: VInternalEventbus) {
         this._eventBus = eventBus;
 
-        eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
+        eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATION_ENDED, (route: VRoute) => {
             this.setRouteParams();
             this.setQueryParams();
             this.setData(route);
@@ -30,6 +30,10 @@ export class VActivatedRoute {
             eventBus.unsubscribe(VInternalEventName.ROUTE_PARAMS);
             eventBus.unsubscribe(VInternalEventName.QUERY_PARAMS);
         });
+    }
+
+    initialize(applicationRoutes: VRoute[]): void {
+        this._applicationRoutes = applicationRoutes;
     }
 
     public data(callBack: (data: VRouteData) => void): (data: VRouteData) => void {
@@ -98,7 +102,7 @@ export class VActivatedRoute {
                     doWalk(r.children);
                 }
             });
-        doWalk(this.internalRoutes.routes);
+        doWalk(this._applicationRoutes);
         return internalRouteParams;
     }
 }

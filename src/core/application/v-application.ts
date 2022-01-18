@@ -8,8 +8,7 @@ import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VInternalApplicationSelectors} from "./v-internal-application-selectors";
 import {VInternalRouter} from "../router/v-internal-router";
-import {VInternalRoutes} from "../router/v-internal-routes";
-import {VInjectable} from "../injector/v-injectable-decorator";
+import {VActivatedRoute} from "../router/v-activated-route";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -19,7 +18,7 @@ export function VApplication(config: VApplicationConfig) {
             private readonly _declarationTypes: Type<VComponentType>[];
             private readonly _routes: VRoute[];
 
-            constructor(private eventBus: VInternalEventbus, private internalRoutes: VInternalRoutes) {
+            constructor(private eventBus: VInternalEventbus, private activatedRoute: VActivatedRoute) {
                 this._eventBus = eventBus;
                 this._mainRenderer = new VInternalRenderer({
                     selector: VInternalApplicationSelectors.V_APP_RENDERER,
@@ -31,12 +30,16 @@ export function VApplication(config: VApplicationConfig) {
                 this._routes = config.routes;
 
                 this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
-                    this.renderComponentForRoute(route)
+                    this.renderComponentForRoute(route);
+                    this.eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
                 });
 
-                this.internalRoutes.routes = this._routes;
-
+                this.initializeActivatedRoute();
                 this.initializeRouter();
+            }
+
+            private initializeActivatedRoute(): void {
+                this.activatedRoute.initialize(config.routes);
             }
 
             private async initializeRouter() {
@@ -67,8 +70,8 @@ export function VApplication(config: VApplicationConfig) {
                 super(...args);
 
                 const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus);
-                const internalRoutes = VInjector.resolve<VInternalRoutes>(VInternalRoutes);
-                new InternalVApplication(eventBus, internalRoutes);
+                const activatedRoute = VInjector.resolve<VActivatedRoute>(VActivatedRoute);
+                new InternalVApplication(eventBus, activatedRoute);
             }
         };
     }
