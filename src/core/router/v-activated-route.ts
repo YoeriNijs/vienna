@@ -89,20 +89,19 @@ export class VActivatedRoute {
 
     private walkRouteTreeForParams(): VInternalRouteParam[] {
         const internalRouteParams: VInternalRouteParam[] = [];
-        let pathIndex = 0;
-        const doWalk = (routes: VRoute[]) =>
+        const doWalk = (routes: VRoute[], depth: number) => {
             routes.forEach(r => {
                 const path = r.path;
                 if (path.startsWith('/:')) {
                     const pathName = path.substring(2, path.length);
-                    internalRouteParams.push({key: pathName, index: pathIndex});
+                    internalRouteParams.push({key: pathName, index: depth + 1});
                 }
-                ++pathIndex;
                 if (r.children && r.children.length > 0) {
-                    doWalk(r.children);
+                    doWalk(r.children, ++depth);
                 }
             });
-        doWalk(this._applicationRoutes);
+        }
+        doWalk(this._applicationRoutes, 1);
         return internalRouteParams;
     }
 }
