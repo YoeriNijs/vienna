@@ -8,17 +8,16 @@ import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VInternalApplicationSelectors} from "./v-internal-application-selectors";
 import {VInternalRouter} from "../router/v-internal-router";
+import {VDarkMode} from "../style/v-dark-mode";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
         class InternalVApplication {
-            private readonly _eventBus: VInternalEventbus;
             private readonly _mainRenderer: VInternalRenderer;
             private readonly _declarationTypes: Type<VComponentType>[];
             private readonly _routes: VRoute[];
 
-            constructor(private eventBus: VInternalEventbus) {
-                this._eventBus = eventBus;
+            constructor(private _eventBus: VInternalEventbus, private _darkModeService: VDarkMode) {
                 this._mainRenderer = new VInternalRenderer({
                     selector: VInternalApplicationSelectors.V_APP_RENDERER,
                     eventBus: this._eventBus,
@@ -31,6 +30,7 @@ export function VApplication(config: VApplicationConfig) {
                 this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
                     this.renderComponentForRoute(route)
                 });
+                this.initializeDarkMode();
                 this.initializeRouter();
             }
 
@@ -55,6 +55,20 @@ export function VApplication(config: VApplicationConfig) {
                     throw new VRenderError(`Cannot find declaration for path '${route.path}'. Declare a class for this path in your Vienna application configuration.`);
                 }
             }
+
+            private initializeDarkMode(): void {
+                const isDarkModeEnabledInConfig = config.darkModeEnabled ? config.darkModeEnabled() : false;
+                if (isDarkModeEnabledInConfig) {
+                    this._darkModeService.enableDarkMode();
+                } else {
+                    this._darkModeService.disableDarkMode();
+                }
+
+                const darkModeCssClassOverride = config.darkModeCssClassOverride;
+                if (darkModeCssClassOverride) {
+                    this._darkModeService.overrideGlobalDarkModeClass(darkModeCssClassOverride);
+                }
+            }
         }
 
         return class extends target {
@@ -62,7 +76,8 @@ export function VApplication(config: VApplicationConfig) {
                 super(...args);
 
                 const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus);
-                new InternalVApplication(eventBus);
+                const darkModeService = VInjector.resolve<VDarkMode>(VDarkMode);
+                new InternalVApplication(eventBus, darkModeService);
             }
         };
     }

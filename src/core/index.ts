@@ -28,3 +28,5 @@ export * from './router/v-route-not-found-redirect';
 export * from './router/v-route-not-found-strategy';
 export * from './router/v-route-params';
 export * from './router/v-route-redirect';
+
+export * from './style/v-dark-mode';

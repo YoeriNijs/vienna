@@ -28,6 +28,7 @@ import {VComponentEncapsulationMode} from "../component/v-component-encapsulatio
 import {VGlobalStyleLink} from "../application/v-global-style-link";
 import {VGlobalInlineStyle} from "../application/v-global-inline-style";
 import {VGlobalStyles} from "../application/v-global-styles";
+import {VInternalDarkModeTransformer} from "./transformers/html/v-internal-dark-mode-transformer";
 
 interface ComponentAndType {
     type: Type<VComponentType>;
@@ -56,6 +57,7 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             new VInternalPropTransformer()
         ];
         private _htmlTransformers: VInternalHtmlTransformer[] = [
+            new VInternalDarkModeTransformer(),
             new VInternalHtmlAttributeTransformer(),
             new VInternalRepeatTransformer(),
             new VInternalTemplateTransformer(),

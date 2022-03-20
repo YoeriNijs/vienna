@@ -11,4 +11,6 @@ export interface VApplicationConfig {
     routeNotFoundStrategy?: VRouteNotFoundStrategy | VRouteNotFoundRedirect;
     rootElementSelector?: string;
     globalStyles?: VGlobalStyles;
+    darkModeEnabled?: () => boolean;
+    darkModeCssClassOverride?: string;
 }

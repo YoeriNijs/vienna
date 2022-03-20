@@ -31,6 +31,9 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
     - [Guards](#route-guards)
     - [Route redirects](#route-redirects)
 - [Dependency injection](#dependency-injection)
+- [Dark mode](#dark-mode)
+  - [Set up dark mode](#set-up-dark-mode)
+  - [Customize dark mode](#customize-dark-mode)
 - [Component testing](#component-testing)
 
 ## Install
@@ -89,6 +92,7 @@ following:
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
   - `style`: just plain css.
   - `href`: a href to a remote stylesheet. Thus, a href should start with 'http'.
+- `darkModeEnabled`: global method to initialize app-wide dark mode (see [dark mode](#dark-mode)).
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
 
@@ -702,8 +706,6 @@ export class CustomComponent implements VInit {
 
 ```
 
-
-
 ## Dependency injection
 
 Vienna provides a basic implementation of dependency injection, that uses reflection under the hood. In order to inject
@@ -750,6 +752,113 @@ instance for every injection. For this, just set singleton to false:
 export class CustomService {...}
 
 ````
+
+## Dark mode
+Nowadays, dark mode is very convenient to add some additional usability features to your application. Some people like
+dark apps more than light apps, and for some it is even a necessity to use an app.
+
+### Set up dark mode
+Luckily, Vienna comes with dark mode out of the box. There are two ways to enable dark mode. The easiest way is to set
+up dark mode in your application config by using the so-called `darkModeEnabled` hook. It is just a method that should
+return true or false. If it returns true, dark mode will be enabled for the whole application. For instance:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [],
+    routes: [],
+    darkModeEnabled: () => {
+      // ... Some custom logic here. 
+      return true; 
+    }
+})
+export class Application {}
+```
+
+If dark mode is enabled, by default, Vienna will apply a `v-dark` css class to all elements in the dom. Then, you have 
+various possibilities to style the dark selectors. For instance, just inject some global styling to set some default for
+the v-dark class (e.g. a specific background color and specific text color). Or, you can apply custom css rules for all
+your Vienna components separately.
+
+Vienna is flexible, though. For instance, you can apply dark mode initially, but later disable it. Or, you can disable 
+dark mode by default, and manually enable it later. To do this, you only need to inject the `VDarkMode` helper somewhere:
+
+```
+@VComponent({
+    selector: 'dark-mode-component',
+    html: `
+        <div class='background'>
+            <h2>Some title</h2>
+            
+            <v-check if="{{ isDarkModeEnabled }}">
+                <true>
+                    <button @click="disableDarkMode()">Disable dark mode</button>
+                </true>
+                <false>
+                    <button @click="enableDarkMode()">Enable dark mode</button>
+                </false>
+            </v-check>
+        </div>`,
+    styles: [`
+        .v-dark {
+            background-color: #000;
+            color: #fff;
+        }
+    `]
+})
+export class DarkModeComponent implements VInit {
+
+    isDarkModeEnabled = false;
+
+    constructor(private darkMode: VDarkMode) {}
+
+    vInit(): void {
+        this.isDarkModeEnabled = this.darkMode.isDarkModeEnabled();
+    }
+
+    enableDarkMode(): void {
+        this.darkMode.enableDarkMode();
+    }
+
+    disableDarkMode(): void {
+        this.darkMode.disableDarkMode();
+    }
+}
+```
+
+### Customize dark mode
+If you want to customize the `v-dark` class for some reason, you can choose between an application-wide class set up of
+a component override. To apply the application-wide option, just pass the `darkModeCssClassOverride` to your application
+config:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [],
+    routes: [],
+    darkModeEnabled: () => {...},
+    darkModeCssClassOverride: 'my-custom-dark-mode-class'
+})
+export class Application {}
+```
+
+Or if you want to specify a custom class in you component, apply the `darkModeClassOverride`:
+
+```
+@VComponent({
+    selector: 'dark-mode-component',
+    html: ...,
+    styles: [...],
+    darkModeClassOverride: 'my-custom-dark-mode-class'
+})
+export class DarkModeComponent implements VInit {...}
+```
+
+<b>Important:</b> a Vienna component option is always more specific than some application-wide config. Therefore, if you
+apply dark mode settings to a component, these settings will always be true. For instance, if you set up a custom dark 
+mode class globally, and have another custom class in your component, the latter will be used.
 
 ## Component testing
 
