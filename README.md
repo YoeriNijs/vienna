@@ -885,7 +885,7 @@ export class DarkModeComponent implements VInit {
 
 ### Customize dark mode
 If you want to customize the `v-dark` class for some reason, you can choose between an application-wide class set up of
-a component override. To apply the application-wide option, just pass the `darkModeCssClassOverride` to your application
+a component override. To apply the application-wide option, just pass the `darkModeClassOverride` to your application
 config:
 
 `application.ts`
@@ -895,7 +895,7 @@ config:
     declarations: [],
     routes: [],
     darkModeEnabled: () => {...},
-    darkModeCssClassOverride: 'my-custom-dark-mode-class'
+    darkModeClassOverride: 'my-custom-dark-mode-class'
 })
 export class Application {}
 ```

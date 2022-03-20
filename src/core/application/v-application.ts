@@ -74,9 +74,9 @@ export function VApplication(config: VApplicationConfig) {
                     this._darkModeService.disableDarkMode();
                 }
 
-                const darkModeCssClassOverride = config.darkModeCssClassOverride;
-                if (darkModeCssClassOverride) {
-                    this._darkModeService.overrideGlobalDarkModeClass(darkModeCssClassOverride);
+                const darkModeClassOverride = config.darkModeClassOverride;
+                if (darkModeClassOverride) {
+                    this._darkModeService.overrideGlobalDarkModeClass(darkModeClassOverride);
                 }
             }
         }
