@@ -12,5 +12,5 @@ export interface VApplicationConfig {
     rootElementSelector?: string;
     globalStyles?: VGlobalStyles;
     darkModeEnabled?: () => boolean;
-    darkModeCssClassOverride?: string;
+    darkModeClassOverride?: string;
 }
