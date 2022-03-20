@@ -32,7 +32,7 @@ export function VApplication(config: VApplicationConfig) {
 
                 this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
                     this.renderComponentForRoute(route);
-                    this.eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
+                    this._eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
                 });
 
                 this.initializeDarkMode();
