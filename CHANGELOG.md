@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.27](https://github.com/YoeriNijs/vienna/compare/0.2.26...0.2.27)
+## [0.2.28](https://github.com/YoeriNijs/vienna/compare/0.2.27...0.2.28)
+
+### Merged
+
+- fix(application conf): override rename [`#30`](https://github.com/YoeriNijs/vienna/pull/30)
+
+## [0.2.27](https://github.com/YoeriNijs/vienna/compare/0.2.26...0.2.27) - 2022-03-20
 
 ### Merged
 
@@ -13,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.27' [`fab9c5d`](https://github.com/YoeriNijs/vienna/commit/fab9c5d434297eaa66c2d1cfaef5cdf682fdfcb2)
 - Update README.md [`01c91a6`](https://github.com/YoeriNijs/vienna/commit/01c91a63690538d8464f504a0e2f23cd80cd5464)
 
 ## [0.2.26](https://github.com/YoeriNijs/vienna/compare/0.2.25...0.2.26) - 2022-01-18
