@@ -972,10 +972,6 @@ describe('VComponentFactory', () => {
 - Running tests with vComponentFactory may cause Jest open handles issue. As a workaround, you can enable fake timers in
   the Jest config or explicitly disable real timers in your tests (do not forget to re-enable them!).
 
-# Ideas
-
-- Support optional dark mode (css variables)
-
 # Literature
 
 - https://www.thinktecture.com/en/web-components/flaws/
