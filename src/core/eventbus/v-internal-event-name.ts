@@ -1,4 +1,5 @@
 export enum VInternalEventName {
+    DARK_MODE_ENABLED = 'dark-mode-enabled',
     EMIT = 'emit',
     NAVIGATED = 'navigation',
     NAVIGATION_ENDED = 'navigation_ended',
