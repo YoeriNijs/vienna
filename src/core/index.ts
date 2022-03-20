@@ -21,12 +21,13 @@ export * from './router/hooks/v-init';
 export * from './router/hooks/v-destroy';
 
 export * from './router/v-activated-route';
+export * from './router/v-query-param';
 export * from './router/v-route-guard';
 export * from './router/v-route';
 export * from './router/v-route-data';
 export * from './router/v-route-not-found-redirect';
 export * from './router/v-route-not-found-strategy';
-export * from './router/v-route-params';
 export * from './router/v-route-redirect';
+export * from './router/v-route-param';
 
 export * from './style/v-dark-mode';

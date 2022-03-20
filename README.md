@@ -28,6 +28,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Routes](#routes)
     - [Route data](#route-data)
     - [Route params](#route-params)
+    - [Query params](#query-params)
     - [Guards](#route-guards)
     - [Route redirects](#route-redirects)
 - [Dependency injection](#dependency-injection)
@@ -91,7 +92,7 @@ following:
   root. Default: 'body'.
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
   - `style`: just plain css.
-  - `href`: a href to a remote stylesheet. Thus, a href should start with 'http'.
+  - `href`: a link to a remote stylesheet. Thus, a href should start with 'http'. Also, it is possible to pass integrity and crossorigin values  (see below).
 - `darkModeEnabled`: global method to initialize app-wide dark mode (see [dark mode](#dark-mode)).
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
@@ -105,7 +106,11 @@ For instance, if you want to use [Bulma](https://bulma.io), just add the followi
       { path: '/', component: HomeComponent }
     ],
     globalStyles: [
-      { href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css' },
+      {
+        href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css',
+        integrity: "sha384-IJLmUY0f1ePPX6uSCJ9Bxik64/meJmjSYD7dHaJqTXXEBE4y+Oe9P2KBZa/z7p0Q",
+        crossOrigin: "anonymous"
+      }
       { style: 'body { padding: 10px; }' }
     ]
 })
@@ -522,6 +527,7 @@ Besides the path and component properties, the `VRoute` interface accepts the fo
 - `data` (optional): key-value based map to specify some custom values for that specific route.
 - `guards` (optional): implementations of the `VRouteGuard` interface that allow you to control the accessibility of a
   route based on a custom condition.
+- `children` (optional): an array of `VRoute` objects that represent nested routes.
 
 Routes can be nested limitless. To create subroutes, just implement child routes. For example:
 
@@ -652,6 +658,56 @@ unable to inject the LoginService. Please see dependency injection for more info
 `routeNotFoundStrategy` kicks in. You might want to adjust this strategy depending on your needs.
 
 ### Route params
+Consider the following url `#/blog/1` with the following route signature `#/blog/:id`. In order to retrieve the route param 'id', you can
+use the `VActivatedRoute` to retrieve a list of current `VRouteParam` values.
+
+A `VRouteParam` holds the following values:
+- `id`: the name of the route param name
+- `value`: the actual route param value
+
+`blog-post.component.ts`
+
+```
+
+@VComponent({ 
+  selector: 'blog-post-component', 
+  styles: [], 
+  html: `<span>{{ id }}</span>` // prints '1'
+})
+export class BlogPostComponent {
+    id = '';
+    
+    constructor(private activatedRoute: VActivatedRoute) {
+        this.activatedRoute.params(params => this.id = params.find(v => v.id === 'id'));
+    }
+}
+
+```
+
+In order to add route params to Vienna, just pass them in your routes. For example:
+
+`application.ts`
+
+```
+
+@VApplication({ 
+  declarations: [HomeComponent, BlogComponent, BlogPostComponent], 
+  routes: [
+    { path: '/', component: HomeComponent }, 
+    { 
+      path: '/blog', 
+      component: BlogComponent,
+      children: [
+        { path: '/:id', component: BlogPostComponent, guards: [BlogPostIdGuard] }
+      ]
+    },
+  ]
+})
+export class Application {}
+
+```
+
+### Query params
 
 Consider the following url: `#/dashboard?message=Hello%20there`. In order to retrieve the query param 'message', you can
 use the `VActivatedRoute`:
@@ -669,7 +725,7 @@ export class DashboardComponent {
     welcomeMsg = '';
     
     constructor(private activatedRoute: VActivatedRoute) {
-        this.activatedRoute.params(params => this.welcomeMsg = params.message);
+        this.activatedRoute.queryParams(params => this.welcomeMsg = params.message);
     }
 }
 
@@ -903,7 +959,6 @@ describe('VComponentFactory', () => {
 
 # Todo
 
-- Implement route params (Idea: `/route{:param}/`)
 - Add renderer cache to increase rendering performance (e.g. use render event for one component + internal component id
   instead of all)
 - Add unit tests

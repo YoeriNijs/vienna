@@ -9,6 +9,7 @@ import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VInternalApplicationSelectors} from "./v-internal-application-selectors";
 import {VInternalRouter} from "../router/v-internal-router";
 import {VDarkMode} from "../style/v-dark-mode";
+import {VActivatedRoute} from "../router/v-activated-route";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -17,7 +18,9 @@ export function VApplication(config: VApplicationConfig) {
             private readonly _declarationTypes: Type<VComponentType>[];
             private readonly _routes: VRoute[];
 
-            constructor(private _eventBus: VInternalEventbus, private _darkModeService: VDarkMode) {
+            constructor(private _eventBus: VInternalEventbus,
+                        private _activatedRoute: VActivatedRoute,
+                        private _darkModeService: VDarkMode) {
                 this._mainRenderer = new VInternalRenderer({
                     selector: VInternalApplicationSelectors.V_APP_RENDERER,
                     eventBus: this._eventBus,
@@ -28,10 +31,17 @@ export function VApplication(config: VApplicationConfig) {
                 this._routes = config.routes;
 
                 this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
-                    this.renderComponentForRoute(route)
+                    this.renderComponentForRoute(route);
+                    this.eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
                 });
+
                 this.initializeDarkMode();
+                this.initializeActivatedRoute();
                 this.initializeRouter();
+            }
+
+            private initializeActivatedRoute(): void {
+                this._activatedRoute.initialize(this._routes);
             }
 
             private async initializeRouter() {
@@ -76,8 +86,9 @@ export function VApplication(config: VApplicationConfig) {
                 super(...args);
 
                 const eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus);
-                const darkModeService = VInjector.resolve<VDarkMode>(VDarkMode);
-                new InternalVApplication(eventBus, darkModeService);
+                const activatedRoute = VInjector.resolve<VActivatedRoute>(VActivatedRoute);
+                const darkMode = VInjector.resolve<VDarkMode>(VDarkMode);
+                new InternalVApplication(eventBus, activatedRoute, darkMode);
             }
         };
     }

@@ -39,22 +39,14 @@ export class VInternalProxyMapper {
 
                 // Next, check exactly which element we need to re-render
                 let data = this.createDataWithDirtyHtmlElementIds(component);
-                if (data.dirtyElementIds.length > 0) {
-                    // View is dirty. Re-render dirty elements.
-                    eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
-                } else {
-                    // View is pristine, but controller is dirty. Re-render entire component by upper v-id.
-                    const options: VComponentOptions = JSON.parse(data.component.vComponentOptions);
-                    const parser = new DOMParser();
-                    const document = parser.parseFromString(options.html, 'text/html');
-                    if (document.body && document.body.children.length > 0) {
-                        const componentId = document.body.children[0].attributes.getNamedItem(V_INTERNAL_COMPONENT_ID);
-                        if (componentId && componentId.value) {
-                            data = {...data, dirtyElementIds: [componentId.value] };
-                        }
+                if (data.dirtyElementIds.length < 1) {
+                    // We do not have found a dirty element in the view. This means the controller is dirty. Mark the whole body as dirty.
+                    const bodyElementId = this.findInternalIdOfBodyElement(component);
+                    if (bodyElementId) {
+                        data = {...data, dirtyElementIds: [bodyElementId] };
                     }
-                    eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
                 }
+                eventBus.publish(VInternalEventName.REBUILD_CHECK, data);
 
                 return true; // Just indicate that the value has been set
             }
@@ -65,6 +57,16 @@ export class VInternalProxyMapper {
         const dirtyElementIds: string[] = [];
 
         const findElementIds = (element: HTMLElement): void => {
+            // Workaround: if we are dealing with Vienna repeat or check elements, we need to register the whole body element as dirty. At
+            // this stage we do not know whether we should render the true or false elements, so we just mark them both. This is marked as
+            // temporarily solution until we find something better (YN).
+            if (element.tagName === 'V-REPEAT' || element.tagName === 'V-CHECK') {
+                const bodyElementId = this.findInternalIdOfBodyElement(component);
+                if (bodyElementId && !dirtyElementIds.includes(bodyElementId)) {
+                    dirtyElementIds.push(bodyElementId);
+                }
+            }
+
             const innerTextWithoutChildNodes = [].reduce.call(element.childNodes, (a: any, b: any) =>
                 a + (b.nodeType === 3 ? b.textContent : ''), '');
 
@@ -90,6 +92,20 @@ export class VInternalProxyMapper {
         Array.from(document.children).forEach((el: HTMLElement) => findElementIds(el));
 
         return {component, dirtyElementIds};
+    }
+
+    private findInternalIdOfBodyElement(component: VComponentType): string | undefined {
+        const options: VComponentOptions = JSON.parse(component.vComponentOptions);
+        const parser = new DOMParser();
+        const document = parser.parseFromString(options.html, 'text/html');
+        if (document.body && document.body.children.length > 0) {
+            const componentId = document.body.children[0].attributes.getNamedItem(V_INTERNAL_COMPONENT_ID);
+            if (componentId && componentId.value) {
+                return componentId.value;
+            }
+        }
+
+        return undefined;
     }
 
     private initRenderHooks(eventBus: VInternalEventbus): void {

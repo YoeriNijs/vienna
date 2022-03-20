@@ -97,6 +97,9 @@ export class VInternalRouter {
 
     private findChildRoute(parent: VRoute, segments: string[], segmentIndex: number): Promise<VRoute | null> {
         const childSegment = segments[segmentIndex + 1];
+        if (!childSegment) {
+            return Promise.resolve(null);
+        }
         const child = this.findRouteForSegment(childSegment, parent.children);
         return child ? this.isAllowedToNavigateTo(child)
                 .then(isAllowedForChild => isAllowedForChild
@@ -106,21 +109,39 @@ export class VInternalRouter {
     }
 
     private findRouteForSegment(url: string, routes: VRoute[]): VRoute | null {
-        const resolvedRoute = routes.find((r) => {
+        if (!url || !routes) {
+            return null;
+        }
+        return this.findExactRoute(routes, url) || this.findRouteParam(routes);
+    }
+
+    private findRouteParam(routes: VRoute[]): VRoute | null {
+        const routeParam = routes.find((r) => {
+            const lowerPath = r.path.toLowerCase();
+            return lowerPath.startsWith('/:') ? r : null;
+        });
+        return routeParam ? routeParam : null;
+    }
+
+    private findExactRoute(routes: VRoute[], url: string): VRoute | null {
+        const exactRoute = routes.find((r) => {
+            const lowerPath = r.path.toLowerCase();
+            const lowerUrl = url.toLowerCase();
             const paramIndex = url.indexOf('?');
             if (paramIndex === -1) {
-                return r.path === url;
+                return lowerPath === lowerUrl;
             } else {
-                return r.path === url.substring(0, paramIndex);
+                return lowerPath === lowerUrl.substring(0, paramIndex);
             }
         });
-        return resolvedRoute ? resolvedRoute : null;
+        return exactRoute ? exactRoute : null;
     }
 
     private dispatchNavigationAction(route: VRoute): void {
         const eventBus: VInternalEventbus = this.options.eventBus;
         eventBus.unsubscribe(VInternalEventName.ROUTE_DATA);
         eventBus.unsubscribe(VInternalEventName.ROUTE_PARAMS);
+        eventBus.unsubscribe(VInternalEventName.QUERY_PARAMS);
         eventBus.publish<VRoute>(VInternalEventName.NAVIGATED, route);
     }
 

@@ -5,11 +5,84 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.18](https://github.com/YoeriNijs/vienna/compare/0.2.17...0.2.18)
+## [0.2.26](https://github.com/YoeriNijs/vienna/compare/0.2.25...0.2.26)
+
+### Merged
+
+- (feat)Add integrity and crossorigin values for remote styles [`#28`](https://github.com/YoeriNijs/vienna/pull/28)
+
+## [0.2.25](https://github.com/YoeriNijs/vienna/compare/0.2.24...0.2.25) - 2022-01-18
+
+### Commits
+
+- feat(package.json): release '0.2.25' [`0f214fa`](https://github.com/YoeriNijs/vienna/commit/0f214fabb1e4f5d3f7ec7684051793f299c9fd84)
+- Update README.md [`703a5c3`](https://github.com/YoeriNijs/vienna/commit/703a5c394c6234a48d50fd8c8dfaf84b1cdec07d)
+
+## [0.2.24](https://github.com/YoeriNijs/vienna/compare/0.2.23...0.2.24) - 2022-01-18
+
+### Merged
+
+- (fix)add xss protection + fixed some bugs in rendering of check elements [`#27`](https://github.com/YoeriNijs/vienna/pull/27)
+
+### Commits
+
+- feat(package.json): release '0.2.24' [`5a340ab`](https://github.com/YoeriNijs/vienna/commit/5a340abbce0c43a638e21838fa487ccd50d2d6ce)
+
+## [0.2.23](https://github.com/YoeriNijs/vienna/compare/0.2.22...0.2.23) - 2022-01-18
+
+### Merged
+
+- (fix)route param fix [`#26`](https://github.com/YoeriNijs/vienna/pull/26)
+
+### Commits
+
+- feat(package.json): release '0.2.23' [`b0e2a77`](https://github.com/YoeriNijs/vienna/commit/b0e2a773a4af6d6c269552cad9d04c8a160ae6d2)
+
+## [0.2.22](https://github.com/YoeriNijs/vienna/compare/0.2.21...0.2.22) - 2022-01-18
+
+### Merged
+
+- (fix)hotfix routes [`#25`](https://github.com/YoeriNijs/vienna/pull/25)
+
+### Commits
+
+- feat(package.json): release '0.2.22' [`b481863`](https://github.com/YoeriNijs/vienna/commit/b4818634d3fb5c594bbe87429c6d09da72c84b45)
+
+## [0.2.21](https://github.com/YoeriNijs/vienna/compare/0.2.20...0.2.21) - 2022-01-18
+
+### Commits
+
+- feat(package.json): release '0.2.21' [`38b7594`](https://github.com/YoeriNijs/vienna/commit/38b75948889997cd795132bf8fe6b76c2a8a77c4)
+- (fix) Fix route param for current route [`b1c4d65`](https://github.com/YoeriNijs/vienna/commit/b1c4d6589418b50ef5840e8b1ead1502af75c714)
+
+## [0.2.20](https://github.com/YoeriNijs/vienna/compare/0.2.19...0.2.20) - 2022-01-17
+
+### Commits
+
+- feat(package.json): release '0.2.20' [`281154c`](https://github.com/YoeriNijs/vienna/commit/281154c717f4025b4f8656935b4e24d998f592ff)
+- (docs) Update docs [`08469f5`](https://github.com/YoeriNijs/vienna/commit/08469f5ae40a00d7508c9ca356ec94af35600da5)
+
+## [0.2.19](https://github.com/YoeriNijs/vienna/compare/0.2.18...0.2.19) - 2022-01-17
+
+### Merged
+
+- (feat) Route params [`#22`](https://github.com/YoeriNijs/vienna/pull/22)
+
+### Commits
+
+- feat(package.json): release '0.2.19' [`2af07f6`](https://github.com/YoeriNijs/vienna/commit/2af07f65d863e0e3247e96ac5e27dcb6a5a39629)
+- Fix test [`d1d4fb9`](https://github.com/YoeriNijs/vienna/commit/d1d4fb9be8b2b7f50e67fe3b8beb96056b4135c7)
+- (feat) update docs about route params [`32ce572`](https://github.com/YoeriNijs/vienna/commit/32ce572cda9539d132ef0ac72a2d74d998d592ef)
+
+## [0.2.18](https://github.com/YoeriNijs/vienna/compare/0.2.17...0.2.18) - 2022-01-16
 
 ### Merged
 
 - docs(readme): update docs [`#21`](https://github.com/YoeriNijs/vienna/pull/21)
+
+### Commits
+
+- feat(package.json): release '0.2.18' [`a64b307`](https://github.com/YoeriNijs/vienna/commit/a64b3071c9f9d65ba69733a1d7142997005f20a0)
 
 ## [0.2.17](https://github.com/YoeriNijs/vienna/compare/0.2.16...0.2.17) - 2022-01-16
 
