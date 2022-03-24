@@ -4,6 +4,7 @@ import {VRoute} from '../router/v-route';
 import {VRouteNotFoundStrategy} from '../router/v-route-not-found-strategy';
 import {VRouteNotFoundRedirect} from "../router/v-route-not-found-redirect";
 import {VGlobalStyles} from "./v-global-styles";
+import {VApplicationPlugins} from "./v-application-plugins";
 
 export interface VApplicationConfig {
     declarations: Type<VComponentType>[];
@@ -13,4 +14,5 @@ export interface VApplicationConfig {
     globalStyles?: VGlobalStyles;
     darkModeEnabled?: () => boolean;
     darkModeClassOverride?: string;
+    plugins?: VApplicationPlugins;
 }

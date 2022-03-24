@@ -53,7 +53,12 @@ import {DarkModeComponent} from "./components/dark-mode.component";
         }
     ],
     routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT,
-    rootElementSelector: '#vienna-root'
+    rootElementSelector: '#vienna-root',
+    plugins: {
+        logger: {
+            process: logs => console.log('send to logging provider such as Sentry...', logs)
+        }
+    }
 })
 export class DemoApplication {
 }

@@ -10,6 +10,7 @@ import {VInternalApplicationSelectors} from "./v-internal-application-selectors"
 import {VInternalRouter} from "../router/v-internal-router";
 import {VDarkMode} from "../style/v-dark-mode";
 import {VActivatedRoute} from "../router/v-activated-route";
+import {VInternalLogSender} from "../logger/v-internal-log-sender";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -35,6 +36,7 @@ export function VApplication(config: VApplicationConfig) {
                     this._eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
                 });
 
+                this.initializePlugins();
                 this.initializeDarkMode();
                 this.initializeActivatedRoute();
                 this.initializeRouter();
@@ -77,6 +79,16 @@ export function VApplication(config: VApplicationConfig) {
                 const darkModeClassOverride = config.darkModeClassOverride;
                 if (darkModeClassOverride) {
                     this._darkModeService.overrideGlobalDarkModeClass(darkModeClassOverride);
+                }
+            }
+
+            private initializePlugins(): void {
+                if (config.plugins) {
+                    const logger = config.plugins.logger;
+                    if (logger) {
+                        const logSender = VInjector.resolve<VInternalLogSender>(VInternalLogSender);
+                        logSender.registerSettings({ process: logger.process });
+                    }
                 }
             }
         }
