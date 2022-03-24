@@ -35,6 +35,8 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Dark mode](#dark-mode)
   - [Set up dark mode](#set-up-dark-mode)
   - [Customize dark mode](#customize-dark-mode)
+- [Plugins](#plugins)
+  - [Logger](#logger)
 - [Component testing](#component-testing)
 
 ## Install
@@ -915,6 +917,49 @@ export class DarkModeComponent implements VInit {...}
 <b>Important:</b> a Vienna component option is always more specific than some application-wide config. Therefore, if you
 apply dark mode settings to a component, these settings will always be true. For instance, if you set up a custom dark 
 mode class globally, and have another custom class in your component, the latter will be used.
+
+## Plugins
+Plugins are pieces of optional utilities that you can configure inside Vienna. They are not mandatory, because they do not
+belong to the core of the Vienna framework. However, they might be handy to use.
+
+### Logger
+Vienna ships a basic logger implementation that you can configure to send messages to an external logging provider, such as Sentry. 
+To get started with the logger, just configure the plugin in your application config:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [],
+    routes: [],
+    plugins: {
+      logger: {
+          process: logs => // ... your implementation (e.g. send logs to some external provider)
+      }
+    }
+})
+export class Application {}
+```
+
+Everytime a log line is recorded, the process method will be called. To use the logger, just inject it:
+
+```
+@VComponent({...})
+export class MyComponent implements VInit {
+
+  constructor(private _logger: VLogger) {}
+
+  vInit(): void {
+    this._logger.info('Some info log');
+  }
+}
+```
+
+The output of the `process` method will be:
+
+```
+[{ type: 'info', msg: 'Some info log' }]
+```
 
 ## Component testing
 

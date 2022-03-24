@@ -17,6 +17,10 @@ export * from './component/v-component-type';
 export * from './injector/v-injectable-decorator';
 export * from './injector/v-injector';
 
+export * from './logger/v-log';
+export * from './logger/v-log-sender-settings';
+export * from './logger/v-logger';
+
 export * from './router/hooks/v-init';
 export * from './router/hooks/v-destroy';
 

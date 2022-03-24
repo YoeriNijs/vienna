@@ -1,4 +1,4 @@
-import {VComponent, VInit} from '../../src';
+import {VComponent, VInit, VLogger} from '../../src';
 import {LoginService} from "../services/login.service";
 import {UserService} from "../services/user.service";
 import {User} from "../model/user";
@@ -74,7 +74,7 @@ export class HomeComponent implements VInit {
     passwordRegister: HTMLInputElement;
     emailRegister: HTMLInputElement;
 
-    constructor(protected loginService: LoginService, protected userService: UserService) {
+    constructor(protected loginService: LoginService, protected userService: UserService, private _logger: VLogger) {
     }
 
     vInit(): void {
@@ -82,6 +82,8 @@ export class HomeComponent implements VInit {
         if (!this.isLoggedIn) {
             this.usernameLogin.focus();
         }
+
+        this._logger.debug('HomeComponent initialized', 'Another log');
     }
 
     login(): void {

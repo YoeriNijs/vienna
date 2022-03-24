@@ -1,0 +1,1 @@
+export type VInternalLogType = 'debug' | 'info' | 'warning' | 'error';
