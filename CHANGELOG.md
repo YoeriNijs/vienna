@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.30](https://github.com/YoeriNijs/vienna/compare/0.2.29...0.2.30)
+## [0.2.31](https://github.com/YoeriNijs/vienna/compare/0.2.30...0.2.31)
+
+### Merged
+
+- fix(vaudit): fix export [`#33`](https://github.com/YoeriNijs/vienna/pull/33)
+
+## [0.2.30](https://github.com/YoeriNijs/vienna/compare/0.2.29...0.2.30) - 2022-03-25
 
 ### Merged
 
 - feat(vaudit): initial VAudit implementation with some validators [`#32`](https://github.com/YoeriNijs/vienna/pull/32)
+
+### Commits
+
+- feat(package.json): release '0.2.30' [`1fb0892`](https://github.com/YoeriNijs/vienna/commit/1fb08929add43a0160d64a76c89bc2a53d3c1994)
 
 ## [0.2.29](https://github.com/YoeriNijs/vienna/compare/0.2.28...0.2.29) - 2022-03-24
 
