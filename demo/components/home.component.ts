@@ -2,6 +2,7 @@ import {VComponent, VInit, VLogger} from '../../src';
 import {LoginService} from "../services/login.service";
 import {UserService} from "../services/user.service";
 import {User} from "../model/user";
+import {VAudit} from "../../src/core/audit/v-audit";
 
 @VComponent({
     selector: 'app-home',
@@ -74,7 +75,10 @@ export class HomeComponent implements VInit {
     passwordRegister: HTMLInputElement;
     emailRegister: HTMLInputElement;
 
-    constructor(protected loginService: LoginService, protected userService: UserService, private _logger: VLogger) {
+    constructor(protected loginService: LoginService,
+                protected userService: UserService,
+                private _logger: VLogger,
+                private _audit: VAudit) {
     }
 
     vInit(): void {
@@ -102,17 +106,17 @@ export class HomeComponent implements VInit {
 
     register(): void {
         const name = this.usernameRegister.value;
-        if (!name || name.trim().length < 1) {
+        if (this._audit.isBlank(name)) {
             alert('Fill in a valid name!');
             return;
         }
         const password = this.passwordRegister.value;
-        if (!password || password.trim().length < 1) {
+        if (this._audit.isBlank(password)) {
             alert('Fill in a valid password!');
             return;
         }
         const email = this.emailRegister.value;
-        if (!email || email.trim().length < 1) {
+        if (this._audit.isValidEmail(email)) {
             alert('Fill in a valid email!');
             return;
         }

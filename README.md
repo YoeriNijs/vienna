@@ -35,6 +35,8 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Dark mode](#dark-mode)
   - [Set up dark mode](#set-up-dark-mode)
   - [Customize dark mode](#customize-dark-mode)
+- [Data validation](#data-validation)
+  - [Validator class](#validator-class)
 - [Plugins](#plugins)
   - [Logger](#logger)
 - [Component testing](#component-testing)
@@ -917,6 +919,32 @@ export class DarkModeComponent implements VInit {...}
 <b>Important:</b> a Vienna component option is always more specific than some application-wide config. Therefore, if you
 apply dark mode settings to a component, these settings will always be true. For instance, if you set up a custom dark 
 mode class globally, and have another custom class in your component, the latter will be used.
+
+## Data validation
+Vienna provides a data validator class that you can use to verify multiple data fields. Currently, the following
+methods are supported:
+
+- `isValidUrl` (http or https is required)
+- `isValidEmail`
+- `isValidIp4`
+- `isBlank`
+
+### Validator class
+
+The Vienna data validator is called `VAudit`, and is an injectable. Hence, just inject it in your code:
+
+```
+@VComponent({...})
+export class MyComponent implements VInit {
+
+  constructor(private _audit: VAudit) {}
+
+  vInit(): void {
+    const url = 'https://www.my-url.com';
+    this._audit.isValidUrl(url); // true
+  }
+}
+```
 
 ## Plugins
 Plugins are pieces of optional utilities that you can configure inside Vienna. They are not mandatory, because they do not
