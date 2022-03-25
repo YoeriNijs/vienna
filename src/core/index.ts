@@ -5,6 +5,8 @@ export * from './application/v-global-inline-style';
 export * from './application/v-global-style-link';
 export * from './application/v-global-styles';
 
+export * from './audit/v-audit';
+
 export * from './binding/v-emit';
 export * from './binding/v-emitter';
 export * from './binding/v-prop';
