@@ -58,7 +58,7 @@ describe('VAudit', () => {
         ])(`should return false for '%s'`, v => expect(audit.isValidEmail(v)).toBe(false));
     });
 
-    describe('Ip4', () => {
+    describe('IPv4', () => {
         it.each([
             '0.0.0.0',
             '127.0.0.1',
@@ -69,11 +69,29 @@ describe('VAudit', () => {
         it.each([
             '0.0.0',
             '127.0.0.0.1',
+            '2001:0db8:85a3:0000:1319:8a2e:0370:7344',
             undefined,
             null,
             '',
             ' '
         ])(`should return false for '%s'`, v => expect(audit.isValidIp4(v)).toBe(false));
+    });
+
+    describe('IPv6', () => {
+        it.each([
+            '2001:0db8:85a3:0000:1319:8a2e:0370:7344',
+            '2001:db8:85a3::1319:8a2e:370:7344'
+        ])(`should return true for '%s'`, v => expect(audit.isValidIp6(v)).toBe(true));
+
+        it.each([
+            '2001:0db8:85a3:0000:1319:8a2e:0370',
+            '2001.0db8.85a3.0000.1319.8a2e.0370.7344',
+            '127.0.0.1',
+            undefined,
+            null,
+            '',
+            ' '
+        ])(`should return false for '%s'`, v => expect(audit.isValidIp6(v)).toBe(false));
     });
 
     describe('IsBlank', () => {
