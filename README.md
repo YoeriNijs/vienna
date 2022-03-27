@@ -927,6 +927,7 @@ methods are supported:
 - `isValidUrl` (http or https is required)
 - `isValidEmail`
 - `isValidIp4`
+- `isValidIp6`
 - `isBlank`
 
 ### Validator class
