@@ -8,10 +8,6 @@ const IPV6_REGEX = new RegExp(/^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::
 @VInjectable({ singleton: false })
 export class VAudit {
 
-    private static replaceAll(str: string, find: string, replace: string): string {
-        return str.replace(new RegExp(find, 'g'), replace);
-    }
-
     isValidUrl(url: string): boolean {
         return !!url && URL_REGEX.test(url);
     }
