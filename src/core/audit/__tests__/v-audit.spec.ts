@@ -112,4 +112,35 @@ describe('VAudit', () => {
             () => console.log('something')
         ])(`should return false for '%s'`, v => expect(audit.isBlank(v)).toBe(false));
     });
+
+    describe('isUserAgentBot', () => {
+       it.each([
+           'bot',
+           'BOT',
+           ' bot',
+           'bot ',
+           'BoT',
+           'slurper',
+           'spider',
+           'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+           'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+           'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36 some crawler value',
+       ])('should know is user agent %s is a bot', (ua) => {
+          expect(audit.isUserAgentBot(ua)).toBe(true);
+       });
+
+        it.each([
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393',
+            'Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
+            'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G570Y Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/4.0 Chrome/44.0.2403.133 Mobile Safari/537.36',
+            undefined,
+            null,
+            ''
+        ])('should know is user agent %s is not a bot', (ua) => {
+            expect(audit.isUserAgentBot(ua)).toBe(false);
+        });
+    });
 });
