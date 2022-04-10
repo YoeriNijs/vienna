@@ -97,7 +97,7 @@ following:
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want to use a css (utility) framework, such as [Tailwind](https://tailwindcss.com) or [Bulma](https://bulma.io). GlobalStyles support two kinds of globals:
   - `style`: just plain css.
   - `href`: a link to a remote stylesheet. Thus, a href should start with 'http'. Also, it is possible to pass integrity and crossorigin values  (see below).
-- `darkModeEnabled`: global method to initialize app-wide dark mode (see [dark mode](#dark-mode)).
+- `darkModeEnabled` (optional): global method to initialize app-wide dark mode (see [dark mode](#dark-mode)).
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
 
@@ -928,6 +928,7 @@ methods are supported:
 - `isValidEmail`
 - `isValidIp4`
 - `isBlank`
+- `isUserAgentBot`
 
 ### Validator class
 
