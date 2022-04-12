@@ -35,8 +35,9 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Dark mode](#dark-mode)
   - [Set up dark mode](#set-up-dark-mode)
   - [Customize dark mode](#customize-dark-mode)
-- [Data validation](#data-validation)
-  - [Validator class](#validator-class)
+- [Miscellaneous](#miscellaneous)
+  - [VAudit](#vaudit)
+  - [VWeb](#vweb)
 - [Plugins](#plugins)
   - [Logger](#logger)
 - [Component testing](#component-testing)
@@ -920,7 +921,10 @@ export class DarkModeComponent implements VInit {...}
 apply dark mode settings to a component, these settings will always be true. For instance, if you set up a custom dark 
 mode class globally, and have another custom class in your component, the latter will be used.
 
-## Data validation
+## Miscellaneous
+Vienna provides various handy miscellaneous tools that you can use.
+
+### VAudit
 Vienna provides a data validator class that you can use to verify multiple data fields. Currently, the following
 methods are supported:
 
@@ -930,8 +934,6 @@ methods are supported:
 - `isValidIp6`
 - `isBlank`
 - `isUserAgentBot`
-
-### Validator class
 
 The Vienna data validator is called `VAudit`, and is an injectable. Hence, just inject it in your code:
 
@@ -944,6 +946,25 @@ export class MyComponent implements VInit {
   vInit(): void {
     const url = 'https://www.my-url.com';
     this._audit.isValidUrl(url); // true
+  }
+}
+```
+
+### VWeb
+Vienna provides basic web utilities, which are all available under the so-called `VWeb` class. This class is an injectable.
+
+The following methods are supported for now:
+- `slugify`: for creating slugs. You can pass the following optional options: `trim` and `toLowerCase`.
+
+```
+@VComponent({...})
+export class MyComponent implements VInit {
+
+  constructor(private _web: VWeb) {}
+
+  vInit(): void {
+    const value = 'my string';
+    this._web.slugify(value); // 'my-string'
   }
 }
 ```

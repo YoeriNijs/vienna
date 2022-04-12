@@ -2,7 +2,7 @@ import {VComponent, VInit, VLogger} from '../../src';
 import {LoginService} from "../services/login.service";
 import {UserService} from "../services/user.service";
 import {User} from "../model/user";
-import {VAudit} from "../../src/core/audit/v-audit";
+import {VAudit} from "../../src/core/misc/audit/v-audit";
 
 @VComponent({
     selector: 'app-home',
