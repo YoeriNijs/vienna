@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.34](https://github.com/YoeriNijs/vienna/compare/0.2.33...0.2.34)
+## [0.2.35](https://github.com/YoeriNijs/vienna/compare/0.2.34...0.2.35)
+
+### Merged
+
+- Initial VWeb implementation [`#36`](https://github.com/YoeriNijs/vienna/pull/36)
+
+## [0.2.34](https://github.com/YoeriNijs/vienna/compare/0.2.33...0.2.34) - 2022-04-10
 
 ### Merged
 
 - Bot audit [`#35`](https://github.com/YoeriNijs/vienna/pull/35)
+
+### Commits
+
+- feat(package.json): release '0.2.34' [`4682bbe`](https://github.com/YoeriNijs/vienna/commit/4682bbedbcb4d202c5a4d4b8e607e5b63fefa302)
 
 ## [0.2.33](https://github.com/YoeriNijs/vienna/compare/0.2.32...0.2.33) - 2022-03-27
 
