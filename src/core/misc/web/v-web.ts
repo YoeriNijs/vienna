@@ -14,6 +14,9 @@ export class VWeb {
      * @param options
      */
     slugify(value: string, options: VWebOptions = { trim: true, toLowerCase: true }): string {
+        if (!value) {
+            return '';
+        }
         if (options.trim) {
             value = value.trim();
         }
