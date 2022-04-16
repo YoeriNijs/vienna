@@ -16,6 +16,11 @@ describe('VWeb', () => {
             {input: 'FOO BAR BAZ', output: 'foo-bar-baz', options: {toLowerCase: true}},
             {input: 'Foo BaR BAZ', output: 'Foo-BaR-BAZ', options: {toLowerCase: false}},
             {input: `foo <script>alert('bar')</script> baz`, output: 'foo-scriptalertbarscript-baz'},
+            {input: undefined, output: ''},
+            {input: null, output: ''},
+            {input: '', output: ''},
+            {input: ' ', output: ''},
+            {input: ' ', output: '-', options: { trim: false }}
         ])(`should create a slug for '%s'`, scenario => {
             const instance = new VWeb();
             expect(instance.slugify(scenario.input, scenario.options)).toEqual(scenario.output);
