@@ -1,9 +1,12 @@
 import {VInjectable} from "../../injector/v-injectable-decorator";
+import {CookieAttributes, get as getCookieValue, remove as removeCookieValue, set as setCookieValue} from "js-cookie";
 
 export interface VWebOptions {
     trim?: boolean;
     toLowerCase?: boolean;
 }
+
+export type VCookieOptions = CookieAttributes;
 
 @VInjectable({ singleton: false })
 export class VWeb {
@@ -25,5 +28,17 @@ export class VWeb {
             .replace(/[\u0300-\u036f]/g, '')
             .replace(/[^a-zA-Z0-9 ]/g, '')
             .replace(/\s+/g, '-');
+    }
+
+    getCookie(name: string): string {
+        return getCookieValue(name);
+    }
+
+    setCookie(name: string, value: string, options: VCookieOptions = {}): void {
+        setCookieValue(name, value, options);
+    }
+
+    removeCookie(name: string): void {
+        removeCookieValue(name);
     }
 }
