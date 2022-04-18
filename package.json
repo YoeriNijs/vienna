@@ -32,12 +32,14 @@
     "frontend"
   ],
   "dependencies": {
+    "js-cookie": "^3.0.1",
     "pincet": "^0.4.2",
     "reflect-metadata": "^0.1.13",
     "xss": "^1.0.10"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
+    "@types/js-cookie": "^3.0.1",
     "@types/jsdom": "^16.2.13",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
