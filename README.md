@@ -38,6 +38,8 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Miscellaneous](#miscellaneous)
   - [VAudit](#vaudit)
   - [VWeb](#vweb)
+    - [Slugify](#slugify)
+    - [Cookies](#cookies)
 - [Plugins](#plugins)
   - [Logger](#logger)
 - [Component testing](#component-testing)
@@ -953,8 +955,8 @@ export class MyComponent implements VInit {
 ### VWeb
 Vienna provides basic web utilities, which are all available under the so-called `VWeb` class. This class is an injectable.
 
-The following methods are supported for now:
-- `slugify`: for creating slugs. You can pass the following optional options: `trim` and `toLowerCase`.
+#### Slugify
+For creating slugs. You can pass the following optional options: `trim` and `toLowerCase`.
 
 ```
 @VComponent({...})
@@ -965,6 +967,33 @@ export class MyComponent implements VInit {
   vInit(): void {
     const value = 'my string';
     this._web.slugify(value); // 'my-string'
+  }
+}
+```
+
+#### Cookies
+Cookies let you store user information in web pages. Vienna helps you with this by providing an easy api for storing, 
+retrieving and removing cookies. For this, Vienna uses the fully-tested and commonly used [js-cookie](https://github.com/js-cookie/js-cookie) library
+under the hood. In this case, Vienna acts as simple proxy.
+
+```
+@VComponent({...})
+export class MyComponent implements VInit {
+
+  constructor(private _web: VWeb) {}
+
+  vInit(): void {
+    // Set cookie
+    this._web.setCookie('cookieName', 'cookieValue');
+    
+    // Set cookie with options
+    this._web.setCookie('cookieName', 'cookieValue', { secure: true });
+    
+    // Read cookie
+    this._web.getCookie('cookieName'); // 'cookieValue'
+    
+    // Remove cookie
+    this._web.removeCookie('cookieName');
   }
 }
 ```
