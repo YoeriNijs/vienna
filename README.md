@@ -1,4 +1,4 @@
-# Vienna (very alpha, still in development)
+# Vienna micro frontend for creating webcomponents with ease
 
 ![Vienna logo](https://raw.githubusercontent.com/YoeriNijs/vienna/main/img/logo.png)
 
@@ -6,8 +6,9 @@
 
 ## Do great things with this tiny framework
 
-Vienna is a small framework under active development. It is based on some core concepts of
-the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) frameworks.
+Vienna is a micro framework written in TypeScript and under active development. It is based on some core concepts of
+the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) frameworks. Since Vienna is still work in 
+progress, it might be unstable.
 
 Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 
