@@ -6,7 +6,7 @@ export * from './application/v-global-style-link';
 export * from './application/v-global-styles';
 
 export * from './misc/audit/v-audit';
-export * from './misc/web/v-web';
+export * from './misc/web';
 
 export * from './binding/v-emit';
 export * from './binding/v-emitter';
@@ -24,6 +24,7 @@ export * from './logger/v-log';
 export * from './logger/v-log-sender-settings';
 export * from './logger/v-logger';
 
+export * from './router/hooks/v-after-init';
 export * from './router/hooks/v-init';
 export * from './router/hooks/v-destroy';
 
@@ -32,7 +33,6 @@ export * from './router/v-query-param';
 export * from './router/v-route-guard';
 export * from './router/v-route';
 export * from './router/v-route-data';
-export * from './router/v-route-doc-tags';
 export * from './router/v-route-not-found-redirect';
 export * from './router/v-route-not-found-strategy';
 export * from './router/v-route-redirect';

@@ -1,7 +1,11 @@
-import {VActivatedRoute, VComponent, VInit, VRouteData, VRouteParam} from "../../src";
+import {VActivatedRoute, VComponent, VInit} from "../../src";
 import {RouteData} from "../model/route-data";
 import {RouteParams} from "../model/route-params";
 
+/**
+ * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
+ * If you want to see a 'real world' example of Vienna, please check https://github.com/YoeriNijs/vienna-demo-app.
+ */
 @VComponent({
     selector: 'app-settings',
     styles: [' .settings { margin: 10px 0; padding: 10px; } '],

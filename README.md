@@ -1,4 +1,4 @@
-# Vienna (very alpha, still in development)
+# Vienna micro frontend for creating webcomponents with ease
 
 ![Vienna logo](https://raw.githubusercontent.com/YoeriNijs/vienna/main/img/logo.png)
 
@@ -6,8 +6,9 @@
 
 ## Do great things with this tiny framework
 
-Vienna is a small framework under active development. It is based on some core concepts of
-the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) frameworks.
+Vienna is a micro framework written in TypeScript and under active development. It is based on some core concepts of
+the [Angular](https://angular.io) and [FatFree](https://fatfreeframework.com/) frameworks. Since Vienna is still work in 
+progress, it might be unstable.
 
 Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 
@@ -265,10 +266,11 @@ export class CustomComponent implement VInit {
 
 It is possible to use a component lifecycle hook to perform some logic. Vienna supports two hooks at the moment:
 
-- `VInit`: Will be executed when the component is rendered in the view.
+- `VInit`: Will be executed when the component is going to be rendered in the view.
+- `VAfterInit`: Will be executed when the root node and all child nodes are initialized and rendered in the view.
 - `VDestroy`: Will be executed when the component is removed from the view.
 
-If you want to use these hooks, just implement the corresponding interface (i.e. `VInit` or `VDestroy`). For example:
+If you want to use these hooks, just implement the corresponding interface (i.e. `VInit`, `VAfterInit` or `VDestroy`). For example:
 
 `my-component.ts`
 
@@ -279,9 +281,13 @@ If you want to use these hooks, just implement the corresponding interface (i.e.
   styles: [], 
   html: `Hello world!`
 })
-export class MyComponent implements VInit, VDestroy { 
+export class MyComponent implements VInit, VAfterInit, VDestroy { 
   vInit(): void { 
-    alert('I am executed when this component is rendered!'); 
+    alert('I am executed when this component is going to be rendered!'); 
+  }
+  
+  vAfterInit(): void {
+    alert('I am executed when this component is rendered!');
   }
 
   vDestroy(): void { 
@@ -951,6 +957,34 @@ export class MyComponent implements VInit {
     
     // Remove cookie
     this._web.removeCookie('cookieName');
+  }
+}
+```
+
+#### Override document tags
+VWeb provides a method to override document tags that are set in the Vienna route as [VRouteDocTag](#seo-optimization).
+This may be helpful in situations where you want to create dynamic titles (e.g. correspondig to a specific blog post).
+
+In order to use this simple utility method, you need to call it inside the `VAfterInit` hook, since document tags in the current
+route tree are called first.
+
+```
+@VComponent({...})
+export class MyComponent implements VAfterInit {
+
+  const post = {
+    title: 'Blogpost title',
+    body: 'Some body',
+    author: 'Lucky Luke'
+  };
+
+  constructor(private _web: VWeb) {}
+
+  vAfterInit(): void {
+    this._web.overrideTags({
+      title: this.post.title,
+      meta: [ name: 'author', content: this.post.author ]
+    });
   }
 }
 ```

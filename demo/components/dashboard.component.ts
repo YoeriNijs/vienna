@@ -2,6 +2,10 @@ import {VComponent} from '../../src';
 import {VEmitter} from "../../src/core/binding/v-emitter";
 import {VEmit} from "../../src/core/binding/v-emit";
 
+/**
+ * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
+ * If you want to see a 'real world' example of Vienna, please check https://github.com/YoeriNijs/vienna-demo-app.
+ */
 @VComponent({
     selector: 'app-dashboard',
     styles: [`

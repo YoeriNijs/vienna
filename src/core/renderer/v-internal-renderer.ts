@@ -103,6 +103,12 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 eventBus.publish(VInternalEventName.RENDERING_FINISHED);
             });
 
+            eventBus.subscribe(VInternalEventName.NAVIGATION_ENDED, () => {
+                if (this._component.vAfterInit) {
+                    this._component.vAfterInit();
+                }
+            });
+
             const endIntervalId = window.setInterval(emptyMethod, 0);
             this._intervalRange = {start: startIntervalId, end: endIntervalId};
 
