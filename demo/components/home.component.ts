@@ -1,4 +1,4 @@
-import {VComponent, VInit, VLogger} from '../../src';
+import {VAfterInit, VComponent, VInit, VLogger, VWeb} from '../../src';
 import {LoginService} from "../services/login.service";
 import {UserService} from "../services/user.service";
 import {User} from "../model/user";
@@ -67,7 +67,7 @@ import {VAudit} from "../../src/core/misc/audit/v-audit";
 		<app-footer>Footer from homepage</app-footer>
 	`
 })
-export class HomeComponent implements VInit {
+export class HomeComponent implements VInit, VAfterInit {
     navbarTitle = 'My fancy app :: Home';
     isLoggedIn = false;
 
@@ -82,7 +82,8 @@ export class HomeComponent implements VInit {
     constructor(protected loginService: LoginService,
                 protected userService: UserService,
                 private _logger: VLogger,
-                private _audit: VAudit) {
+                private _audit: VAudit,
+                private _web: VWeb) {
     }
 
     vInit(): void {
@@ -92,6 +93,12 @@ export class HomeComponent implements VInit {
         }
 
         this._logger.debug('HomeComponent initialized', 'Another log');
+    }
+
+    vAfterInit(): void {
+        this._web.overrideTags({
+            title: 'Home component'
+        });
     }
 
     login(): void {

@@ -104,8 +104,10 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             });
 
             eventBus.subscribe(VInternalEventName.NAVIGATION_ENDED, () => {
-                if (this._component.vAfterInit) {
-                    this._component.vAfterInit();
+                const vAfterInit = getAllMethods(componentType.prototype).find(m => m === 'vAfterInit');
+                if (vAfterInit) {
+                    this._component[vAfterInit] = componentType.prototype[vAfterInit];
+                    this._component[vAfterInit]();
                 }
             });
 
