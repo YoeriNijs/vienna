@@ -43,6 +43,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
   - [VWeb](#vweb)
     - [Slugify](#slugify)
     - [Cookies](#cookies)
+    - [Document tags](#override-document-tags)
 - [Plugins](#plugins)
   - [Logger](#logger)
 - [Component testing](#component-testing)
@@ -731,6 +732,8 @@ Hence, the tags of the most specific route are added to the dom, while the tags 
 export class Application {}
 
 ```
+
+If you want to create document tags inside the component itself, because, for instance, you need some specific data, just use the override method from `VWeb`.
 
 ## Dependency injection
 
