@@ -733,7 +733,7 @@ export class Application {}
 
 ```
 
-If you want to create document tags inside the component itself, because, for instance, you need some specific data, just use the override method from `VWeb`.
+If you want to create document tags inside the component itself, because, for instance, you need some specific data, just use the [override method](#override-document-tags) from the `VWeb` utility.
 
 ## Dependency injection
 
