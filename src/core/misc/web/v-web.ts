@@ -75,18 +75,23 @@ export class VWeb {
      */
     overrideTags(tags: VWebDocTags): void {
         // Set document title
-        document.title = tags.title
-            || document.title
-            || 'Vienna application';
+        if (tags && tags.title) {
+            document.title = tags.title;
+        } else {
+            document.title = document.title || 'Vienna application';
+        }
 
         // Retrieve new tags
-        const newMetaTags: VWebDocMetaTag[] = tags.meta
-            || Array.from(document.head.children)
-                .filter(c => c.tagName.toLowerCase() === 'meta')
-                .map((c: HTMLMetaElement) => {
-                    return {name: c.name, content: c.content};
-                })
-            || [];
+        let newMetaTags: VWebDocMetaTag[];
+        if (tags && tags.meta) {
+            newMetaTags = tags.meta;
+        } else {
+            newMetaTags = Array.from(document.head.children)
+                    .filter(c => c.tagName.toLowerCase() === 'meta')
+                    .map((c: HTMLMetaElement) => {
+                        return {name: c.name, content: c.content};
+                    }) || [];
+        }
 
         // Remove old elements
         Array.from(document.head.children)

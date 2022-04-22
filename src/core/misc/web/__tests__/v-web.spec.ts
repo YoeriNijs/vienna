@@ -96,7 +96,7 @@ describe('VWeb', () => {
            expect(tag).toEqual(createMetaElement('some meta name', 'some meta content'));
        });
 
-       it('should override none', () => {
+       it('should override none when empty', () => {
            instance.overrideTags({});
            expect(document.title).toEqual('My document title');
            expect(document.head.children).toHaveLength(2);
@@ -105,5 +105,16 @@ describe('VWeb', () => {
            expect(title.textContent).toEqual('My document title');
            expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
        });
+
+        it('should override none when undefined', () => {
+            instance.overrideTags(undefined);
+            expect(document.title).toEqual('My document title');
+            expect(document.head.children).toHaveLength(2);
+            const [title, tag] = document.head.children;
+            expect(title.tagName).toEqual('TITLE');
+            expect(title.textContent).toEqual('My document title');
+            expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
+        });
+
     });
 });
