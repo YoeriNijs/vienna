@@ -1,4 +1,4 @@
-# Vienna micro frontend for creating webcomponents with ease
+# Vienna micro frontend
 
 ![Vienna logo](https://raw.githubusercontent.com/YoeriNijs/vienna/main/img/logo.png)
 
@@ -12,7 +12,7 @@ progress, it might be unstable.
 
 Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 
-# Table of Contents (work in progress)
+## Table of Contents (work in progress)
 
 - [Install Vienna](#install)
 - [Set up application](#set-up-application)
