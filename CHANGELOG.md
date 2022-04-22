@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.42](https://github.com/YoeriNijs/vienna/compare/0.2.41...0.2.42)
+## [0.2.43](https://github.com/YoeriNijs/vienna/compare/0.2.42...0.2.43)
+
+### Merged
+
+- Restore initial tags [`#43`](https://github.com/YoeriNijs/vienna/pull/43)
+
+## [0.2.42](https://github.com/YoeriNijs/vienna/compare/0.2.41...0.2.42) - 2022-04-22
 
 ### Merged
 
 - fix(vapplication): restore initial doc tags when none exist [`#42`](https://github.com/YoeriNijs/vienna/pull/42)
+
+### Commits
+
+- feat(package.json): release '0.2.42' [`d231a30`](https://github.com/YoeriNijs/vienna/commit/d231a3069c2983cb614c1d78005c4e521a82a797)
 
 ## [0.2.41](https://github.com/YoeriNijs/vienna/compare/0.2.40...0.2.41) - 2022-04-22
 
