@@ -5,11 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.38](https://github.com/YoeriNijs/vienna/compare/0.2.37...0.2.38)
+## [0.2.39](https://github.com/YoeriNijs/vienna/compare/0.2.38...0.2.39)
+
+### Merged
+
+- feat(vweb): override document tags that are set in route tree [`#40`](https://github.com/YoeriNijs/vienna/pull/40)
+
+### Commits
+
+- Update README.md [`3d47bee`](https://github.com/YoeriNijs/vienna/commit/3d47bee074927341d3d48b53860085f370e79495)
+
+## [0.2.38](https://github.com/YoeriNijs/vienna/compare/0.2.37...0.2.38) - 2022-04-22
 
 ### Merged
 
 - feat(vroute): seo optimization [`#39`](https://github.com/YoeriNijs/vienna/pull/39)
+
+### Commits
+
+- feat(package.json): release '0.2.38' [`12de510`](https://github.com/YoeriNijs/vienna/commit/12de510acc363de12d3882fea8984d98137dca99)
 
 ## [0.2.37](https://github.com/YoeriNijs/vienna/compare/0.2.36...0.2.37) - 2022-04-18
 
