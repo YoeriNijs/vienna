@@ -11,6 +11,7 @@ import {VInternalRouter} from "../router/v-internal-router";
 import {VDarkMode} from "../style/v-dark-mode";
 import {VActivatedRoute} from "../router/v-activated-route";
 import {VInternalLogSender} from "../logger/v-internal-log-sender";
+import {VRouteDocMetaTag} from "../router/v-route-doc-tags";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -63,9 +64,39 @@ export function VApplication(config: VApplicationConfig) {
                     this._eventBus.subscribe(VInternalEventName.REBUILD, () => {
                         this._mainRenderer.renderAllFromRootNode(rootNode, this._declarationTypes)
                     });
+                    this.updateDocumentTags(route);
                 } else {
                     throw new VRenderError(`Cannot find declaration for path '${route.path}'. Declare a class for this path in your Vienna application configuration.`);
                 }
+            }
+
+            private updateDocumentTags(route: VRoute): void {
+                // Set document title
+                document.title = route.docTags.title
+                    || document.head.title
+                    || 'Vienna application';
+
+                // Retrieve wanted tags
+                const docMeta: VRouteDocMetaTag[] = route.docTags.meta
+                    || Array.from(document.head.children)
+                        .filter(c => c.tagName.toLowerCase() === 'meta')
+                        .map((c: HTMLMetaElement) => {
+                            return {name: c.name, content: c.content};
+                        })
+                    || [];
+
+                // Remove old elements
+                Array.from(document.head.children)
+                    .filter(c => c.tagName.toLowerCase() === 'meta')
+                    .forEach(c => document.head.removeChild(c));
+
+                // Update with new elements
+                docMeta.map(meta => {
+                    const element: HTMLMetaElement = document.createElement('meta');
+                    element.name = meta.name;
+                    element.content = meta.content;
+                    return element
+                }).forEach(el => document.head.appendChild(el));
             }
 
             private initializeDarkMode(): void {

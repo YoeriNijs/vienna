@@ -34,8 +34,19 @@ import {DarkModeComponent} from "./components/dark-mode.component";
         {
             path: '/about',
             component: AboutComponent,
+            docTags: {
+                title: 'About page title',
+                meta: [ { name: 'author', content: 'Lucky Luke' }]
+            },
             children: [
-                { path: '/more', component: AboutMoreComponent },
+                {
+                    path: '/more',
+                    component: AboutMoreComponent,
+                    docTags: {
+                        title: 'About more page title',
+                        meta: [ { name: 'author', content: 'Harry Potter' }]
+                    },
+                },
                 { path: '/:name', component: AboutMoreComponent }
             ]
         },

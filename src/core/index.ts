@@ -32,6 +32,7 @@ export * from './router/v-query-param';
 export * from './router/v-route-guard';
 export * from './router/v-route';
 export * from './router/v-route-data';
+export * from './router/v-route-doc-tags';
 export * from './router/v-route-not-found-redirect';
 export * from './router/v-route-not-found-strategy';
 export * from './router/v-route-redirect';

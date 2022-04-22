@@ -26,11 +26,13 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
     - [VRepeat](#vrepeat)
 - [Event binding](#event-binding)
 - [Routes](#routes)
+    - [Nested routes](#nested-routes)
     - [Route data](#route-data)
     - [Route params](#route-params)
     - [Query params](#query-params)
     - [Guards](#route-guards)
     - [Route redirects](#route-redirects)
+    - [SEO optimization](#seo-optimization)
 - [Dependency injection](#dependency-injection)
 - [Dark mode](#dark-mode)
   - [Set up dark mode](#set-up-dark-mode)
@@ -403,85 +405,7 @@ export class MyComponent {
 ## Event binding
 
 Vienna is created to create web applications with ease. Of course, event binding is supported in the Vienna template
-engine. It supports the following dom events:
-
-- Abort (@abort)
-- Afterprint (@afterPrint)
-- Animationend (@animationEnd)
-- Animationiteration (@animationIteration)
-- Animationstart (@animationStart)
-- Beforeprint (@beforePrint)
-- Beforeunload (@beforeUnload)
-- Canplay (@canPlay)
-- canplaythrough (@canPlayThrough)
-- Change (@change)
-- Click (@click)
-- Contextmenu (@contextMenu)
-- Copy (@copy)
-- Cut (@cut)
-- Dblclick (@dblClick)
-- Drag (@drag)
-- Dragend (@dragEnd)
-- Dragenter (@dragEnter)
-- Dragleave (@dragLeave)
-- Dragover (@dragOver)
-- Dragstart (@dragStart)
-- Drop (@drop)
-- Durationchange (@durationChange)
-- Ended (@ended)
-- Error (@error)
-- Focus (@focus)
-- Focusin (@focusIn)
-- Focusout (@focusOut)
-- Fullscreenchange (@fullScreenChange)
-- Fullscreenerror (@fullScreenError)
-- Hashchange (@hashChange)
-- Input (@input)
-- Invalid (@invalid)
-- KeyDown (@keyDown)
-- KeyUp (@keyUp)
-- Load (@load)
-- LoadedData (@loadedData)
-- LoadedMetadata (@loadedMetadata)
-- LoadStart (@loadStart)
-- Message (@message)
-- MouseDown (@mouseDown)
-- MouseUp (@mouseUp)
-- Offline (@offline)
-- Online (@online)
-- Open (@open)
-- PageHide (@pageHide)
-- PageShow (@pageShow)
-- Paste (@paste)
-- Pause (@pause)
-- Play (@play)
-- Playing (@playing)
-- Progress (@progress)
-- RateChange (@rateChange)
-- Resize (@resize)
-- Reset (@reset)
-- Scroll (@scroll)
-- Search (@search)
-- Seeked (@seeked)
-- Seeking (@seeking)
-- Select (@select)
-- Show (@show)
-- Stalled (@stalled)
-- Submit (@submit)
-- Suspend (@suspend)
-- TimeUpdate (@timeUpdate)
-- Toggle (@toggle)
-- TouchCancel (@touchCancel)
-- TouchEnd (@touchEnd)
-- TouchMove (@touchMove)
-- TouchStart (@touchStart)
-- TransitionEnd (@transitionEnd)
-- Unload (@unload)
-- VolumeChange (@volumeChange)
-- Waiting (@waiting)
-- Wheel (@wheel)
-
-To listen to an event on one element, just add the @mark. For instance:
+engine. To listen to an event on one element, just add the @mark. For instance:
 
 `custom.component.ts`
 
@@ -535,7 +459,9 @@ Besides the path and component properties, the `VRoute` interface accepts the fo
 - `guards` (optional): implementations of the `VRouteGuard` interface that allow you to control the accessibility of a
   route based on a custom condition.
 - `children` (optional): an array of `VRoute` objects that represent nested routes.
+- `docTags` (optional): an array of `VRouteDocTag` objects, which are needed for seo optimization.
 
+### Nested routes
 Routes can be nested limitless. To create subroutes, just implement child routes. For example:
 
 `application.ts`
@@ -766,6 +692,37 @@ export class CustomComponent implements VInit {
     setTimeout(() => this.routeRedirect.redirectTo('#/another-vienna-path', true), 2000)); // 'true' means new window here
   }
 }
+
+```
+
+### Seo optimization
+Since Vienna is in the end a framework that runs client side, it may be difficult for web crawlers to scan Vienna pages
+for content. Vienna can help these crawlers by injecting the necessary title and meta tags in the document, since
+these crawlers heavily rely on these tags. This will improve the seo of the application.
+
+To use the document tags, just add them to your route. If you have nested routes, the most specific route 'wins'.
+Hence, the tags of the most specific route are added to the dom, while the tags of the parents are ignored.
+
+`application.ts`
+
+```
+
+@VApplication({ 
+  declarations: [
+    HomeComponent
+  ], 
+  routes: [
+    { 
+      path: '/', 
+      component: HomeComponent,
+      docTags: {
+        title: 'My fancy home title',
+        meta: [{ name: 'author', content: 'Lucky Luke' }]
+      }
+    }
+  ]
+})
+export class Application {}
 
 ```
 
