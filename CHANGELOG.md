@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.37](https://github.com/YoeriNijs/vienna/compare/0.2.36...0.2.37)
+## [0.2.38](https://github.com/YoeriNijs/vienna/compare/0.2.37...0.2.38)
+
+### Merged
+
+- feat(vroute): seo optimization [`#39`](https://github.com/YoeriNijs/vienna/pull/39)
+
+## [0.2.37](https://github.com/YoeriNijs/vienna/compare/0.2.36...0.2.37) - 2022-04-18
 
 ### Merged
 
 - Cookie support [`#38`](https://github.com/YoeriNijs/vienna/pull/38)
+
+### Commits
+
+- feat(package.json): release '0.2.37' [`e004090`](https://github.com/YoeriNijs/vienna/commit/e004090a123f2bd736b02903b0f4a806633ebc3d)
 
 ## [0.2.36](https://github.com/YoeriNijs/vienna/compare/0.2.35...0.2.36) - 2022-04-13
 
