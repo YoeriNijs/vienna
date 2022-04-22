@@ -1,6 +1,7 @@
 import {VInjectable} from "../../injector/v-injectable-decorator";
 import {CookieAttributes, get as getCookieValue, remove as removeCookieValue, set as setCookieValue} from "js-cookie";
 import {VWebDocMetaTag, VWebDocTags} from "./v-web-doc-tags";
+import {getCurrentDocMetaTags} from "../../util/v-internal-document-util";
 
 export interface VSlugifyOptions {
     trim?: boolean;
@@ -82,16 +83,9 @@ export class VWeb {
         }
 
         // Retrieve new tags
-        let newMetaTags: VWebDocMetaTag[];
-        if (tags && tags.meta) {
-            newMetaTags = tags.meta;
-        } else {
-            newMetaTags = Array.from(document.head.children)
-                    .filter(c => c.tagName.toLowerCase() === 'meta')
-                    .map((c: HTMLMetaElement) => {
-                        return {name: c.name, content: c.content};
-                    }) || [];
-        }
+        const newMetaTags: VWebDocMetaTag[] = tags && tags.meta
+            ? tags.meta
+            : getCurrentDocMetaTags();
 
         // Remove old elements
         Array.from(document.head.children)
