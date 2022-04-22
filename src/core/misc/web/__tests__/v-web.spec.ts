@@ -1,5 +1,12 @@
 import {VWeb} from "../v-web";
 
+const createMetaElement = (name: string, content: string): HTMLMetaElement => {
+    const element = document.createElement('meta');
+    element.name = name;
+    element.content = content;
+    return element;
+}
+
 describe('VWeb', () => {
 
     let instance: VWeb;
@@ -55,5 +62,48 @@ describe('VWeb', () => {
             const value = instance.getCookie('invalid');
             expect(value).toBeUndefined();
         });
+    });
+
+    describe('Document tags', () => {
+       beforeEach(() => {
+           document.title = 'My document title';
+           document.head.appendChild(createMetaElement('author', 'Lucky Luke'));
+       });
+
+       afterEach(() => {
+           document.title = '';
+           const children = Array.from(document.head.children);
+           children.forEach(c => document.head.removeChild(c));
+       })
+
+       it('should override only the title tag', () => {
+           instance.overrideTags({ title: 'My new title' });
+           expect(document.title).toEqual('My new title');
+           expect(document.head.children).toHaveLength(2);
+           const [title, tag] = document.head.children;
+           expect(title.tagName).toEqual('TITLE');
+           expect(title.textContent).toEqual('My new title');
+           expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
+       });
+
+       it('should override only the meta tag', () => {
+           instance.overrideTags({ meta: [ { name: 'some meta name', content: 'some meta content'} ] });
+           expect(document.title).toEqual('My document title');
+           expect(document.head.children).toHaveLength(2);
+           const [title, tag] = document.head.children;
+           expect(title.tagName).toEqual('TITLE');
+           expect(title.textContent).toEqual('My document title');
+           expect(tag).toEqual(createMetaElement('some meta name', 'some meta content'));
+       });
+
+       it('should override none', () => {
+           instance.overrideTags({});
+           expect(document.title).toEqual('My document title');
+           expect(document.head.children).toHaveLength(2);
+           const [title, tag] = document.head.children;
+           expect(title.tagName).toEqual('TITLE');
+           expect(title.textContent).toEqual('My document title');
+           expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
+       });
     });
 });

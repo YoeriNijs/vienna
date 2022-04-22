@@ -1,7 +1,8 @@
 import {VInjectable} from "../../injector/v-injectable-decorator";
 import {CookieAttributes, get as getCookieValue, remove as removeCookieValue, set as setCookieValue} from "js-cookie";
+import {VWebDocMetaTag, VWebDocTags} from "./v-web-doc-tags";
 
-export interface VWebOptions {
+export interface VSlugifyOptions {
     trim?: boolean;
     toLowerCase?: boolean;
 }
@@ -11,12 +12,19 @@ export type VCookieOptions = CookieAttributes;
 @VInjectable({ singleton: false })
 export class VWeb {
 
+    private static createHtmlMetaElement(tag: VWebDocMetaTag): HTMLMetaElement {
+        const el: HTMLMetaElement = document.createElement('meta');
+        el.name = tag.name;
+        el.content = tag.content;
+        return el
+    }
+
     /**
      * Creates a slug for a given string. E.g. 'my string' will become 'my-string'.
      * @param value
      * @param options
      */
-    slugify(value: string, options: VWebOptions = { trim: true, toLowerCase: true }): string {
+    slugify(value: string, options: VSlugifyOptions = { trim: true, toLowerCase: true }): string {
         if (!value) {
             return '';
         }
@@ -59,5 +67,34 @@ export class VWeb {
      */
     removeCookie(name: string): void {
         removeCookieValue(name);
+    }
+
+    /**
+     * Override the document tags with custom tags
+     * @param tags
+     */
+    overrideTags(tags: VWebDocTags): void {
+        // Set document title
+        document.title = tags.title
+            || document.title
+            || 'Vienna application';
+
+        // Retrieve new tags
+        const newMetaTags: VWebDocMetaTag[] = tags.meta
+            || Array.from(document.head.children)
+                .filter(c => c.tagName.toLowerCase() === 'meta')
+                .map((c: HTMLMetaElement) => {
+                    return {name: c.name, content: c.content};
+                })
+            || [];
+
+        // Remove old elements
+        Array.from(document.head.children)
+            .filter(c => c.tagName.toLowerCase() === 'meta')
+            .forEach(c => document.head.removeChild(c));
+
+        // Update with new elements
+        newMetaTags.map(tag => VWeb.createHtmlMetaElement(tag))
+            .forEach(el => document.head.appendChild(el));
     }
 }

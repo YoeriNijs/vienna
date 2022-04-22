@@ -4,6 +4,10 @@ import {UserService} from "../services/user.service";
 import {User} from "../model/user";
 import {VAudit} from "../../src/core/misc/audit/v-audit";
 
+/**
+ * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
+ * If you want to see a 'real world' example of Vienna, please check https://github.com/YoeriNijs/vienna-demo-app.
+ */
 @VComponent({
     selector: 'app-home',
     styles: [`
