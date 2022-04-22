@@ -97,7 +97,7 @@ export class HomeComponent implements VInit, VAfterInit {
 
     vAfterInit(): void {
         this._web.overrideTags({
-            title: 'test'
+            title: 'Home component'
         });
     }
 
