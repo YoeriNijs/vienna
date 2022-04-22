@@ -11,7 +11,8 @@ import {VInternalRouter} from "../router/v-internal-router";
 import {VDarkMode} from "../style/v-dark-mode";
 import {VActivatedRoute} from "../router/v-activated-route";
 import {VInternalLogSender} from "../logger/v-internal-log-sender";
-import {VWeb} from "../misc/web";
+import {VWeb, VWebDocTags} from "../misc/web";
+import {getCurrentDocTags} from "../util/v-internal-document-util";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -19,6 +20,7 @@ export function VApplication(config: VApplicationConfig) {
             private readonly _mainRenderer: VInternalRenderer;
             private readonly _declarationTypes: Type<VComponentType>[];
             private readonly _routes: VRoute[];
+            private readonly _initialTags: VWebDocTags;
 
             constructor(private _eventBus: VInternalEventbus,
                         private _activatedRoute: VActivatedRoute,
@@ -32,6 +34,7 @@ export function VApplication(config: VApplicationConfig) {
                 });
                 this._declarationTypes = config.declarations;
                 this._routes = config.routes;
+                this._initialTags = getCurrentDocTags();
 
                 this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
                     this.renderComponentForRoute(route);
@@ -76,7 +79,7 @@ export function VApplication(config: VApplicationConfig) {
                     this._web.overrideTags(route.docTags);
                 } else {
                     const parentDocTags = this.findParentWithDocTags(route);
-                    this._web.overrideTags(parentDocTags);
+                    this._web.overrideTags(parentDocTags || this._initialTags);
                 }
             }
 
