@@ -986,7 +986,7 @@ export class MyComponent implements VAfterInit {
   vAfterInit(): void {
     this._web.overrideTags({
       title: this.post.title,
-      meta: [ name: 'author', content: this.post.author ]
+      meta: [ { name: 'author', content: this.post.author } ]
     });
   }
 }
