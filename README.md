@@ -409,6 +409,35 @@ export class MyComponent {
 
 ```
 
+### VSwitch
+
+In some cases, you might want to use a switch statement in your views. For this, you can use `VSwitch`. Important: you must
+either have a matching case for your statement, or a default case! If one is missing, the switch will not work, since
+Vienna does not know what to display in that particular situation.
+
+```
+@VComponent({
+    selector: 'switch-component',
+    styles: [],
+    html: `
+        <v-switch condition="{{ name }}">
+            <v-case if="admin">
+                May the force be with you!
+            </v-case>
+            <v-case if="member">
+                You have limited force here...
+            </v-case>
+            <v-case-default>
+                You have no force here.
+            </v-case-default>
+        </v-switch>
+    `
+})
+export class SwitchComponent {
+    name = 'admin';
+}
+```
+
 ## Event binding
 
 Vienna is created to create web applications with ease. Of course, event binding is supported in the Vienna template
