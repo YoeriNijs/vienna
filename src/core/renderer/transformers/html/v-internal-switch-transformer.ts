@@ -1,5 +1,4 @@
 import {VInternalHtmlTransformer} from "./v-internal-html-transformer";
-import {VComponentType} from "../../../component/v-component-type";
 import {VAudit} from "../../../misc/audit/v-audit";
 import {VTemplateRenderException} from "../../../template-engine/v-template-render-exception";
 
@@ -13,7 +12,7 @@ export class VInternalSwitchTransformer implements VInternalHtmlTransformer {
 
     private readonly _vAudit = new VAudit();
 
-    transform(html: string, component: VComponentType): string {
+    transform(html: string): string {
         const parser = new DOMParser();
         let document = parser.parseFromString(html, 'text/html');
         do document = this.replaceVSwitches(document);
@@ -25,8 +24,7 @@ export class VInternalSwitchTransformer implements VInternalHtmlTransformer {
         const switchEls: Element[] = document.getElementsByTagName(V_SWITCH_TAG);
         for (let switchEl of switchEls) {
             const newValue = this.findSwitchElement(switchEl);
-            switchEl.parentElement.insertBefore(newValue, switchEl);
-            switchEl.parentElement.removeChild(switchEl);
+            switchEl.parentElement.innerHTML = newValue.innerHTML;
         }
         return document;
     }

@@ -424,6 +424,9 @@ Vienna does not know what to display in that particular situation.
             <v-case if="admin">
                 May the force be with you!
             </v-case>
+            <v-case if="member">
+                You have limited force here...
+            </v-case>
             <v-case-default>
                 You have no force here.
             </v-case-default>
