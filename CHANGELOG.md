@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.44](https://github.com/YoeriNijs/vienna/compare/0.2.43...0.2.44)
+## [0.2.45](https://github.com/YoeriNijs/vienna/compare/0.2.44...0.2.45)
+
+### Merged
+
+- Switch implementation in views [`#44`](https://github.com/YoeriNijs/vienna/pull/44)
+
+## [0.2.44](https://github.com/YoeriNijs/vienna/compare/0.2.43...0.2.44) - 2022-04-29
 
 ### Commits
 
+- feat(package.json): release '0.2.44' [`4a30214`](https://github.com/YoeriNijs/vienna/commit/4a302147d587279b26e6fa47d6c5eb9cc024f9af)
 - Update README.md [`71d35ac`](https://github.com/YoeriNijs/vienna/commit/71d35ac974132e2d4442fc54f2b3e9bd97840ea1)
 
 ## [0.2.43](https://github.com/YoeriNijs/vienna/compare/0.2.42...0.2.43) - 2022-04-22
