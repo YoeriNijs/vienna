@@ -25,6 +25,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Conditional segments](#conditional-segments)
     - [VCheck](#vcheck)
     - [VRepeat](#vrepeat)
+    - [VSwitch](#vswitch)
 - [Event binding](#event-binding)
 - [Routes](#routes)
     - [Nested routes](#nested-routes)
