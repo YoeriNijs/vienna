@@ -57,10 +57,10 @@ export class VInternalProxyMapper {
         const dirtyElementIds: string[] = [];
 
         const findElementIds = (element: HTMLElement): void => {
-            // Workaround: if we are dealing with Vienna repeat or check elements, we need to register the whole body element as dirty. At
+            // Workaround: if we are dealing with Vienna repeat, switch or check elements, we need to register the whole body element as dirty. At
             // this stage we do not know whether we should render the true or false elements, so we just mark them both. This is marked as
             // temporarily solution until we find something better (YN).
-            if (element.tagName === 'V-REPEAT' || element.tagName === 'V-CHECK') {
+            if (element.tagName === 'V-REPEAT' || element.tagName === 'V-CHECK' || element.tagName === 'V-SWITCH') {
                 const bodyElementId = this.findInternalIdOfBodyElement(component);
                 if (bodyElementId && !dirtyElementIds.includes(bodyElementId)) {
                     dirtyElementIds.push(bodyElementId);

@@ -29,6 +29,7 @@ import {VGlobalStyleLink} from "../application/v-global-style-link";
 import {VGlobalInlineStyle} from "../application/v-global-inline-style";
 import {VGlobalStyles} from "../application/v-global-styles";
 import {VInternalDarkModeTransformer} from "./transformers/html/v-internal-dark-mode-transformer";
+import {VInternalSwitchTransformer} from "./transformers/html/v-internal-switch-transformer";
 
 interface ComponentAndType {
     type: Type<VComponentType>;
@@ -62,7 +63,8 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             new VInternalRepeatTransformer(),
             new VInternalTemplateTransformer(),
             new VInternalStyleTransformer(),
-            new VInternalCheckTransformer()
+            new VInternalCheckTransformer(),
+            new VInternalSwitchTransformer()
         ];
         private _attachers: VInternalAttacher[] = [
             new VInternalBindAttacher(),

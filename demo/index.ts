@@ -10,6 +10,7 @@ import {SettingsComponent} from "./components/settings.component";
 import {CounterComponent} from "./components/counter.component";
 import {AboutMoreComponent} from "./components/about-more.component";
 import {DarkModeComponent} from "./components/dark-mode.component";
+import {SwitchComponent} from "./components/switch.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -26,10 +27,12 @@ import {DarkModeComponent} from "./components/dark-mode.component";
         NavbarComponent,
         PersonalComponent,
         SettingsComponent,
+        SwitchComponent,
         CounterComponent
     ],
     routes: [
         { path: '/', component: HomeComponent },
+        { path: '/switch', component: SwitchComponent },
         { path: '/dark-mode', component: DarkModeComponent },
         {
             path: '/about',
