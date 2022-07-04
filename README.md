@@ -416,8 +416,6 @@ either have a matching case for your statement, or a default case! If one is mis
 Vienna does not know what to display in that particular situation.
 
 ```
-import {VComponent} from "../../src";
-
 @VComponent({
     selector: 'switch-component',
     styles: [],
