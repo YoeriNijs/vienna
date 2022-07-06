@@ -3,7 +3,7 @@ import {VInternalValidationSet} from "./v-internal-validation-set";
 import {VInternalValidationError} from "./v-internal-validation-error";
 
 @VInjectable()
-export class VValidate {
+export class VValidator {
 
     validate(obj: any, validations: VInternalValidationSet[]): VValidationResult {
         const validationErrors = validations

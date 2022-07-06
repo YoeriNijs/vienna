@@ -1,9 +1,9 @@
-import {VValidate} from "../v-validate";
+import {VValidator} from "../v-validator";
 import {vLengthValidator, vNoBlankValidator, vNumberValidator, vStringValidator} from "../v-validation-rules";
 
 describe('VValidate', () => {
 
-    const validator = new VValidate();
+    const validator = new VValidator();
 
     it('should validate multiple fields and everything is valid', () => {
         const person = { name: 'Bert', age: 30 };

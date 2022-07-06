@@ -40,6 +40,6 @@ export * from './router/v-route-param';
 
 export * from './style/v-dark-mode';
 
-export * from './validation/v-validate';
+export * from './validation/v-validator';
 export * from './validation/v-validation-function';
 export * from './validation/v-validation-rules';
