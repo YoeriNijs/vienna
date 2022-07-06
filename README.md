@@ -39,6 +39,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Dark mode](#dark-mode)
   - [Set up dark mode](#set-up-dark-mode)
   - [Customize dark mode](#customize-dark-mode)
+- [Validation engine](#validation-engine)
 - [Miscellaneous](#miscellaneous)
   - [VAudit](#vaudit)
   - [VWeb](#vweb)
@@ -918,6 +919,46 @@ export class DarkModeComponent implements VInit {...}
 <b>Important:</b> a Vienna component option is always more specific than some application-wide config. Therefore, if you
 apply dark mode settings to a component, these settings will always be true. For instance, if you set up a custom dark 
 mode class globally, and have another custom class in your component, the latter will be used.
+
+## Validation engine
+Vienna provides a simple, extendable validation engine out of the box. With this, you are able to validate objects with ease.
+
+Just inject the validator, which is an injectable. Then, define the fields you want to validate, and the functions you want to
+use for the validation. The result is a wrapper object that holds methods to verify the result.
+
+```
+@VComponent({...})
+export class MyComponent implements VInit {
+
+  private readonly _person = {
+    name: 'Ernie',
+    age: 30
+  };
+
+  constructor(private _validator: VValidator) {}
+
+  validate(): void {
+    const result = this._validator.validate(this._person, [
+      { fields: ['name', 'age'], functions: [vNoBlankValidator()] },
+      { fields: ['name'], functions: [vStringValidator(), vLengthValidator(4)] },
+      { fields: ['age'], functions: [vNumberValidator()] }
+    ]);
+    
+    console.log(result.isValid()); // false
+    console.log(result.errorSize()); // 1
+    console.log(result.errors()[0].cause); // 'length error'
+  }
+}
+```
+
+Vienna provides the following validator functions out of the box:
+- `vNoBlankValidator`: checks whether a value is not null, is defined, and has length >= 1
+- `vStringValidator`: checks whether a value is a string
+- `vNumberValidator`: checks whether a value is a number
+- `vLengthValidator`: checks whether the value is a string and has a certain required length
+
+Of course, you can easily extend the validation engine by passing your own validation functions. Just implement the
+`VValidationFunction` interface.
 
 ## Miscellaneous
 Vienna provides various handy miscellaneous tools that you can use.
