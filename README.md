@@ -204,7 +204,12 @@ export class ComponentB {}
 
 ### Output binding
 
-To bind to component outputs, it is possible to implement the `VEmitter`:
+To bind to component outputs, it is possible to implement the `VEmitter`.
+
+<b>Important!</b> Naming is very important when using output binding. As opposed to frameworks like Angular, Vienna does not
+limit the scope of the output to one parent. As a consequence, emitted items are available in the whole codebase.
+This is as designed, since it may be very useful to emit the data to the complete application at once. If you do not want this,
+you are fully in control. Just keep your naming clean and unique.
 
 `component-a.ts`
 

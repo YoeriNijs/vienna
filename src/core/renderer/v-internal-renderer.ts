@@ -30,6 +30,7 @@ import {VGlobalInlineStyle} from "../application/v-global-inline-style";
 import {VGlobalStyles} from "../application/v-global-styles";
 import {VInternalDarkModeTransformer} from "./transformers/html/v-internal-dark-mode-transformer";
 import {VInternalSwitchTransformer} from "./transformers/html/v-internal-switch-transformer";
+import {toAssumedTypeAndValue} from "./v-internal-renderer-util";
 
 interface ComponentAndType {
     type: Type<VComponentType>;
@@ -210,13 +211,14 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                     methodName = methodName.substring(0, indexOfFirstParenthesis);
                 } else {
                     // First, we find the actual values for the variables that we have some references for
-                    const actualValues = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
+                    const actualValues: any[] = methodName.substring(indexOfFirstParenthesis + 1, indexOfLastParenthesis)
                         .split(',')
                         .filter(v => v.length > 0)
                         .map(v => {
                             const template = new VInternalTemplate(v);
                             return VInternalTemplateEngine.render(template, component);
-                        });
+                        })
+                        .map(toAssumedTypeAndValue);
                     methodVariables.push(...actualValues);
 
                     // Then, just replace the method name by the name without arguments
@@ -231,7 +233,11 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                     return method(htmlElement);
                 }
                 if (!isEmpty(methodVariables)) {
-                    return method(methodVariables);
+                    if (methodVariables.length === 1) {
+                        return method(...methodVariables);
+                    } else {
+                        return method(methodVariables);
+                    }
                 }
                 return method();
             }

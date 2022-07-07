@@ -29,7 +29,8 @@ import {VEmit} from "../../src/core/binding/v-emit";
             </v-repeat>
         </ul>
         <br />
-        <button @click="changeTitle()">Change title</button>
+        <button @click="changeTitle('New title from dashboard')">Change title</button>
+        <button @click="changeTitle('Another new title from dashboard')">Change title</button>
 	`
 })
 export class DashboardComponent {
@@ -42,7 +43,7 @@ export class DashboardComponent {
         {name: 'counter', link: '#/counter'}
     ];
 
-    changeTitle(): void {
-        this.titleChange.emit('New title from dashboard');
+    changeTitle(title: string): void {
+        this.titleChange.emit(title);
     }
 }

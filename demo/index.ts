@@ -11,6 +11,7 @@ import {CounterComponent} from "./components/counter.component";
 import {AboutMoreComponent} from "./components/about-more.component";
 import {DarkModeComponent} from "./components/dark-mode.component";
 import {SwitchComponent} from "./components/switch.component";
+import {DomParserComponent} from "./components/dom-parser.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -22,6 +23,7 @@ import {SwitchComponent} from "./components/switch.component";
         AboutMoreComponent,
         DarkModeComponent,
         DashboardComponent,
+        DomParserComponent,
         FooterComponent,
         HomeComponent,
         NavbarComponent,
@@ -34,6 +36,7 @@ import {SwitchComponent} from "./components/switch.component";
         { path: '/', component: HomeComponent },
         { path: '/switch', component: SwitchComponent },
         { path: '/dark-mode', component: DarkModeComponent },
+        { path: '/dom-parser', component: DomParserComponent },
         {
             path: '/about',
             component: AboutComponent,
