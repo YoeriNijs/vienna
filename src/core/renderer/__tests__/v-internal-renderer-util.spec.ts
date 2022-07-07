@@ -22,7 +22,7 @@ describe('VInternalRendererUtil', () => {
 
         it.each(['true', 'false'])('should cast a boolean %s', (value) => {
            const result = toAssumedTypeAndValue(value);
-           expect(result).toEqual(42);
+           expect(result).toEqual(!!value);
         });
    });
 });
