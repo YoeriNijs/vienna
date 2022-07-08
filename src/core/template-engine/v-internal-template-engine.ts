@@ -2,7 +2,7 @@ import {VInternalTemplate} from "./v-internal-template";
 import {VTemplateRenderException} from "./v-template-render-exception";
 import {getDefinedOrElse, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 import {escapeBracketsInRegex} from "../util/v-internal-regex-util";
-import { filterXSS } from "xss";
+import {filterXSS} from "xss";
 
 export class VInternalTemplateEngine {
 

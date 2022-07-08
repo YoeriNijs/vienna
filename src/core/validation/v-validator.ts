@@ -1,12 +1,13 @@
 import {VInjectable} from "../injector/v-injectable-decorator";
 import {VInternalValidationSet} from "./v-internal-validation-set";
 import {VInternalValidationError} from "./v-internal-validation-error";
+import {getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 
 @VInjectable()
 export class VValidator {
 
     validate(obj: any, validations: VInternalValidationSet[]): VValidationResult {
-        const validationErrors = validations
+        const validationErrors: VInternalValidationError[] = validations
             .map(validation => this.executeValidationRule(obj, validation))
             .reduce((prev, curr) => prev.concat(curr), [])
             .reduce((prev, curr) => prev.concat(curr), []);
@@ -15,14 +16,16 @@ export class VValidator {
     }
 
     private executeValidationRule(obj: any, validation: VInternalValidationSet): VInternalValidationError[] {
-        return Object.keys(obj)
-            .filter((actualField) => validation.fields.some((expectedField) => expectedField === actualField))
-            .reduce((existingValidationErrors, actualField) => {
-                const newValidationErrors = validation.functions.map((fn) => fn.validate(obj[actualField]));
-                return existingValidationErrors.concat(newValidationErrors);
-            }, []);
+        return validation.fields.reduce((errors, field) => {
+            const value = getNestedPropertyByStringPath(obj, field);
+            if (!value || value && typeof value !== 'object') {
+                const newErrors = validation.functions.map((fn) => fn.validate(value));
+                return errors.concat(newErrors);
+            } else {
+                return errors.concat([{ cause: 'missing', message: `Field ${field} is missing in object ${JSON.stringify(obj)}`}]);
+            }
+        }, []);
     }
-
 }
 
 class VValidationResult {

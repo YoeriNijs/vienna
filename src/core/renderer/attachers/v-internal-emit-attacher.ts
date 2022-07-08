@@ -12,7 +12,13 @@ import {findMethodNameInElement} from "./v-internal-attacher-util";
 
 const EMIT_SPLITTER = '=>';
 
+interface AttachedItem {
+    caller: string;
+    methodName: string;
+}
+
 export class VInternalEmitAttacher implements VInternalAttacher {
+    private static attached: AttachedItem[] = [];
     private readonly _eventBus = VInjector.resolve<VInternalEventbus>(VInternalEventbus);
 
     accept(component: VComponentType, shadowRoot: ShadowRoot): boolean {
@@ -43,6 +49,13 @@ export class VInternalEmitAttacher implements VInternalAttacher {
             throw new VRenderError('Invalid emit attribute: no left or right side found!');
         }
 
+        // Check if the listener is already attached. If so, do not attach it again.
+        const isAlreadyAttached = VInternalEmitAttacher.attached
+            .some(v => v.caller === caller && v.methodName === methodName);
+        if (isAlreadyAttached) {
+            return;
+        }
+
         const elements = Array.from(shadow.children)
             .filter((shadowEl) => shadowEl.nodeName !== 'STYLE')
             .map((shadowEl: HTMLElement) => findMethodNameInElement(shadowEl, attr, signature))
@@ -52,11 +65,13 @@ export class VInternalEmitAttacher implements VInternalAttacher {
         }
 
         this._eventBus.subscribe(VInternalEventName.EMIT, (internalEmitterData: VInternalEmitterData<any>) => {
-            const data = internalEmitterData.data;
             if (internalEmitterData.callerName === caller) {
-                methods.callInternalMethod(component, methodName, elements[0], data);
+                methods.callInternalMethod(component, methodName, elements[0], internalEmitterData.data);
                 methods.forceRerendering(); // Re-render since view may have changed
             }
         });
+
+        // Mark as attached
+        VInternalEmitAttacher.attached.push({ caller, methodName });
     }
 }
