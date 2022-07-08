@@ -26,8 +26,33 @@ describe('VValidate', () => {
         expect(result.errors()[0].cause).toEqual('type error');
     });
 
+    it('should validate nested objects', () => {
+       const person = { name: 'John Doe', address: { street: 'Doe Street', number: 42 }};
+        const result = validator.validate(person, [
+            { fields: ['name', 'address.street', 'address.number'], functions: [vNoBlankValidator()] },
+            { fields: ['address.street'], functions: [vStringValidator()] },
+            { fields: ['address.number'], functions: [vStringValidator()] },
+            { fields: ['address.number'], functions: [vNumberValidator()] },
+        ]);
+        expect(result.errorSize()).toEqual(1);
+        expect(result.isValid()).toBe(false);
+        expect(result.errors()[0].cause).toEqual('type error');
+        expect(result.errors()[0].message).toEqual('Value \'42\' is no string!');
+    });
+
+    it('should validate nested objects when nested field does not exist', () => {
+        const person = { name: 'John Doe', address: { street: 'Doe Street', number: 42 }};
+        const result = validator.validate(person, [
+            { fields: ['address.city'], functions: [] },
+        ]);
+        expect(result.errorSize()).toEqual(1);
+        expect(result.isValid()).toBe(false);
+        expect(result.errors()[0].cause).toEqual('missing');
+        expect(result.errors()[0].message).toEqual('Field address.city is missing in object {"name":"John Doe","address":{"street":"Doe Street","number":42}}');
+    });
+
     describe('Rules', () => {
-        it.each([null, undefined, 1, true, {}])('should provide an error when value is \'%s\'', v => {
+        it.each([null, undefined, 1, true])('should provide an error when value is \'%s\'', v => {
             const result = validator.validate(
                 { name: v },
                 [ { fields: ['name'], functions: [vStringValidator()] } ]
@@ -47,7 +72,7 @@ describe('VValidate', () => {
             expect(result.errors()[0].cause).toEqual('blank');
         });
 
-        it.each(['1', true, undefined, null, {}])('should provide an error when value is \'%s\'', v => {
+        it.each(['1', true, undefined, null])('should provide an error when value is \'%s\'', v => {
             const result = validator.validate(
                 { age: v },
                 [ { fields: ['age'], functions: [vNumberValidator()] } ]

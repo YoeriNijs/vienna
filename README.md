@@ -39,7 +39,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Dark mode](#dark-mode)
   - [Set up dark mode](#set-up-dark-mode)
   - [Customize dark mode](#customize-dark-mode)
-- [Validation engine](#validation-engine)
+- [Validator](#validator)
 - [Miscellaneous](#miscellaneous)
   - [VAudit](#vaudit)
   - [VWeb](#vweb)
@@ -925,11 +925,17 @@ export class DarkModeComponent implements VInit {...}
 apply dark mode settings to a component, these settings will always be true. For instance, if you set up a custom dark 
 mode class globally, and have another custom class in your component, the latter will be used.
 
-## Validation engine
+## Validator
 Vienna provides a simple, extendable validation engine out of the box. With this, you are able to validate objects with ease.
 
 Just inject the validator, which is an injectable. Then, define the fields you want to validate, and the functions you want to
-use for the validation. The result is a wrapper object that holds methods to verify the result.
+use for the validation. It is also possible to select nested fields. The result is a wrapper object that holds methods to verify the result.
+
+Vienna provides the following simple validator functions for you:
+- `vNoBlankValidator`: checks whether a value is not null, is defined, and has length >= 1
+- `vStringValidator`: checks whether a value is a string
+- `vNumberValidator`: checks whether a value is a number
+- `vLengthValidator`: checks whether the value is a string and has a certain required length
 
 ```
 @VComponent({...})
@@ -956,14 +962,41 @@ export class MyComponent implements VInit {
 }
 ```
 
-Vienna provides the following validator functions out of the box:
-- `vNoBlankValidator`: checks whether a value is not null, is defined, and has length >= 1
-- `vStringValidator`: checks whether a value is a string
-- `vNumberValidator`: checks whether a value is a number
-- `vLengthValidator`: checks whether the value is a string and has a certain required length
-
 Of course, you can easily extend the validation engine by passing your own validation functions. Just implement the
 `VValidationFunction` interface.
+
+```
+class MyCustomEmailValidator implements VValidationFunction {   
+    validate(value: any): VInternalValidationError[] {
+      if (this.isValidEmail(value)) {
+        return [];
+      } else {
+        return [{ cause: 'no email', message: `Value '${value}' is no email!` }];
+      }
+    }
+    
+    private isValidEmail(value: string): boolean {...}
+}
+const myCustomEmailValidator = () => new MyCustomEmailValidator();
+
+@VComponent({...})
+export class MyComponent implements VInit {
+
+  private readonly _person = {
+    name: 'Ernie',
+    age: 30,
+    contact: { email: 'ernie@someplace.com', telephone: '+312345678' }
+  };
+
+  constructor(private _validator: VValidator) {}
+
+  validate(): void {
+    const result = this._validator.validate(this._person, [
+      { fields: ['contact.email'], functions: [myCustomEmailValidator()] }
+    ]);
+  }
+}
+```
 
 ## Miscellaneous
 Vienna provides various handy miscellaneous tools that you can use.
@@ -1166,6 +1199,8 @@ describe('VComponentFactory', () => {
 - VInit does not work without callback yet
 - Running tests with vComponentFactory may cause Jest open handles issue. As a workaround, you can enable fake timers in
   the Jest config or explicitly disable real timers in your tests (do not forget to re-enable them!).
+- VCheck is always executed internally when the dom is being built, while some values may not be set yet;
+- In some cases the template ref can be undefined. The renderer should not throw an error.
 
 # Literature
 
