@@ -1,6 +1,5 @@
 import {VInternalTemplate} from "../v-internal-template";
 import {VInternalTemplateEngine} from "../v-internal-template-engine";
-import {VTemplateRenderException} from "../v-template-render-exception";
 
 describe('VInternalTemplateEngine', () => {
 
@@ -59,10 +58,10 @@ describe('VInternalTemplateEngine', () => {
     });
 
     describe('Missing data', () => {
-        it.each([{}, undefined])('should throw a render exception when there is a interpolation and data is %s', (data) => {
+        it.each([{}, undefined])('should return empty string when there is a interpolation and data is %s', (data) => {
             const template = createTemplate('Hello, my name is {{ name }}');
-            const render = () => VInternalTemplateEngine.render(template, data);
-            expect(render).toThrow(new VTemplateRenderException(`Cannot find value for template reference '{{ name }}'.`));
+            const result = VInternalTemplateEngine.render(template, data);
+            expect(result).toEqual('Hello, my name is ');
         });
     });
 

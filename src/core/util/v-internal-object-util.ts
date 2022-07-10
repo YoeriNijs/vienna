@@ -46,6 +46,14 @@ export const getDefinedOrElse = <T>(obj: T, fn: () => void): T => {
     }
 }
 
+export const getDefinedOrElseDefault = <T>(obj: T, defaultValue: T): T => {
+    if (obj !== undefined && obj !== null) {
+        return obj;
+    } else {
+        return defaultValue;
+    }
+}
+
 export const doWhenDefined = <T>(obj: T, fn: (v?: T) => void): void => {
     if (obj !== undefined && obj !== null) {
         fn(obj);

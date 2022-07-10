@@ -1199,8 +1199,6 @@ describe('VComponentFactory', () => {
 - VInit does not work without callback yet
 - Running tests with vComponentFactory may cause Jest open handles issue. As a workaround, you can enable fake timers in
   the Jest config or explicitly disable real timers in your tests (do not forget to re-enable them!).
-- VCheck is always executed internally when the dom is being built, while some values may not be set yet;
-- In some cases the template ref can be undefined. The renderer should not throw an error.
 
 # Literature
 

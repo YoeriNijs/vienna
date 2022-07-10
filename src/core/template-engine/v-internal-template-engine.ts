@@ -1,6 +1,5 @@
 import {VInternalTemplate} from "./v-internal-template";
-import {VTemplateRenderException} from "./v-template-render-exception";
-import {getDefinedOrElse, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
+import {getDefinedOrElseDefault, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 import {escapeBracketsInRegex} from "../util/v-internal-regex-util";
 import {filterXSS} from "xss";
 
@@ -20,9 +19,11 @@ export class VInternalTemplateEngine {
             const rawValue = typeof data === 'object'
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
-            const value = getDefinedOrElse<any>(rawValue, () => {
-                throw new VTemplateRenderException(`Cannot find value for template reference '${match}'.`)
-            });
+
+            // Originally, this condition was throwing an exception. However, with conditional segments, template
+            // refs may change over time. This means that the ref will be set later in time. This is totally valid.
+            // So, if the value does not exist yet, we just return an empty string (YN).
+            const value = getDefinedOrElseDefault<any>(rawValue, '');
             return filterXSS(`${value}`);
         });
     }
