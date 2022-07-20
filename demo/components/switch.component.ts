@@ -4,6 +4,7 @@ import {VComponent} from "../../src";
     selector: 'switch-component',
     styles: [],
     html: `
+        <div>Not switch related</div>
         <v-switch condition="{{ value }}">
             <v-case if="First">
                 First

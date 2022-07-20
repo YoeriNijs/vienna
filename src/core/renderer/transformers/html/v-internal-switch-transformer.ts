@@ -21,15 +21,15 @@ export class VInternalSwitchTransformer implements VInternalHtmlTransformer {
     }
 
     private replaceVSwitches(document: any): Document {
-        const switchEls: Element[] = document.getElementsByTagName(V_SWITCH_TAG);
-        for (let switchEl of switchEls) {
-            const newValue = this.findSwitchElement(switchEl);
-            switchEl.parentElement.innerHTML = newValue.innerHTML;
+        const switchElements: Element[] = document.getElementsByTagName(V_SWITCH_TAG);
+        for (let originalSwitchElement of switchElements) {
+            const switchResultElement = this.findSwitchResultElement(originalSwitchElement);
+            originalSwitchElement.replaceWith(...switchResultElement.childNodes);
         }
         return document;
     }
 
-    private findSwitchElement(switchEl: Element): Element {
+    private findSwitchResultElement(switchEl: Element): Element {
         const condition = switchEl.attributes.getNamedItem(V_SWITCH_TAG_CONDITION_ATTRIBUTE).value;
         if (this._vAudit.isBlank(condition)) {
             throw new VTemplateRenderException(`Switch condition is empty, while it should not be!`);

@@ -6,6 +6,17 @@ describe('VInternalSwitchTransformer', () => {
     const transformer = new VInternalSwitchTransformer();
     const transform = (html: string): string => transformer.transform(html);
 
+    it('should render value next to irrelevant element', () => {
+        const html = `
+            <span>irrelevant</span>
+            <v-switch condition="Some condition">
+                <v-case-default><span>relevant</span></v-case-default>
+            </v-switch>
+        `;
+        const result = transform(html).replace(/\s/g,'');
+        expect(result).toEqual('<span>irrelevant</span><span>relevant</span>');
+    });
+
     it('should render value', () => {
         const html = `
             <v-switch condition="Ernie">
