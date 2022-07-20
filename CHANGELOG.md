@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.49](https://github.com/YoeriNijs/vienna/compare/0.2.48...0.2.49)
+## [0.2.50](https://github.com/YoeriNijs/vienna/compare/0.2.49...0.2.50)
+
+### Merged
+
+- fix(v-switch): keep unrelated elements when updating the dom with v-switch [`#49`](https://github.com/YoeriNijs/vienna/pull/49)
+
+## [0.2.49](https://github.com/YoeriNijs/vienna/compare/0.2.48...0.2.49) - 2022-07-10
 
 ### Merged
 
 - fix(renderer): undefined template ref does not throw template exception anymore [`#48`](https://github.com/YoeriNijs/vienna/pull/48)
+
+### Commits
+
+- feat(package.json): release '0.2.49' [`0a3b197`](https://github.com/YoeriNijs/vienna/commit/0a3b1971edb5069e84973bd31eaef1bbdb5a2bb5)
 
 ## [0.2.48](https://github.com/YoeriNijs/vienna/compare/0.2.47...0.2.48) - 2022-07-08
 
