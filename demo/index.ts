@@ -12,6 +12,8 @@ import {AboutMoreComponent} from "./components/about-more.component";
 import {DarkModeComponent} from "./components/dark-mode.component";
 import {SwitchComponent} from "./components/switch.component";
 import {DomParserComponent} from "./components/dom-parser.component";
+import {InputComponent} from "./components/input.component";
+import {InputHostComponent} from "./components/input-host.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -30,13 +32,16 @@ import {DomParserComponent} from "./components/dom-parser.component";
         PersonalComponent,
         SettingsComponent,
         SwitchComponent,
-        CounterComponent
+        CounterComponent,
+        InputComponent,
+        InputHostComponent
     ],
     routes: [
         { path: '/', component: HomeComponent },
         { path: '/switch', component: SwitchComponent },
         { path: '/dark-mode', component: DarkModeComponent },
         { path: '/dom-parser', component: DomParserComponent },
+        { path: '/input', component: InputComponent },
         {
             path: '/about',
             component: AboutComponent,

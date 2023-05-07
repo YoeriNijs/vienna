@@ -28,11 +28,28 @@ export class VInternalPropTransformer implements VInternalControllerTransformer 
 
     private addActualValue(attr: Attr, prevValue: {}) {
         const key = attr.name.replace(V_INTERNAL_PROP_PREFIX, '');
-        const value = attr.value;
+        const value = this.toStringOrObject(attr.value);
 
         let obj: any = {};
-        obj[key] = value;
+        obj[key] = value
 
         return {...prevValue, ...obj};
+    }
+
+    private toStringOrObject(value: string): string | object {
+        const isStringArray = (str: any) => {
+            try {
+                return new Function(`return Array.isArray(${str})`)();
+            } catch {
+                return false;
+            }
+        }
+
+        if (isStringArray(value)) {
+            value = value.split('\'').join('"');
+            value = JSON.parse(value);
+        }
+
+        return value;
     }
 }

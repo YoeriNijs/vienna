@@ -40,13 +40,13 @@ describe('VInternalTemplateEngine', () => {
     it('should render object string when interpolation and object data', () => {
         const template = createTemplate('Hello, my name is {{ nested }}');
         const result = VInternalTemplateEngine.render(template, {nested: {name: 'Bert'}});
-        expect(result).toEqual('Hello, my name is [object Object]');
+        expect(result).toEqual('Hello, my name is {\'name\':\'Bert\'}');
     });
 
     it('should render object string when interpolation and no corresponding data', () => {
-        const template = createTemplate('Hello, my name is {{ name }}');
+        const template = createTemplate('Hello, my age is {{ age }}');
         const result = VInternalTemplateEngine.render(template, {age: 30});
-        expect(result).toEqual('Hello, my name is [object Object]');
+        expect(result).toEqual('Hello, my age is 30');
     });
 
     describe('Missing template', () => {

@@ -5,6 +5,10 @@ import {filterXSS} from "xss";
 
 export class VInternalTemplateEngine {
 
+    private static replaceAll(str: string, find: string, replace: string): string {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }
+
     private constructor() {
         // Util class
     }
@@ -20,11 +24,23 @@ export class VInternalTemplateEngine {
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
 
+
             // Originally, this condition was throwing an exception. However, with conditional segments, template
             // refs may change over time. This means that the ref will be set later in time. This is totally valid.
             // So, if the value does not exist yet, we just return an empty string (YN).
             const value = getDefinedOrElseDefault<any>(rawValue, '');
-            return filterXSS(`${value}`);
+            const convertedValue = VInternalTemplateEngine.objectToString(value);
+            return filterXSS(`${convertedValue}`);
         });
+    }
+
+    private static objectToString(value: any): string {
+        if (typeof value === 'object') {
+            value = JSON.stringify(value);
+            if (value.includes('"')) {
+                value = value.split('"').join('\'');
+            }
+        }
+        return value;
     }
 }

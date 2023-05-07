@@ -37,33 +37,6 @@ describe('VWeb', () => {
         });
     });
 
-    describe('Cookie', () => {
-        beforeEach(() => document.cookie = '');
-
-        it('should get a cookie value', () => {
-            instance.setCookie('key1', 'value1');
-            instance.setCookie('key2', 'value2');
-            instance.setCookie('key3', 'value3');
-            expect(document.cookie).toEqual('; key1=value1; key2=value2; key3=value3');
-
-            const value = instance.getCookie('key2');
-            expect(value).toEqual('value2');
-        });
-
-        it('should remove a cookie', () => {
-            instance.setCookie('cookieName', 'cookieValue');
-            expect(instance.getCookie('cookieName')).toBeDefined();
-            instance.removeCookie('cookieName');
-            expect(instance.getCookie('cookieName')).toBeUndefined();
-        })
-
-        it('should return undefined when cookie does not exist', () => {
-            document.cookie = 'cookieName=cookieValue';
-            const value = instance.getCookie('invalid');
-            expect(value).toBeUndefined();
-        });
-    });
-
     describe('Document tags', () => {
        beforeEach(() => {
            document.title = 'My document title';

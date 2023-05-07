@@ -1,8 +1,7 @@
 import {VComponentFactoryOptions} from "./v-component-factory-options";
 import {VTestComponent} from "./v-test-component";
-import {VComponentOptions, VComponentType} from "../../../core";
+import {VComponentOptions, VComponentType, Type, VInjector} from "../../../core";
 import {VInternalEventbus} from "../../../core/eventbus/v-internal-eventbus";
-import {Type, VInjector} from "../../../core/injector/v-injector";
 import {VInternalRendererOptions} from "../../../core/renderer/v-internal-renderer-options";
 import {VInternalRenderer} from "../../../core/renderer/v-internal-renderer";
 import {VInternalEventName} from "../../../core/eventbus/v-internal-event-name";
@@ -17,10 +16,13 @@ export const vComponentFactory = <T extends VComponentType>(factoryOptions: VCom
     };
 
     const renderer = new VInternalRenderer(options);
-    renderer.renderAllFromRootNode(providedComponentType, [providedComponentType]);
+    const declarations: Type<any>[] = factoryOptions.declarations
+        ? factoryOptions.declarations as Type<any>[]
+        : [providedComponentType];
+    renderer.renderAllFromRootNode(providedComponentType, declarations);
 
     eventBus.subscribe(VInternalEventName.REBUILD, () =>
-        renderer.renderAllFromRootNode(providedComponentType, [providedComponentType]));
+        renderer.renderAllFromRootNode(providedComponentType, declarations));
 
     const providedComponent: T = VInjector.resolve<T>(providedComponentType, {singleton: false});
     const componentOptions: VComponentOptions = (providedComponent as any).vComponentOptions

@@ -1,7 +1,8 @@
 import {VInjectable} from "../../injector/v-injectable-decorator";
-import {CookieAttributes, get as getCookieValue, remove as removeCookieValue, set as setCookieValue} from "js-cookie";
+import {CookieAttributes} from "js-cookie";
 import {VWebDocMetaTag, VWebDocTags} from "./v-web-doc-tags";
 import {getCurrentDocMetaTags} from "../../util/v-internal-document-util";
+import * as Cookies from "js-cookie";
 
 export interface VSlugifyOptions {
     trim?: boolean;
@@ -48,7 +49,7 @@ export class VWeb {
      * @param name
      */
     getCookie(name: string): string | undefined {
-        return getCookieValue(name);
+        return Cookies.get(name);
     }
 
     /**
@@ -59,7 +60,7 @@ export class VWeb {
      * @param options
      */
     setCookie(name: string, value: string, options: VCookieOptions = {}): void {
-        setCookieValue(name, value, options);
+        Cookies.set(name, value, options);
     }
 
     /**
@@ -67,7 +68,7 @@ export class VWeb {
      * @param name
      */
     removeCookie(name: string): void {
-        removeCookieValue(name);
+        Cookies.remove(name);
     }
 
     /**
