@@ -13,6 +13,7 @@ export class RepeatTestComponent {
     booleanArr = [true, false, true];
     objectArr = [{name: 'Bert', age: 30}, {name: 'Ernie', age: 60}];
     noArr = 'no array';
+    encoded = "W3sibmFtZSI6ImRvbGxhciIsInR5cGUiOjF9LHsibmFtZSI6ImV1cm8iLCJ0eXBlIjoyfV0=";
 }
 
 describe('VInternalRepeatTransformer', () => {
@@ -143,6 +144,17 @@ describe('VInternalRepeatTransformer', () => {
             `;
             const result = transform(html);
             expect(result).toEqual('<span>Bert</span><span>30</span><span>Ernie</span><span>60</span>');
+        });
+
+        it('should work with base64 encoded value', () => {
+            const html = `
+                <v-repeat let="{{ i }}" for="{{ encoded }}">
+                    <span>{{ i.name }}</span>
+                    <span>{{ i.type }}</span>
+                </v-repeat>
+            `;
+            const result = transform(html);
+            expect(result).toEqual('<span>dollar</span><span>1</span><span>euro</span><span>2</span>');
         });
     });
 

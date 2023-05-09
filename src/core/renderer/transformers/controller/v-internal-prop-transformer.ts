@@ -1,6 +1,7 @@
 import {VComponentType} from "../../../component/v-component-type";
 import {V_INTERNAL_PROP_PLACEHOLDER, V_INTERNAL_PROP_PREFIX} from "../../../binding/v-prop";
 import {VInternalControllerTransformer} from "./v-internal-controller-transformer";
+import {isBase64Encoded} from "../../../util/v-internal-base64-util";
 
 export class VInternalPropTransformer implements VInternalControllerTransformer {
     accept(component: VComponentType, attributes: NamedNodeMap | undefined): boolean {
@@ -27,29 +28,24 @@ export class VInternalPropTransformer implements VInternalControllerTransformer 
     }
 
     private addActualValue(attr: Attr, prevValue: {}) {
-        const key = attr.name.replace(V_INTERNAL_PROP_PREFIX, '');
-        const value = this.toStringOrObject(attr.value);
-
-        let obj: any = {};
-        obj[key] = value
-
-        return {...prevValue, ...obj};
-    }
-
-    private toStringOrObject(value: string): string | object {
-        const isStringArray = (str: any) => {
-            try {
-                return new Function(`return Array.isArray(${str})`)();
-            } catch {
-                return false;
+        let value = attr.value;
+        if (isBase64Encoded(value)) {
+            value = window.atob(value);
+            value = JSON.parse(value);
+            for (let i = 0; i < value.length; i++){
+                const obj: any = value[i];
+                for (const key in obj) {
+                    const objValue = obj[key];
+                    obj[key] = objValue.split('"').join("'")
+                }
             }
         }
 
-        if (isStringArray(value)) {
-            value = value.split('\'').join('"');
-            value = JSON.parse(value);
-        }
 
-        return value;
+        const key = attr.name.replace(V_INTERNAL_PROP_PREFIX, '');
+        const obj: any = {};
+        obj[key] = value
+
+        return {...prevValue, ...obj};
     }
 }

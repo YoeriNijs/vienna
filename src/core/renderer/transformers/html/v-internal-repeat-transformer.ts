@@ -5,6 +5,7 @@ import {getNestedPropertyByStringPath} from "../../../util/v-internal-object-uti
 import {VRenderError} from "../../v-render-error";
 import {VInternalTemplate} from "../../../template-engine/v-internal-template";
 import {VInternalTemplateEngine} from "../../../template-engine/v-internal-template-engine";
+import {isBase64Encoded} from "../../../util/v-internal-base64-util";
 
 const REGEX_REFERENCE_WITHOUT_BRACKETS = /{{|}}/;
 
@@ -33,7 +34,13 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
                 const templateReference = forValue.split(REGEX_REFERENCE_WITHOUT_BRACKETS)
                     .filter(v => v)[0]
                     .trim();
-                const iterationValues = getNestedPropertyByStringPath(component, templateReference);
+
+                let iterationValues = getNestedPropertyByStringPath(component, templateReference);
+                if (isBase64Encoded(iterationValues)) {
+                    iterationValues = window.atob(iterationValues);
+                    iterationValues = JSON.parse(iterationValues);
+                }
+
                 if (!Array.isArray(iterationValues)) {
                     throw new VRenderError('Repeat value is no array!');
                 }
