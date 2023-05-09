@@ -5,10 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.51](https://github.com/YoeriNijs/vienna/compare/0.2.50...0.2.51)
+## [0.2.52](https://github.com/YoeriNijs/vienna/compare/0.2.51...0.2.52)
+
+### Merged
+
+- Revert "fix(husky): fix husky hooks" [`#51`](https://github.com/YoeriNijs/vienna/pull/51)
+- V repeat fix [`#50`](https://github.com/YoeriNijs/vienna/pull/50)
+
+## [0.2.51](https://github.com/YoeriNijs/vienna/compare/0.2.50...0.2.51) - 2023-05-07
 
 ### Commits
 
+- feat(package.json): release '0.2.51' [`2b900df`](https://github.com/YoeriNijs/vienna/commit/2b900df71920dec74b44cceb15dfb470ab931540)
 - Revert "fix(husky): chmod husky hooks" [`6d2da3d`](https://github.com/YoeriNijs/vienna/commit/6d2da3d8668e0e9c3ce0f7196a3eaef6aa89554c)
 - fix(husky): chmod husky hooks [`644c661`](https://github.com/YoeriNijs/vienna/commit/644c661914442f3fe1b6c4dfb23b6fcb6481adef)
 - fix(template engine): pass objects as inputs as well [`5817a05`](https://github.com/YoeriNijs/vienna/commit/5817a05266d6b9d6d6d64a970048c7c64c5fc702)
