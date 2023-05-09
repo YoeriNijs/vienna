@@ -29,18 +29,25 @@ export class VInternalTemplateEngine {
             // refs may change over time. This means that the ref will be set later in time. This is totally valid.
             // So, if the value does not exist yet, we just return an empty string (YN).
             const value = getDefinedOrElseDefault<any>(rawValue, '');
-            const convertedValue = VInternalTemplateEngine.objectToString(value);
-            return filterXSS(`${convertedValue}`);
+            const convertedValue = VInternalTemplateEngine.valueToString(value);
+            return filterXSS(convertedValue);
         });
     }
 
-    private static objectToString(value: any): string {
-        if (typeof value === 'object') {
-            value = JSON.stringify(value);
-            if (value.includes('"')) {
-                value = value.split('"').join('\'');
-            }
+    /**
+     * Convert this value to a string value.
+     * - If it is an array, stringify it and base64 encode it
+     * - If it is an object, just stringify if
+     * - Otherwise, just return the value as string.
+     */
+    private static valueToString(value: any): string {
+        if (Array.isArray(value)) {
+            const valueAsString = JSON.stringify(value);
+            return window.btoa(valueAsString);
         }
-        return value;
+        if (typeof value === 'object') {
+            return JSON.stringify(value);
+        }
+        return `${value}`;
     }
 }
