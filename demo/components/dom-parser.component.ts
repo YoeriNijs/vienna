@@ -6,6 +6,10 @@ interface Person {
     active: boolean;
 }
 
+/**
+ * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
+ * If you want to see a 'real world' example of Vienna, please check https://github.com/YoeriNijs/vienna-demo-app.
+ */
 @VComponent({
     selector: 'dom-parser',
     styles: [`
@@ -34,8 +38,8 @@ interface Person {
 })
 export class DomParserComponent {
     persons: Person[] = [
-        { name: 'Ernie', age: 30, active: true },
-        { name: 'Bert', age: 33, active: false }
+        {name: 'Ernie', age: 30, active: true},
+        {name: 'Bert', age: 33, active: false}
     ];
 
     click(value: any): void {

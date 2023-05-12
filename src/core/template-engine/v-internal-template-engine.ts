@@ -28,7 +28,6 @@ export class VInternalTemplateEngine {
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
 
-
             // Originally, this condition was throwing an exception. However, with conditional segments, template
             // refs may change over time. This means that the ref will be set later in time. This is totally valid.
             // So, if the value does not exist yet, we just return an empty string (YN).

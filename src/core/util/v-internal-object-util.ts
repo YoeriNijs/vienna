@@ -22,6 +22,7 @@ export const getNestedPropertyByStringPath = (obj: any, path: string): any => {
 
     path = path.replace(/\[(\w+)\]/g, '.$1');
     path = path.replace(/^\./, '');
+    path = path.split('|')[0].trim(); // remove pipes
 
     const nested = path.split('.');
     if (!nested) {
