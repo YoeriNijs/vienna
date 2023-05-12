@@ -34,13 +34,13 @@ export class VInternalPropTransformer implements VInternalControllerTransformer 
             value = JSON.parse(value);
             for (let i = 0; i < value.length; i++){
                 const obj: any = value[i];
-                for (const key in obj) {
-                    const objValue = obj[key];
-                    obj[key] = objValue.split('"').join("'")
+                if (typeof obj === 'object') {
+                    for (const key in obj) {
+                        (value[i] as any)[key] = obj[key].split('"').join("'");
+                    }
                 }
             }
         }
-
 
         const key = attr.name.replace(V_INTERNAL_PROP_PREFIX, '');
         const obj: any = {};

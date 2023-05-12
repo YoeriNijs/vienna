@@ -10,3 +10,6 @@ coverage
 
 # Builds
 lib
+
+# Husky
+.husky
