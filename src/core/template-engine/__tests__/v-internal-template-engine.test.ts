@@ -1,5 +1,6 @@
 import {VInternalTemplate} from "../v-internal-template";
 import {VInternalTemplateEngine} from "../v-internal-template-engine";
+import {VInternalRawPipe} from "../pipes/v-internal-raw-pipe";
 
 describe('VInternalTemplateEngine', () => {
 
@@ -53,8 +54,8 @@ describe('VInternalTemplateEngine', () => {
         const template = createTemplate('I have the following coins: {{ coins }}');
         const result = VInternalTemplateEngine.render(template, {
             coins: [
-                { name: 'dollar', type: 1 },
-                { name: 'euro', type: 2 }
+                {name: 'dollar', type: 1},
+                {name: 'euro', type: 2}
             ]
         });
         expect(result).toEqual('I have the following coins: W3sibmFtZSI6ImRvbGxhciIsInR5cGUiOjF9LHsibmFtZSI6ImV1cm8iLCJ0eXBlIjoyfV0=');
@@ -87,6 +88,15 @@ describe('VInternalTemplateEngine', () => {
             const evil = createTemplate('Normal text and {{ script }}');
             const result = VInternalTemplateEngine.render(evil, {script: '<script>alert(\'evil script\');</script>'});
             expect(result).toEqual('Normal text and &lt;script&gt;alert(\'evil script\');&lt;/script&gt;');
+        });
+    });
+
+    describe('Pipes', () => {
+        it('It should have valid pipes', () => {
+            const actualPipes = VInternalTemplateEngine.pipes;
+            expect(actualPipes).toEqual([
+                new VInternalRawPipe()
+            ]);
         });
     });
 });

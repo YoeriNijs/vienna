@@ -14,6 +14,7 @@ import {SwitchComponent} from "./components/switch.component";
 import {DomParserComponent} from "./components/dom-parser.component";
 import {InputComponent} from "./components/input.component";
 import {InputHostComponent} from "./components/input-host.component";
+import {PipeComponent} from "./components/pipe.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -30,6 +31,7 @@ import {InputHostComponent} from "./components/input-host.component";
         HomeComponent,
         NavbarComponent,
         PersonalComponent,
+        PipeComponent,
         SettingsComponent,
         SwitchComponent,
         CounterComponent,
@@ -37,27 +39,28 @@ import {InputHostComponent} from "./components/input-host.component";
         InputHostComponent
     ],
     routes: [
-        { path: '/', component: HomeComponent },
-        { path: '/switch', component: SwitchComponent },
-        { path: '/dark-mode', component: DarkModeComponent },
-        { path: '/dom-parser', component: DomParserComponent },
-        { path: '/input', component: InputComponent },
+        {path: '/', component: HomeComponent},
+        {path: '/switch', component: SwitchComponent},
+        {path: '/dark-mode', component: DarkModeComponent},
+        {path: '/dom-parser', component: DomParserComponent},
+        {path: '/input', component: InputComponent},
+        {path: '/pipe', component: PipeComponent},
         {
             path: '/about',
             component: AboutComponent,
             docTags: {
                 title: 'About page title',
-                meta: [ { name: 'author', content: 'Lucky Luke' }]
+                meta: [{name: 'author', content: 'Lucky Luke'}]
             },
             children: [
                 {
                     path: '/more',
                     component: AboutMoreComponent
                 },
-                { path: '/:name', component: AboutMoreComponent }
+                {path: '/:name', component: AboutMoreComponent}
             ]
         },
-        { path: '/counter', component: CounterComponent },
+        {path: '/counter', component: CounterComponent},
         {
             path: '/settings',
             component: SettingsComponent,
