@@ -1,9 +1,13 @@
 import {VInternalTemplate} from "./v-internal-template";
 import {getDefinedOrElseDefault, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 import {escapeBracketsInRegex} from "../util/v-internal-regex-util";
-import {filterXSS} from "xss";
+import {VInternalRawPipe} from "./pipes/v-internal-raw-pipe";
 
 export class VInternalTemplateEngine {
+
+    public static readonly pipes = [
+        new VInternalRawPipe()
+    ];
 
     private static replaceAll(str: string, find: string, replace: string): string {
         return str.replace(new RegExp(find, 'g'), replace);
@@ -30,7 +34,7 @@ export class VInternalTemplateEngine {
             // So, if the value does not exist yet, we just return an empty string (YN).
             const value = getDefinedOrElseDefault<any>(rawValue, '');
             const convertedValue = VInternalTemplateEngine.valueToString(value);
-            return filterXSS(convertedValue);
+            return VInternalTemplateEngine.transformValueByPipes(convertedValue, templateReference);
         });
     }
 
@@ -49,5 +53,10 @@ export class VInternalTemplateEngine {
             return JSON.stringify(value);
         }
         return `${value}`;
+    }
+
+    private static transformValueByPipes(value: string, templateReference: string): string {
+        return VInternalTemplateEngine.pipes.reduce((result, pipe) =>
+            pipe.transform(result, templateReference), value);
     }
 }
