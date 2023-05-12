@@ -5,12 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.52](https://github.com/YoeriNijs/vienna/compare/0.2.51...0.2.52)
+## [0.2.53](https://github.com/YoeriNijs/vienna/compare/0.2.52...0.2.53)
+
+### Commits
+
+- fix(v-internal-prop-transformer): prop transformer now transforms simple arrays as well [`820a8b8`](https://github.com/YoeriNijs/vienna/commit/820a8b83df20f37bcc083b6c2033fc63db4af1a5)
+
+## [0.2.52](https://github.com/YoeriNijs/vienna/compare/0.2.51...0.2.52) - 2023-05-09
 
 ### Merged
 
 - Revert "fix(husky): fix husky hooks" [`#51`](https://github.com/YoeriNijs/vienna/pull/51)
 - V repeat fix [`#50`](https://github.com/YoeriNijs/vienna/pull/50)
+
+### Commits
+
+- feat(package.json): release '0.2.52' [`0ff757b`](https://github.com/YoeriNijs/vienna/commit/0ff757bf620557ca449f72f2f8fef451ebba3b8b)
 
 ## [0.2.51](https://github.com/YoeriNijs/vienna/compare/0.2.50...0.2.51) - 2023-05-07
 
