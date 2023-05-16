@@ -1,15 +1,14 @@
 import {VInternalTemplatePipe} from "./v-internal-template-pipe";
 import {filterXSS} from "xss";
 
-const PIPE = '|';
+const PIPE = '| raw';
 
 export class VInternalRawPipe implements VInternalTemplatePipe {
     transform(value: string, templateReference: string): string {
-        const rawPipe = `${PIPE} raw`;
-        if (templateReference.indexOf(rawPipe) !== -1) {
-            return value;
-        } else {
+        if (templateReference.indexOf(PIPE) === -1) {
             return filterXSS(value);
+        } else {
+            return value;
         }
     }
 

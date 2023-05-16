@@ -8,11 +8,7 @@ export class VInternalTemplateEngine {
     public static readonly pipes = [
         new VInternalRawPipe()
     ];
-
-    private static replaceAll(str: string, find: string, replace: string): string {
-        return str.replace(new RegExp(find, 'g'), replace);
-    }
-
+    
     private constructor() {
         // Util class
     }
