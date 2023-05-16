@@ -31,6 +31,45 @@ export class SwitchComponent {
     myCondition = 'someCondition';
 }
 
+@VComponent({
+    selector: 'switch-check-component',
+    styles: [],
+    html: `
+        <v-switch condition="{{ condition }}">
+            <v-case-default>
+                <v-check if="{{ anotherCondition }}">
+                    <true><span>True</span></true>
+                </v-check>
+            </v-case-default>
+        </v-switch>
+    `
+})
+export class SwitchCheckComponent {
+    condition = true;
+    anotherCondition = true;
+}
+
+@VComponent({
+    selector: 'repeat-check-component',
+    styles: [],
+    html: `
+        <v-repeat let="{{ i }}" for="{{ items }}">>
+            <v-check if="isTwo({{ i }})">
+                <true><span>Two: {{ i }}</span></true>
+                <false><span>Other: {{ i }}</span></false>
+            </v-check>
+        </v-repeat>
+    `
+})
+export class RepeatCheckComponent {
+    items = [1, 2, 3];
+    condition = true;
+
+    isTwo(value: string): boolean {
+        return value === '2';
+    }
+}
+
 describe('VInternalRenderer', () => {
 
     it('should render true value while false is undefined', () => {
@@ -47,5 +86,21 @@ describe('VInternalRenderer', () => {
         });
         const component: VTestComponent<SwitchComponent> = createComponent();
         expect(component.html).toEqual('<span>True</span>');
+    });
+
+    it('should render check inside switch', () => {
+        const createComponent = vComponentFactory<SwitchCheckComponent>({
+            component: SwitchCheckComponent
+        });
+        const component: VTestComponent<SwitchCheckComponent> = createComponent();
+        expect(component.html.trim()).toEqual('<span>True</span>');
+    });
+
+    it('should render check inside repeat', () => {
+        const createComponent = vComponentFactory<RepeatCheckComponent>({
+            component: RepeatCheckComponent
+        });
+        const component: VTestComponent<RepeatCheckComponent> = createComponent();
+        expect(component.html.trim()).toEqual('<span>Other: 1</span><span>Two: 2</span><span>Other: 3</span>');
     });
 });
