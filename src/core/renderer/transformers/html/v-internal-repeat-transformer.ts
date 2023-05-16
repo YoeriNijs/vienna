@@ -110,17 +110,34 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
             });
     }
 
-    private replaceForString(c: HTMLElement, templateRef: string, iterationValue: any): void {
-        Array.from(c.attributes || [])
+    private replaceForString(element: HTMLElement, templateRef: string, iterationValue: any): void {
+        Array.from(element.attributes || [])
             .filter(attr => attr && attr.value)
             .forEach(attr => attr.value = attr.value.replace(templateRef, iterationValue).trim());
-        c.innerHTML = this.replaceTemplateRefByValue(c.innerHTML, iterationValue);
+
+        if (!element.children) {
+            this.replaceInnerHTML(element, templateRef, iterationValue);
+            return;
+        }
+
+        Array.from(element.children)
+            .forEach((child: HTMLElement) =>
+                this.replaceInnerHTML(child, templateRef, iterationValue));
+        this.replaceInnerHTML(element, templateRef, iterationValue);
+    }
+
+    private replaceInnerHTML(element: HTMLElement, templateRef: string, iterationValue: any): void {
+        if (element.innerHTML && element.innerHTML.indexOf(templateRef) !== -1) {
+            element.innerHTML = this.replaceTemplateRefByValue(element.innerHTML, iterationValue);
+        }
     }
 
     private replaceForObject(c: HTMLElement, iterationValue: object): void {
         Array.from(c.attributes || [])
             .filter(attr => attr && attr.value)
-            .forEach(attr => attr.value = this.replaceTemplateRefByValue(attr.value, iterationValue).trim());
+            .forEach(attr => {
+                attr.value = this.replaceTemplateRefByValue(attr.value, iterationValue).trim()
+            });
         c.innerHTML = this.replaceTemplateRefByValue(c.innerHTML, iterationValue);
     }
 
