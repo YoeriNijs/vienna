@@ -15,6 +15,7 @@ import {DomParserComponent} from "./components/dom-parser.component";
 import {InputComponent} from "./components/input.component";
 import {InputHostComponent} from "./components/input-host.component";
 import {PipeComponent} from "./components/pipe.component";
+import {TemplateComponent} from "./components/template.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -24,19 +25,20 @@ import {PipeComponent} from "./components/pipe.component";
     declarations: [
         AboutComponent,
         AboutMoreComponent,
+        CounterComponent,
         DarkModeComponent,
         DashboardComponent,
         DomParserComponent,
         FooterComponent,
         HomeComponent,
+        InputComponent,
+        InputHostComponent,
         NavbarComponent,
         PersonalComponent,
         PipeComponent,
         SettingsComponent,
         SwitchComponent,
-        CounterComponent,
-        InputComponent,
-        InputHostComponent
+        TemplateComponent
     ],
     routes: [
         {path: '/', component: HomeComponent},
@@ -45,6 +47,7 @@ import {PipeComponent} from "./components/pipe.component";
         {path: '/dom-parser', component: DomParserComponent},
         {path: '/input', component: InputComponent},
         {path: '/pipe', component: PipeComponent},
+        {path: '/template', component: TemplateComponent},
         {
             path: '/about',
             component: AboutComponent,

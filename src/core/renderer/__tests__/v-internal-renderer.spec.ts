@@ -55,8 +55,8 @@ export class SwitchCheckComponent {
     html: `
         <v-repeat let="{{ i }}" for="{{ items }}">>
             <v-check if="isTwo({{ i }})">
-                <true><span>Two: {{ i }}</span></true>
-                <false><span>Other: {{ i }}</span></false>
+                <true><span>True: {{ i }}</span></true>
+                <false><span>False: {{ stringOutsideRepeat }}</span></false>
             </v-check>
         </v-repeat>
     `
@@ -64,6 +64,7 @@ export class SwitchCheckComponent {
 export class RepeatCheckComponent {
     items = [1, 2, 3];
     condition = true;
+    stringOutsideRepeat = 'other';
 
     isTwo(value: string): boolean {
         return value === '2';
@@ -101,6 +102,6 @@ describe('VInternalRenderer', () => {
             component: RepeatCheckComponent
         });
         const component: VTestComponent<RepeatCheckComponent> = createComponent();
-        expect(component.html.trim()).toEqual('<span>Other: 1</span><span>Two: 2</span><span>Other: 3</span>');
+        expect(component.html.trim()).toEqual('<span>False: other</span><span>True: 2</span><span>False: other</span>');
     });
 });

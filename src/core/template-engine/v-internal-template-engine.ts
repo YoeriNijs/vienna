@@ -8,7 +8,7 @@ export class VInternalTemplateEngine {
     public static readonly pipes = [
         new VInternalRawPipe()
     ];
-    
+
     private constructor() {
         // Util class
     }
