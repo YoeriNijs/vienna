@@ -1,6 +1,7 @@
 import {VInternalTemplate} from "../v-internal-template";
 import {VInternalTemplateEngine} from "../v-internal-template-engine";
 import {VInternalRawPipe} from "../pipes/v-internal-raw-pipe";
+import {VInternalJsonPipe} from "../pipes/v-internal-json-pipe";
 
 describe('VInternalTemplateEngine', () => {
 
@@ -95,7 +96,8 @@ describe('VInternalTemplateEngine', () => {
         it('It should have valid pipes', () => {
             const actualPipes = VInternalTemplateEngine.pipes;
             expect(actualPipes).toEqual([
-                new VInternalRawPipe()
+                new VInternalRawPipe(),
+                new VInternalJsonPipe()
             ]);
         });
     });
