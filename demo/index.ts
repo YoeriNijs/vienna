@@ -16,6 +16,7 @@ import {InputComponent} from "./components/input.component";
 import {InputHostComponent} from "./components/input-host.component";
 import {PipeComponent} from "./components/pipe.component";
 import {TemplateComponent} from "./components/template.component";
+import {StyleComponent} from "./components/style.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -37,6 +38,7 @@ import {TemplateComponent} from "./components/template.component";
         PersonalComponent,
         PipeComponent,
         SettingsComponent,
+        StyleComponent,
         SwitchComponent,
         TemplateComponent
     ],
@@ -48,6 +50,7 @@ import {TemplateComponent} from "./components/template.component";
         {path: '/input', component: InputComponent},
         {path: '/pipe', component: PipeComponent},
         {path: '/template', component: TemplateComponent},
+        {path: '/style', component: StyleComponent},
         {
             path: '/about',
             component: AboutComponent,
@@ -82,7 +85,14 @@ import {TemplateComponent} from "./components/template.component";
         logger: {
             process: logs => console.log('send to logging provider such as Sentry...', logs)
         }
-    }
+    },
+    globalStyles: [
+        {
+            href: 'https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css',
+            crossOrigin: 'anonymous',
+            integrity: 'sha384-HmYpsz2Aa9Gh3JlkCoh8kUJ2mUKJKTnkyC2Lzt8aLzpPOpnDe8KpFE2xNiBpMDou'
+        }
+    ]
 })
 export class DemoApplication {
 }

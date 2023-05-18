@@ -1,6 +1,6 @@
 import {VComponentFactoryOptions} from "./v-component-factory-options";
 import {VTestComponent} from "./v-test-component";
-import {VComponentOptions, VComponentType, Type, VInjector} from "../../../core";
+import {Type, VComponentOptions, VComponentType, VInjector} from "../../../core";
 import {VInternalEventbus} from "../../../core/eventbus/v-internal-eventbus";
 import {VInternalRendererOptions} from "../../../core/renderer/v-internal-renderer-options";
 import {VInternalRenderer} from "../../../core/renderer/v-internal-renderer";
@@ -12,7 +12,8 @@ export const vComponentFactory = <T extends VComponentType>(factoryOptions: VCom
     const options: VInternalRendererOptions = {
         selector: 'v-renderer',
         eventBus: eventBus,
-        encapsulationModeOverride: 'open'
+        encapsulationModeOverride: 'open',
+        globalStyles: factoryOptions.globalStyles
     };
 
     const renderer = new VInternalRenderer(options);

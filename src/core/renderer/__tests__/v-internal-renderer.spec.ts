@@ -71,37 +71,81 @@ export class RepeatCheckComponent {
     }
 }
 
+@VComponent({
+    selector: 'style-component',
+    styles: [],
+    html: ``
+})
+export class StyleComponent {
+}
+
+@VComponent({
+    selector: 'external-style-component',
+    styles: [],
+    html: ``
+})
+export class ExternalStyleComponent {
+}
+
 describe('VInternalRenderer', () => {
 
-    it('should render true value while false is undefined', () => {
-        const createComponent = vComponentFactory<CheckComponent>({
-            component: CheckComponent
+    describe('Conditions', () => {
+        it('should render true value while false is undefined', () => {
+            const createComponent = vComponentFactory<CheckComponent>({
+                component: CheckComponent
+            });
+            const component: VTestComponent<CheckComponent> = createComponent();
+            expect(component.html).toEqual('<span>True</span>');
         });
-        const component: VTestComponent<CheckComponent> = createComponent();
-        expect(component.html).toEqual('<span>True</span>');
+
+        it('should render case with template ref', () => {
+            const createComponent = vComponentFactory<SwitchComponent>({
+                component: SwitchComponent
+            });
+            const component: VTestComponent<SwitchComponent> = createComponent();
+            expect(component.html).toEqual('<span>True</span>');
+        });
+
+        it('should render check inside switch', () => {
+            const createComponent = vComponentFactory<SwitchCheckComponent>({
+                component: SwitchCheckComponent
+            });
+            const component: VTestComponent<SwitchCheckComponent> = createComponent();
+            expect(component.html.trim()).toEqual('<span>True</span>');
+        });
+
+        it('should render check inside repeat', () => {
+            const createComponent = vComponentFactory<RepeatCheckComponent>({
+                component: RepeatCheckComponent
+            });
+            const component: VTestComponent<RepeatCheckComponent> = createComponent();
+            expect(component.html.trim()).toEqual('<span>False: other</span><span>True: 2</span><span>False: other</span>');
+        });
     });
 
-    it('should render case with template ref', () => {
-        const createComponent = vComponentFactory<SwitchComponent>({
-            component: SwitchComponent
+    describe('Styles', () => {
+        it('should render inner style', () => {
+            const createComponent = vComponentFactory<StyleComponent>({
+                component: StyleComponent,
+                globalStyles: [
+                    {style: `body { background-color: red; }`}
+                ]
+            });
+            const component: VTestComponent<StyleComponent> = createComponent();
+            expect(component.rawHtml).toEqual('<style>body { background-color: red; }</style><style>body { padding: 0; margin: 0; }</style><v-component></v-component>');
         });
-        const component: VTestComponent<SwitchComponent> = createComponent();
-        expect(component.html).toEqual('<span>True</span>');
-    });
 
-    it('should render check inside switch', () => {
-        const createComponent = vComponentFactory<SwitchCheckComponent>({
-            component: SwitchCheckComponent
+        it('should render external style', () => {
+            const createComponent = vComponentFactory<ExternalStyleComponent>({
+                component: ExternalStyleComponent,
+                globalStyles: [
+                    {
+                        href: 'https://linktomystylesheet.com/style.css'
+                    }
+                ]
+            });
+            const component: VTestComponent<ExternalStyleComponent> = createComponent();
+            expect(component.rawHtml).toEqual('<link rel="stylesheet" type="text/css" href="https://linktomystylesheet.com/style.css"><style>body { padding: 0; margin: 0; }</style><v-component></v-component>');
         });
-        const component: VTestComponent<SwitchCheckComponent> = createComponent();
-        expect(component.html.trim()).toEqual('<span>True</span>');
-    });
-
-    it('should render check inside repeat', () => {
-        const createComponent = vComponentFactory<RepeatCheckComponent>({
-            component: RepeatCheckComponent
-        });
-        const component: VTestComponent<RepeatCheckComponent> = createComponent();
-        expect(component.html.trim()).toEqual('<span>False: other</span><span>True: 2</span><span>False: other</span>');
     });
 });

@@ -33,6 +33,10 @@ export class VTestComponent<T extends VComponentType> {
             .replace(`</${VInternalApplicationSelectors.V_COMPONENT_WRAPPER}>`, '')
     }
 
+    get rawHtml(): string {
+        return this.component.innerHTML;
+    }
+
     detectChanges(): void {
         this._eventBus.publish(VInternalEventName.REBUILD);
     }
