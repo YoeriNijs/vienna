@@ -264,6 +264,7 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 .map((link: VGlobalStyleLink) => {
                     const linkedStylesheet = document.createElement('link');
                     linkedStylesheet.rel = 'stylesheet';
+                    linkedStylesheet.type = 'text/css';
                     linkedStylesheet.href = link.href;
                     if (link.integrity) {
                         linkedStylesheet.integrity = link.integrity;
