@@ -2,11 +2,13 @@ import {VInternalTemplate} from "./v-internal-template";
 import {getDefinedOrElseDefault, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 import {escapeBracketsInRegex} from "../util/v-internal-regex-util";
 import {VInternalRawPipe} from "./pipes/v-internal-raw-pipe";
+import {VInternalJsonPipe} from "./pipes/v-internal-json-pipe";
 
 export class VInternalTemplateEngine {
 
     public static readonly pipes = [
-        new VInternalRawPipe()
+        new VInternalRawPipe(),
+        new VInternalJsonPipe()
     ];
 
     private constructor() {
