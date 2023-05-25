@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.59](https://github.com/YoeriNijs/vienna/compare/0.2.58...0.2.59)
+## [0.2.60](https://github.com/YoeriNijs/vienna/compare/0.2.59...0.2.60)
+
+### Merged
+
+- fix(internal prop transformer): only split when value is a string type [`#59`](https://github.com/YoeriNijs/vienna/pull/59)
+
+## [0.2.59](https://github.com/YoeriNijs/vienna/compare/0.2.58...0.2.59) - 2023-05-18
 
 ### Merged
 
 - feat(pipes): introduce json pipe [`#58`](https://github.com/YoeriNijs/vienna/pull/58)
+
+### Commits
+
+- feat(package.json): release '0.2.59' [`7ac05b3`](https://github.com/YoeriNijs/vienna/commit/7ac05b37f0ad416e1ae5f3dee3f12b1faa863955)
 
 ## [0.2.58](https://github.com/YoeriNijs/vienna/compare/0.2.57...0.2.58) - 2023-05-18
 
