@@ -36,7 +36,9 @@ export class VInternalPropTransformer implements VInternalControllerTransformer 
                 const obj: any = value[i];
                 if (typeof obj === 'object') {
                     for (const key in obj) {
-                        (value[i] as any)[key] = obj[key].split('"').join("'");
+                        if (typeof obj[key] === 'string') {
+                            (value[i] as any)[key] = obj[key].split('"').join("'");
+                        }
                     }
                 }
             }
