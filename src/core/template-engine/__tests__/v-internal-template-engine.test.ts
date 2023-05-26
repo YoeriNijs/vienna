@@ -39,10 +39,10 @@ describe('VInternalTemplateEngine', () => {
         expect(result).toEqual('Hello, my name is Bert');
     });
 
-    it('should render object string when interpolation and object data', () => {
+    it('should not render object string when interpolation and object data', () => {
         const template = createTemplate('Hello, my name is {{ nested }}');
         const result = VInternalTemplateEngine.render(template, {nested: {name: 'Bert'}});
-        expect(result).toEqual('Hello, my name is {"name":"Bert"}');
+        expect(result).toEqual('Hello, my name is ');
     });
 
     it('should render object string when interpolation and no corresponding data', () => {
