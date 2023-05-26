@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.60](https://github.com/YoeriNijs/vienna/compare/0.2.59...0.2.60)
+## [0.2.61](https://github.com/YoeriNijs/vienna/compare/0.2.60...0.2.61)
+
+### Commits
+
+- fix(template engine): don´t show objects inside the view as string [`f26e20f`](https://github.com/YoeriNijs/vienna/commit/f26e20f7faa8fca1fce38044309f0f7e55ce274e)
+
+## [0.2.60](https://github.com/YoeriNijs/vienna/compare/0.2.59...0.2.60) - 2023-05-25
 
 ### Merged
 
 - fix(internal prop transformer): only split when value is a string type [`#59`](https://github.com/YoeriNijs/vienna/pull/59)
+
+### Commits
+
+- feat(package.json): release '0.2.60' [`5b3ed4b`](https://github.com/YoeriNijs/vienna/commit/5b3ed4bafc507e96ea47c041be1c13c5f6f0415b)
 
 ## [0.2.59](https://github.com/YoeriNijs/vienna/compare/0.2.58...0.2.59) - 2023-05-18
 
