@@ -47,7 +47,10 @@ export class VInternalTemplateEngine {
             return window.btoa(valueAsString);
         }
         if (typeof value === 'object') {
-            return JSON.stringify(value);
+            // TODO Hotfix for Vienna items that should not be displayed when they are an object. It is
+            // fundamentally wrong to place view logic inside a specific template engine. Hence, we should
+            // fix this (YN).
+            return '';
         }
         return `${value}`;
     }
