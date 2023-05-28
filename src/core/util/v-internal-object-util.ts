@@ -7,7 +7,7 @@
  *
  * See: https://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-and-arrays-by-string-path
  */
-export const getNestedPropertyByStringPath = (obj: any, path: string): any => {
+export const getNestedPropertyByStringPath = (obj: any, path: string): any | undefined => {
     if (!obj || Object.keys(obj).length < 1) {
         return undefined;
     }
@@ -29,14 +29,20 @@ export const getNestedPropertyByStringPath = (obj: any, path: string): any => {
         return undefined;
     }
 
+    let found = false;
     for (let i = 0; i < nested.length; ++i) {
         let k = nested[i];
         if (k && k in obj) {
             obj = obj[k];
+            found = true;
         }
     }
 
-    return obj;
+    // Only return the object if we have found the key, otherwise we are returning
+    // an invalid object here (YN).
+    return found
+        ? obj
+        : undefined;
 }
 
 export const getDefinedOrElse = <T>(obj: T, fn: () => void): T => {
