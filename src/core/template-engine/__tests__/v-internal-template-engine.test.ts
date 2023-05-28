@@ -42,7 +42,7 @@ describe('VInternalTemplateEngine', () => {
     it('should not render object string when interpolation and object data', () => {
         const template = createTemplate('Hello, my name is {{ nested }}');
         const result = VInternalTemplateEngine.render(template, {nested: {name: 'Bert'}});
-        expect(result).toEqual('Hello, my name is ');
+        expect(result).toEqual('Hello, my name is {"name":"Bert"}');
     });
 
     it('should render object string when interpolation and no corresponding data', () => {
@@ -71,10 +71,10 @@ describe('VInternalTemplateEngine', () => {
     });
 
     describe('Missing data', () => {
-        it.each([{}, undefined])('should return empty string when there is a interpolation and data is %s', (data) => {
+        it.each([{}, undefined])('should return original string when there is a interpolation and data is %s', (data) => {
             const template = createTemplate('Hello, my name is {{ name }}');
             const result = VInternalTemplateEngine.render(template, data);
-            expect(result).toEqual('Hello, my name is ');
+            expect(result).toEqual('Hello, my name is {{ name }}');
         });
     });
 

@@ -36,11 +36,7 @@ export class VInternalRepeatTransformer implements VInternalHtmlTransformer {
                     .trim();
 
                 let iterationValues = getNestedPropertyByStringPath(component, templateReference);
-                if (!iterationValues) {
-                    continue;
-                }
-                
-                if (isBase64Encoded(iterationValues)) {
+                if (iterationValues && isBase64Encoded(iterationValues)) {
                     iterationValues = window.atob(iterationValues);
                     iterationValues = JSON.parse(iterationValues);
                 }

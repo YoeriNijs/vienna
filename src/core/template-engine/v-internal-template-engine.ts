@@ -26,7 +26,7 @@ export class VInternalTemplateEngine {
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
 
-            if (!rawValue) {
+            if (rawValue === undefined) {
                 return match; // When we have no raw value, we just return the original string
             }
 
@@ -46,7 +46,6 @@ export class VInternalTemplateEngine {
      * - Otherwise, just return the value as string.
      */
     private static valueToString(value: any): string {
-        console.log('value', value)
         if (Array.isArray(value)) {
             const valueAsString = JSON.stringify(value);
             return window.btoa(valueAsString);
