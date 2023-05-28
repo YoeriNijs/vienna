@@ -26,6 +26,10 @@ export class VInternalTemplateEngine {
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
 
+            if (rawValue === undefined) {
+                return match; // When we have no raw value, we just return the original string
+            }
+
             // Originally, this condition was throwing an exception. However, with conditional segments, template
             // refs may change over time. This means that the ref will be set later in time. This is totally valid.
             // So, if the value does not exist yet, we just return an empty string (YN).
@@ -47,10 +51,7 @@ export class VInternalTemplateEngine {
             return window.btoa(valueAsString);
         }
         if (typeof value === 'object') {
-            // TODO Hotfix for Vienna items that should not be displayed when they are an object. It is
-            // fundamentally wrong to place view logic inside a specific template engine. Hence, we should
-            // fix this (YN).
-            return '';
+            return JSON.stringify(value);
         }
         return `${value}`;
     }

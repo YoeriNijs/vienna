@@ -1300,6 +1300,7 @@ describe('VComponentFactory', () => {
 - VInit does not work without callback yet
 - Running tests with vComponentFactory may cause Jest open handles issue. As a workaround, you can enable fake timers in
   the Jest config or explicitly disable real timers in your tests (do not forget to re-enable them!).
+- Events may not work in child components, investigation needed
 
 # Literature
 

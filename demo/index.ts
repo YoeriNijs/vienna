@@ -17,6 +17,7 @@ import {InputHostComponent} from "./components/input-host.component";
 import {PipeComponent} from "./components/pipe.component";
 import {TemplateComponent} from "./components/template.component";
 import {StyleComponent} from "./components/style.component";
+import {RerenderChildComponent, RerenderParentComponent} from "./components/rerender.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -35,6 +36,8 @@ import {StyleComponent} from "./components/style.component";
         InputComponent,
         InputHostComponent,
         NavbarComponent,
+        RerenderChildComponent,
+        RerenderParentComponent,
         PersonalComponent,
         PipeComponent,
         SettingsComponent,
@@ -51,6 +54,7 @@ import {StyleComponent} from "./components/style.component";
         {path: '/pipe', component: PipeComponent},
         {path: '/template', component: TemplateComponent},
         {path: '/style', component: StyleComponent},
+        {path: '/rerender', component: RerenderParentComponent},
         {
             path: '/about',
             component: AboutComponent,

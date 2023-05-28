@@ -46,7 +46,7 @@ export class VInternalPropTransformer implements VInternalControllerTransformer 
 
         const key = attr.name.replace(V_INTERNAL_PROP_PREFIX, '');
         const obj: any = {};
-        obj[key] = value
+        obj[key] = value;
 
         return {...prevValue, ...obj};
     }
