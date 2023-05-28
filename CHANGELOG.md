@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.61](https://github.com/YoeriNijs/vienna/compare/0.2.60...0.2.61)
+## [0.2.62](https://github.com/YoeriNijs/vienna/compare/0.2.61...0.2.62)
 
 ### Commits
 
+- fix(vinternalobjectutil): fix re-rendering in child components [`96c7609`](https://github.com/YoeriNijs/vienna/commit/96c7609d5c8f377962d9cb47ccd255b5dfcec02d)
+
+## [0.2.61](https://github.com/YoeriNijs/vienna/compare/0.2.60...0.2.61) - 2023-05-26
+
+### Commits
+
+- feat(package.json): release '0.2.61' [`a1913d2`](https://github.com/YoeriNijs/vienna/commit/a1913d2720ac5b76ac335e8b44feb984271aab4b)
 - fix(template engine): don´t show objects inside the view as string [`f26e20f`](https://github.com/YoeriNijs/vienna/commit/f26e20f7faa8fca1fce38044309f0f7e55ce274e)
 
 ## [0.2.60](https://github.com/YoeriNijs/vienna/compare/0.2.59...0.2.60) - 2023-05-25
