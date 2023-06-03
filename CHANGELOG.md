@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.62](https://github.com/YoeriNijs/vienna/compare/0.2.61...0.2.62)
+## [0.2.63](https://github.com/YoeriNijs/vienna/compare/0.2.62...0.2.63)
 
 ### Commits
 
+- fix(vweb): only override doc tags that are changed, keep existing tags [`a9ddbc0`](https://github.com/YoeriNijs/vienna/commit/a9ddbc061b16f0c6a5500c73deaa8d88f7646cf2)
+
+## [0.2.62](https://github.com/YoeriNijs/vienna/compare/0.2.61...0.2.62) - 2023-05-28
+
+### Commits
+
+- feat(package.json): release '0.2.62' [`85f7ff9`](https://github.com/YoeriNijs/vienna/commit/85f7ff9e06835b45873e073f2fa298a3ce50b29c)
 - fix(vinternalobjectutil): fix re-rendering in child components [`96c7609`](https://github.com/YoeriNijs/vienna/commit/96c7609d5c8f377962d9cb47ccd255b5dfcec02d)
 
 ## [0.2.61](https://github.com/YoeriNijs/vienna/compare/0.2.60...0.2.61) - 2023-05-26
