@@ -31,58 +31,60 @@ describe('VWeb', () => {
             {input: null, output: ''},
             {input: '', output: ''},
             {input: ' ', output: ''},
-            {input: ' ', output: '-', options: { trim: false }}
+            {input: ' ', output: '-', options: {trim: false}}
         ])(`should create a slug for '%s'`, scenario => {
             expect(instance.slugify(scenario.input, scenario.options)).toEqual(scenario.output);
         });
     });
 
     describe('Document tags', () => {
-       beforeEach(() => {
-           document.title = 'My document title';
-           document.head.appendChild(createMetaElement('author', 'Lucky Luke'));
-       });
+        beforeEach(() => {
+            document.title = 'My document title';
+            document.head.appendChild(createMetaElement('author', 'Lucky Luke'));
+            document.head.appendChild(createMetaElement('description', 'Lucky Luke is a Western bande dessinée series created by Belgian cartoonist Morris in 1946'));
+        });
 
-       afterEach(() => {
-           document.title = '';
-           const children = Array.from(document.head.children);
-           children.forEach(c => document.head.removeChild(c));
-       })
+        afterEach(() => {
+            document.title = '';
+            const children = Array.from(document.head.children);
+            children.forEach(c => document.head.removeChild(c));
+        })
 
-       it('should override only the title tag', () => {
-           instance.overrideTags({ title: 'My new title' });
-           expect(document.title).toEqual('My new title');
-           expect(document.head.children).toHaveLength(2);
-           const [title, tag] = document.head.children;
-           expect(title.tagName).toEqual('TITLE');
-           expect(title.textContent).toEqual('My new title');
-           expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
-       });
+        it('should override only the title tag', () => {
+            instance.overrideTags({title: 'My new title'});
+            expect(document.title).toEqual('My new title');
+            expect(document.head.children).toHaveLength(3);
+            const [title, tag] = document.head.children;
+            expect(title.tagName).toEqual('TITLE');
+            expect(title.textContent).toEqual('My new title');
+            expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
+        });
 
-       it('should override only the meta tag', () => {
-           instance.overrideTags({ meta: [ { name: 'some meta name', content: 'some meta content'} ] });
-           expect(document.title).toEqual('My document title');
-           expect(document.head.children).toHaveLength(2);
-           const [title, tag] = document.head.children;
-           expect(title.tagName).toEqual('TITLE');
-           expect(title.textContent).toEqual('My document title');
-           expect(tag).toEqual(createMetaElement('some meta name', 'some meta content'));
-       });
+        it('should override only the meta tag', () => {
+            instance.overrideTags({meta: [{name: 'author', content: 'another author'}]});
+            expect(document.title).toEqual('My document title');
+            expect(document.head.children).toHaveLength(3);
+            const [title, tag1, tag2] = document.head.children;
+            expect(title.tagName).toEqual('TITLE');
+            expect(title.textContent).toEqual('My document title');
+            expect(tag1).toEqual(createMetaElement('description', 'Lucky Luke is a Western bande dessinée series created by Belgian cartoonist Morris in 1946'));
+            expect(tag2).toEqual(createMetaElement('author', 'another author'));
+        });
 
-       it('should override none when empty', () => {
-           instance.overrideTags({});
-           expect(document.title).toEqual('My document title');
-           expect(document.head.children).toHaveLength(2);
-           const [title, tag] = document.head.children;
-           expect(title.tagName).toEqual('TITLE');
-           expect(title.textContent).toEqual('My document title');
-           expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
-       });
+        it('should override none when empty', () => {
+            instance.overrideTags({});
+            expect(document.title).toEqual('My document title');
+            expect(document.head.children).toHaveLength(3);
+            const [title, tag] = document.head.children;
+            expect(title.tagName).toEqual('TITLE');
+            expect(title.textContent).toEqual('My document title');
+            expect(tag).toEqual(createMetaElement('author', 'Lucky Luke'));
+        });
 
         it('should override none when undefined', () => {
             instance.overrideTags(undefined);
             expect(document.title).toEqual('My document title');
-            expect(document.head.children).toHaveLength(2);
+            expect(document.head.children).toHaveLength(3);
             const [title, tag] = document.head.children;
             expect(title.tagName).toEqual('TITLE');
             expect(title.textContent).toEqual('My document title');
