@@ -1,8 +1,8 @@
 import {VInjectable} from "../../injector/v-injectable-decorator";
+import * as Cookies from "js-cookie";
 import {CookieAttributes} from "js-cookie";
 import {VWebDocMetaTag, VWebDocTags} from "./v-web-doc-tags";
 import {getCurrentDocMetaTags} from "../../util/v-internal-document-util";
-import * as Cookies from "js-cookie";
 
 export interface VSlugifyOptions {
     trim?: boolean;
@@ -11,7 +11,7 @@ export interface VSlugifyOptions {
 
 export type VCookieOptions = CookieAttributes;
 
-@VInjectable({ singleton: false })
+@VInjectable({singleton: false})
 export class VWeb {
 
     private static createHtmlMetaElement(tag: VWebDocMetaTag): HTMLMetaElement {
@@ -26,7 +26,7 @@ export class VWeb {
      * @param value
      * @param options
      */
-    slugify(value: string, options: VSlugifyOptions = { trim: true, toLowerCase: true }): string {
+    slugify(value: string, options: VSlugifyOptions = {trim: true, toLowerCase: true}): string {
         if (!value) {
             return '';
         }
@@ -88,9 +88,18 @@ export class VWeb {
             ? tags.meta
             : getCurrentDocMetaTags();
 
+
         // Remove old elements
+        // Only replace the elements that we have a new value for.
+        const metaTagsNames = newMetaTags
+            .map(t => t.name)
+            .map(name => name.toLowerCase());
         Array.from(document.head.children)
             .filter(c => c.tagName.toLowerCase() === 'meta')
+            .filter(c => {
+                // @ts-ignore
+                return metaTagsNames.includes(c['name']);
+            })
             .forEach(c => document.head.removeChild(c));
 
         // Update with new elements
