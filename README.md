@@ -52,6 +52,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Plugins](#plugins)
     - [Logger](#logger)
 - [Component testing](#component-testing)
+- [Sitemap generator](#sitemap-generator)
 
 ## Install
 
@@ -1284,6 +1285,70 @@ describe('VComponentFactory', () => {
         expect(component.queryAll('span')[1].innerHTML).toEqual('Lorem Ipsum');
     });
 })
+```
+
+## Sitemap generator
+
+Vienna ships a basic sitemap generator to create a sitemap on build time. The generator itself is not part of the core
+framework, but a simple utility application that you may call somewhere in your build process.
+
+The sitemap generator accepts Vienna routes and manual locations. Vienna routes are always prioritized with a priority
+of 1.0 since we assume that most routes are basic website routes, such as homepage and information pages. The Vienna
+route is always excluded from the sitemap when there is a guard configured, because the generator does not have any
+logic whether the url with the provided guard should be private or not.
+
+Manual locations are, obviously, custom locations. You can configure priority and changefreq for every custom location,
+but you are not forced to.
+
+Please keep in mind that the sitemap generator is pretty dumb. This means: garbage in, garbage out. If you provide a
+Vienna route for path x, and you also create a manual location for path x, the sitemap will contain two records for the
+same path.
+
+Example usage:
+
+```
+import {VSitemapGenerator} from 'vienna-ts/sitemap-generator';
+import {MY_VIENNA_ROUTES} from "./routes.ts";
+
+const generator = new VSitemapGenerator();
+const config: VSitemapGeneratorConfig = {
+    routes: MY_VIENNA_ROUTES
+}
+const xml = generator.generate(config);
+
+// Do something with your xml
+...
+```
+
+Or, for manual locations:
+
+```
+import {VSitemapGenerator} from 'vienna-ts/sitemap-generator';
+import {MY_VIENNA_ROUTES} from "./routes.ts";
+
+const generator = new VSitemapGenerator();
+const config: VSitemapGeneratorConfig = {
+  manual: [
+      {location: '/about-me', priority: 0.8}
+  ]
+}
+const xml = generator.generate(config);
+
+// Do something with your xml
+...
+```
+
+If you want to create a xml file right away, just call `generateAndWriteToFile`:
+
+```
+import {VSitemapGenerator} from 'vienna-ts/sitemap-generator';
+import {MY_VIENNA_ROUTES} from "./routes.ts";
+
+const generator = new VSitemapGenerator();
+const config: VSitemapGeneratorConfig = {
+    routes: MY_VIENNA_ROUTES
+}
+generator.generateAndWriteToFile(config, 'my/location/sitemap.xml');
 ```
 
 # Todo
