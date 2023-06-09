@@ -1,1 +1,0 @@
-export type VSitemapChangefreq = 'never' | 'yearly' | 'monthly' | 'weekly' | 'daily' | 'hourly' | 'always';
