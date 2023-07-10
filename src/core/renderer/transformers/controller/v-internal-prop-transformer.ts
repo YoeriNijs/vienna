@@ -31,7 +31,9 @@ export class VInternalPropTransformer implements VInternalControllerTransformer 
         let value = attr.value;
         if (isBase64Encoded(value)) {
             value = window.atob(value);
-            value = JSON.parse(value);
+            if (value && typeof value === 'string') {
+                value = JSON.parse(value);
+            }
             for (let i = 0; i < value.length; i++) {
                 const obj: any = value[i];
                 if (typeof obj === 'object') {
