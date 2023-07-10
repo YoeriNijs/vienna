@@ -129,19 +129,23 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
             }
 
             // Clear intervals for this component only
-            const intervalStart = this._intervalRange.start;
-            const intervalEnd = this._intervalRange.end;
-            let intervalIdToRemove = this._intervalRange.end;
-            while (intervalIdToRemove-- && intervalEnd >= intervalStart) {
-                window.clearInterval(intervalIdToRemove)
+            if (this._intervalRange && this._intervalRange.start && this._intervalRange.end) {
+                const intervalStart = this._intervalRange.start;
+                const intervalEnd = this._intervalRange.end;
+                let intervalIdToRemove = this._intervalRange.end;
+                while (intervalIdToRemove-- && intervalEnd >= intervalStart) {
+                    window.clearInterval(intervalIdToRemove)
+                }
             }
 
             // Clear timeouts for this component only
-            const timeoutStart = this._timeoutRange.start;
-            const timeoutEnd = this._timeoutRange.end;
-            let timeoutIdToRemove = this._timeoutRange.end;
-            while (timeoutIdToRemove-- && timeoutEnd >= timeoutStart) {
-                window.clearTimeout(timeoutIdToRemove)
+            if (this._timeoutRange && this._timeoutRange.start && this._timeoutRange.end) {
+                const timeoutStart = this._timeoutRange.start;
+                const timeoutEnd = this._timeoutRange.end;
+                let timeoutIdToRemove = this._timeoutRange.end;
+                while (timeoutIdToRemove-- && timeoutEnd >= timeoutStart) {
+                    window.clearTimeout(timeoutIdToRemove)
+                }
             }
 
             this._component = null;
