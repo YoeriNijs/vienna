@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.65](https://github.com/YoeriNijs/vienna/compare/0.2.64...0.2.65)
+## [0.2.66](https://github.com/YoeriNijs/vienna/compare/0.2.65...0.2.66)
+
+### Merged
+
+- fix(renderer): check for intervals and timeouts prior to clearing them [`#65`](https://github.com/YoeriNijs/vienna/pull/65)
+
+## [0.2.65](https://github.com/YoeriNijs/vienna/compare/0.2.64...0.2.65) - 2023-06-09
 
 ### Merged
 
 - Revert "feat(sitemap-generator): implement a first basic sitemap generator (beta) (#63)" [`#64`](https://github.com/YoeriNijs/vienna/pull/64)
+
+### Commits
+
+- feat(package.json): release '0.2.65' [`211df29`](https://github.com/YoeriNijs/vienna/commit/211df2966001219448fe326faa9d4c54182c681e)
 
 ## [0.2.64](https://github.com/YoeriNijs/vienna/compare/0.2.63...0.2.64) - 2023-06-09
 
