@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.68](https://github.com/YoeriNijs/vienna/compare/0.2.67...0.2.68)
+## [0.2.69](https://github.com/YoeriNijs/vienna/compare/0.2.68...0.2.69)
+
+### Merged
+
+- feat(vinternalrouter): implement route wildcard [`#68`](https://github.com/YoeriNijs/vienna/pull/68)
+
+## [0.2.68](https://github.com/YoeriNijs/vienna/compare/0.2.67...0.2.68) - 2023-07-10
 
 ### Merged
 
 - fix(vinternalrepeattransformer): quick fix to prevent iteration issues [`#67`](https://github.com/YoeriNijs/vienna/pull/67)
+
+### Commits
+
+- feat(package.json): release '0.2.68' [`a1775c2`](https://github.com/YoeriNijs/vienna/commit/a1775c27b23feb6596f68f77765a6d97f7e4b147)
 
 ## [0.2.67](https://github.com/YoeriNijs/vienna/compare/0.2.66...0.2.67) - 2023-07-10
 
