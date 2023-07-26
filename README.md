@@ -32,6 +32,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
     - [Json](#json)
 - [Routes](#routes)
     - [Nested routes](#nested-routes)
+    - [Route wildcards](#route-wildcards)
     - [Route data](#route-data)
     - [Route params](#route-params)
     - [Query params](#query-params)
@@ -596,6 +597,36 @@ Routes can be nested limitless. To create subroutes, just implement child routes
 export class Application {}
 
 ```
+
+### Route wildcards
+
+The Vienna router supports wildcards. Just pass the `*`-sign to add a wildcard. Note that the first route wins. This means
+that if you have two routes that match, the router picks the first one. It does not matter whether one of them is a wildcard.
+
+```
+
+@VApplication({ 
+  declarations: [
+    AboutComponent,  
+    PageNotFoundComponent
+  ], 
+  routes: [
+    { 
+      path: '/about', 
+      component: AboutComponent
+    },
+    { 
+      path: '*', 
+      component: PageNotFoundComponent
+    }
+  ]
+})
+export class Application {}
+
+```
+
+Please note: the example above is just to demonstrate how you can use the wildcard. Of course, if you to render a component
+for a page that is not found, you can also implement the `routeNotFoundStrategy`.
 
 ### Route data
 

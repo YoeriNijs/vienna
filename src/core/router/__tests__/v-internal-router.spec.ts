@@ -423,5 +423,166 @@ describe('VInternalRouter', () => {
                 ]
             }).catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')));
         });
+
+        it('should navigate with route param', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/:id');
+                done();
+            });
+            setup('/blog/:id', {
+                routes: [
+                    {
+                        path: '/blog',
+                        component: jest.fn(),
+                        guards: [],
+                        children: [
+                            {
+                                path: '/:id',
+                                component: jest.fn(),
+                                guards: [],
+                                children: []
+                            }
+                        ]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate with query param', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/page');
+                done();
+            });
+            setup('/page?message=Hello%20there', {
+                routes: [
+                    {
+                        path: '/page',
+                        component: jest.fn(),
+                        guards: [],
+                        children: []
+                    }
+                ]
+            });
+        });
+
+        it('should navigate with query param and wildcard', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/');
+                done();
+            });
+            setup('/*?message=Hello%20there', {
+                routes: [
+                    {
+                        path: '/',
+                        component: jest.fn(),
+                        guards: [],
+                        children: []
+                    }
+                ]
+            });
+        });
+
+        it('should navigate with query param and wildcard', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/');
+                done();
+            });
+            setup('*?message=Hello%20there', {
+                routes: [
+                    {
+                        path: '/',
+                        component: jest.fn(),
+                        guards: [],
+                        children: []
+                    }
+                ]
+            });
+        });
+
+        it('should navigate with wildcard and children', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/relevant');
+                done();
+            });
+            setup('/*/relevant', {
+                routes: [
+                    {
+                        path: '/*',
+                        component: jest.fn(),
+                        guards: [],
+                        children: [
+                            {
+                                path: '/relevant',
+                                component: jest.fn(),
+                                guards: [],
+                                children: []
+                            }
+                        ]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate with wildcard and children without slash', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/relevant');
+                done();
+            });
+            setup('/*/relevant', {
+                routes: [
+                    {
+                        path: '*',
+                        component: jest.fn(),
+                        guards: [],
+                        children: [
+                            {
+                                path: '/relevant',
+                                component: jest.fn(),
+                                guards: [],
+                                children: []
+                            }
+                        ]
+                    }
+                ]
+            });
+        });
+
+        it('should navigate to first route before wildcard', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('/about');
+                done();
+            });
+            setup('/about', {
+                routes: [
+                    {
+                        path: '/about',
+                        component: jest.fn()
+                    },
+                    {
+                        path: '*',
+                        component: jest.fn()
+                    }
+                ]
+            });
+        });
+
+        it('should navigate to wildcard first', done => {
+            eventBus.subscribe(VInternalEventName.NAVIGATED, (r: VRoute) => {
+                expect(r.path).toEqual('*');
+                done();
+            });
+            setup('/about', {
+                routes: [
+                    {
+                        path: '*',
+                        component: jest.fn()
+                    },
+                    {
+                        path: '/about',
+                        component: jest.fn()
+                    }
+                ]
+            });
+        });
     });
 });

@@ -129,12 +129,17 @@ export class VInternalRouter {
             const lowerUrl = url.toLowerCase();
             const paramIndex = url.indexOf('?');
             if (paramIndex === -1) {
-                return lowerPath === lowerUrl;
+                return lowerPath === lowerUrl || this.isWildCard(lowerPath);
             } else {
-                return lowerPath === lowerUrl.substring(0, paramIndex);
+                const pathBeforeParam = lowerUrl.substring(0, paramIndex);
+                return lowerPath === pathBeforeParam || this.isWildCard(pathBeforeParam);
             }
         });
         return exactRoute ? exactRoute : null;
+    }
+
+    private isWildCard(value: string): boolean {
+        return value === '*' || value === '/*';
     }
 
     private dispatchNavigationAction(route: VRoute): void {
