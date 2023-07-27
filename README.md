@@ -30,6 +30,8 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
 - [Pipes](#pipes)
     - [Raw](#raw)
     - [Json](#json)
+    - [Encode base64](#encode-base64)
+    - [Decode base64](#decode-base64)
 - [Routes](#routes)
     - [Nested routes](#nested-routes)
     - [Route wildcards](#route-wildcards)
@@ -493,7 +495,7 @@ Pipes are ways to transform template values. It is possible to chain multiple pi
  {{ variable | pipe1 | pipe2 }}
 ```
 
-For now, only the `raw` and `json` pipes are supported. In the future, it may be possible to provide custom pipes on
+For now, only the pipes below are supported. In the future, it may be possible to provide custom pipes on
 application level. If you are a developer, you are welcome to open a PR.
 
 ### Raw
@@ -535,6 +537,36 @@ export class PipeComponent {
             <p>Nisl suscipit adipiscing bibendum est ultricies. Cras pulvinar mattis nunc sed blandit libero volutpat sed cras. Sed libero enim sed faucibus turpis in eu. Duis convallis convallis tellus id interdum velit laoreet id. Et malesuada fames ac turpis egestas sed tempus. In vitae turpis massa sed elementum. Sit amet consectetur adipiscing elit duis tristique. Aliquam sem fringilla ut morbi tincidunt augue interdum velit. Pharetra et ultrices neque ornare aenean euismod elementum nisi. Dictumst vestibulum rhoncus est pellentesque elit. Risus ultricies tristique nulla aliquet enim tortor at. Risus nullam eget felis eget nunc lobortis mattis aliquam faucibus. Massa placerat duis ultricies lacus. Tellus at urna condimentum mattis pellentesque id nibh. Erat velit scelerisque in dictum non consectetur a erat nam. Egestas egestas fringilla phasellus faucibus scelerisque eleifend.</p>
         </div>
     `;
+}
+```
+
+### Encode base64
+
+Base64 encode a template value is easy by passing the `encodeBase64` pipe:
+
+```
+@VComponent({
+    selector: 'pipe-component',
+    styles: [],
+    html: `{{ value | encodeBase64 }}`
+})
+export class PipeComponent {
+    value = 'Hello World';
+}
+```
+
+### Decode base64
+
+To decode a template value, just pass the `decodeBase64` pipe:
+
+```
+@VComponent({
+    selector: 'pipe-component',
+    styles: [],
+    html: `{{ value | encodeBase64 }}`
+})
+export class PipeComponent {
+    value = 'SGVsbG8gV29ybGQ=';
 }
 ```
 
@@ -600,8 +632,10 @@ export class Application {}
 
 ### Route wildcards
 
-The Vienna router supports wildcards. Just pass the `*`-sign to add a wildcard. Note that the first route wins. This means
-that if you have two routes that match, the router picks the first one. It does not matter whether one of them is a wildcard.
+The Vienna router supports wildcards. Just pass the `*`-sign to add a wildcard. Note that the first route wins. This
+means
+that if you have two routes that match, the router picks the first one. It does not matter whether one of them is a
+wildcard.
 
 ```
 
@@ -625,7 +659,8 @@ export class Application {}
 
 ```
 
-Please note: the example above is just to demonstrate how you can use the wildcard. Of course, if you to render a component
+Please note: the example above is just to demonstrate how you can use the wildcard. Of course, if you to render a
+component
 for a page that is not found, you can also implement the `routeNotFoundStrategy`.
 
 ### Route data
@@ -1326,12 +1361,13 @@ describe('VComponentFactory', () => {
 
 # Known issues
 
-- Event listener (such as click) may stop intervals and timeouts in same component
-- VProp is leaking state when routing to subcomponent that has input binding
-- VInit does not work without callback yet
+- Event listener (such as click) may stop intervals and timeouts in same component.
+- VProp is leaking state when routing to subcomponent that has input binding.
+- VInit does not work without callback yet.
 - Running tests with vComponentFactory may cause Jest open handles issue. As a workaround, you can enable fake timers in
   the Jest config or explicitly disable real timers in your tests (do not forget to re-enable them!).
-- Events may not work in child components, investigation needed
+- Events may not work in child components, investigation needed.
+- Pipes only work on component top level; pipes do not work inside inner template refs yet.
 
 # Literature
 

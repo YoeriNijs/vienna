@@ -1,9 +1,9 @@
 import {VInternalTemplatePipe} from "./v-internal-template-pipe";
 
-export class VInternalRawPipe implements VInternalTemplatePipe {
+export class VInternalBase64DecodePipe implements VInternalTemplatePipe {
 
     name(): string {
-        return "raw";
+        return "decodeBase64";
     }
 
     accept(isTemplateRefAvailable: (templateRef: string) => boolean, templateRef: string): boolean {
@@ -11,6 +11,6 @@ export class VInternalRawPipe implements VInternalTemplatePipe {
     }
 
     transform(value: string): string {
-        return value;
+        return window.atob(value);
     }
 }

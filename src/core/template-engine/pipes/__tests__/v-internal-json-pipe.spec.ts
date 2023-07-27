@@ -4,17 +4,13 @@ describe('VInternalJsonPipe', () => {
 
     const pipe = new VInternalJsonPipe();
 
-    it('should create a json value when pipe is provided', () => {
+    it('should create a json value', () => {
         const html = `<a href="https://www.google.com">Google</a>`;
-        const templateRef = '{{ html | json }}';
-        const result = pipe.transform(html, templateRef);
+        const result = pipe.transform(html);
         expect(result).toEqual("\"<a href=\\\"https://www.google.com\\\">Google</a>\"");
     });
 
-    it('should not create a json value when pipe is not provided', () => {
-        const html = `<a href="https://www.google.com">Google</a>`;
-        const templateRef = '{{ html }}';
-        const result = pipe.transform(html, templateRef);
-        expect(result).toEqual(`<a href="https://www.google.com">Google</a>`);
+    it('should have a valid pipe name', () => {
+        expect(pipe.name()).toEqual('json');
     });
 });
