@@ -563,7 +563,7 @@ To decode a template value, just pass the `decodeBase64` pipe:
 @VComponent({
     selector: 'pipe-component',
     styles: [],
-    html: `{{ value | encodeBase64 }}`
+    html: `{{ value | decodeBase64 }}`
 })
 export class PipeComponent {
     value = 'SGVsbG8gV29ybGQ=';
@@ -659,7 +659,7 @@ export class Application {}
 
 ```
 
-Please note: the example above is just to demonstrate how you can use the wildcard. Of course, if you to render a
+Please note: the example above is just to demonstrate how you can use the wildcard. Of course, if you want to render a
 component
 for a page that is not found, you can also implement the `routeNotFoundStrategy`.
 
