@@ -5,11 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.69](https://github.com/YoeriNijs/vienna/compare/0.2.68...0.2.69)
+## [0.2.70](https://github.com/YoeriNijs/vienna/compare/0.2.69...0.2.70)
+
+### Merged
+
+- feat(pipes): new base64 pipes [`#69`](https://github.com/YoeriNijs/vienna/pull/69)
+
+### Commits
+
+- Typo's [`b4be936`](https://github.com/YoeriNijs/vienna/commit/b4be936125680df254f1377a7f430938dd62a41f)
+
+## [0.2.69](https://github.com/YoeriNijs/vienna/compare/0.2.68...0.2.69) - 2023-07-26
 
 ### Merged
 
 - feat(vinternalrouter): implement route wildcard [`#68`](https://github.com/YoeriNijs/vienna/pull/68)
+
+### Commits
+
+- feat(package.json): release '0.2.69' [`34b2099`](https://github.com/YoeriNijs/vienna/commit/34b2099b3d77bbe9c29f7df4a7bf82a73e3c2781)
 
 ## [0.2.68](https://github.com/YoeriNijs/vienna/compare/0.2.67...0.2.68) - 2023-07-10
 
