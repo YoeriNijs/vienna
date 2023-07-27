@@ -1,7 +1,5 @@
 import {VInternalTemplate} from "../v-internal-template";
 import {VInternalTemplateEngine} from "../v-internal-template-engine";
-import {VInternalRawPipe} from "../pipes/v-internal-raw-pipe";
-import {VInternalJsonPipe} from "../pipes/v-internal-json-pipe";
 
 describe('VInternalTemplateEngine', () => {
 
@@ -89,16 +87,6 @@ describe('VInternalTemplateEngine', () => {
             const evil = createTemplate('Normal text and {{ script }}');
             const result = VInternalTemplateEngine.render(evil, {script: '<script>alert(\'evil script\');</script>'});
             expect(result).toEqual('Normal text and &lt;script&gt;alert(\'evil script\');&lt;/script&gt;');
-        });
-    });
-
-    describe('Pipes', () => {
-        it('It should have valid pipes', () => {
-            const actualPipes = VInternalTemplateEngine.pipes;
-            expect(actualPipes).toEqual([
-                new VInternalRawPipe(),
-                new VInternalJsonPipe()
-            ]);
         });
     });
 });

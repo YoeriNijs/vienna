@@ -20,9 +20,16 @@ import {VComponent} from "../../src";
             }
         `
     ],
-    html: `{{ html | raw }}`
+    html: `
+    {{ html | raw }}
+    <br />
+    <div class="container">
+        {{ rawValue | encodeBase64 }}
+    </div>
+    `
 })
 export class PipeComponent {
+    rawValue = 'Hello world'
     html = `
         <div class="container">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu augue ut lectus arcu bibendum at varius. Vitae nunc sed velit dignissim sodales ut eu sem. Varius sit amet mattis vulputate enim nulla aliquet porttitor lacus. Id eu nisl nunc mi ipsum faucibus. Iaculis at erat pellentesque adipiscing commodo. Ut venenatis tellus in metus vulputate. Venenatis cras sed felis eget velit. Lacinia quis vel eros donec ac odio tempor orci. Non pulvinar neque laoreet suspendisse interdum.</p>
