@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.70](https://github.com/YoeriNijs/vienna/compare/0.2.69...0.2.70)
+## [0.2.71](https://github.com/YoeriNijs/vienna/compare/0.2.70...0.2.71)
+
+### Merged
+
+- feat(pipes): initial custom pipes implementation [`#70`](https://github.com/YoeriNijs/vienna/pull/70)
+
+## [0.2.70](https://github.com/YoeriNijs/vienna/compare/0.2.69...0.2.70) - 2023-07-27
 
 ### Merged
 
@@ -13,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.70' [`5c63633`](https://github.com/YoeriNijs/vienna/commit/5c63633843b64536b12c11383fd847f103d5042d)
 - Typo's [`b4be936`](https://github.com/YoeriNijs/vienna/commit/b4be936125680df254f1377a7f430938dd62a41f)
 
 ## [0.2.69](https://github.com/YoeriNijs/vienna/compare/0.2.68...0.2.69) - 2023-07-26
