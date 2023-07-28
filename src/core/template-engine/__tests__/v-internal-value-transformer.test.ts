@@ -10,7 +10,7 @@ describe('VInternalValueTransformer', () => {
     const transformer: VInternalValueTransformer = new VInternalValueTransformer();
 
     it('should have valid pipes', () => {
-        const pipes = transformer.getPipes();
+        const pipes = transformer.getInternalPipes();
         expect(pipes).toEqual([
             new VInternalAntiXssPipe(),
             new VInternalRawPipe(),

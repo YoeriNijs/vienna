@@ -32,6 +32,7 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
     - [Json](#json)
     - [Encode base64](#encode-base64)
     - [Decode base64](#decode-base64)
+    - [Custom pipes](#create-custom-pipes)
 - [Routes](#routes)
     - [Nested routes](#nested-routes)
     - [Route wildcards](#route-wildcards)
@@ -117,6 +118,7 @@ following:
     - `href`: a link to a remote stylesheet. Thus, a href should start with 'http'. Also, it is possible to pass
       integrity and crossorigin values  (see below).
 - `darkModeEnabled` (optional): global method to initialize app-wide dark mode (see [dark mode](#dark-mode)).
+- `pipes` (optional): custom pipes (see [create custom pipes](#create-custom-pipes))
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
 
@@ -495,8 +497,8 @@ Pipes are ways to transform template values. It is possible to chain multiple pi
  {{ variable | pipe1 | pipe2 }}
 ```
 
-For now, only the pipes below are supported. In the future, it may be possible to provide custom pipes on
-application level. If you are a developer, you are welcome to open a PR.
+<strong>Important:</strong> order is important when you chain pipes since values will be transformed in one pipe, and
+then passed to another one. If you do not respect order, you might end up with invalid values.
 
 ### Raw
 
@@ -569,6 +571,57 @@ export class PipeComponent {
     value = 'SGVsbG8gV29ybGQ=';
 }
 ```
+
+### Create custom pipes
+
+Vienna supports custom pipes. In order to create a custom pipe, implement the `VPipe` interface accordingly.
+
+For example:
+
+```
+export class GreetingPipe implements VPipe {
+    name(): string {
+        return "greeting";
+    }
+
+    transform(value: string): string {
+        return `${value}, world!`;
+    }
+}
+```
+
+Secondly, register your pipe on application level:
+
+`application.ts`
+
+```
+@VApplication({
+    declarations: [HomeComponent],
+    routes: [
+      { path: '/', component: HomeComponent }
+    ],
+    pipes: [GreetingPipe]
+})
+export class Application {}
+```
+
+<strong>Important:</strong> all pipes should have different names. Vienna does not accept duplicate pipe names since it
+does not know which pipe to use in that specific case.
+
+Then, add your pipe to the template reference:
+
+```
+@VComponent({
+    selector: 'home-component',
+    styles: [],
+    html: `{{ myGreeting | greeting }}`
+})
+export class HomeComponent {
+    myGreeting = 'Hello';
+}
+```
+
+The pipe above should print `Hello, world!`.
 
 ## Routes
 

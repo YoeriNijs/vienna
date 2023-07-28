@@ -1,13 +1,9 @@
-import {VInternalTemplatePipe} from "./v-internal-template-pipe";
+import {VInternalDefaultPipeImpl} from "./v-internal-template-pipe";
 
-export class VInternalRawPipe implements VInternalTemplatePipe {
+export class VInternalRawPipe extends VInternalDefaultPipeImpl {
 
     name(): string {
         return "raw";
-    }
-
-    accept(isTemplateRefAvailable: (templateRef: string) => boolean, templateRef: string): boolean {
-        return isTemplateRefAvailable(templateRef);
     }
 
     transform(value: string): string {

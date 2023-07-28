@@ -16,5 +16,5 @@ export interface VApplicationConfig {
     darkModeEnabled?: () => boolean;
     darkModeClassOverride?: string;
     plugins?: VApplicationPlugins;
-    pipes?: VPipe[];
+    pipes?: Type<VPipe>[];
 }
