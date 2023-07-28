@@ -13,6 +13,11 @@ import {VActivatedRoute} from "../router/v-activated-route";
 import {VInternalLogSender} from "../logger/v-internal-log-sender";
 import {VWeb, VWebDocTags} from "../misc/web";
 import {getCurrentDocTags} from "../util/v-internal-document-util";
+import {VInternalCustomPipes} from "../template-engine/pipes/v-internal-custom-pipes";
+import {VPipe} from "./v-pipe";
+import {VDuplicatePipeException} from "./v-duplicate-pipe-exception";
+
+import * as pincet from 'pincet';
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -25,7 +30,8 @@ export function VApplication(config: VApplicationConfig) {
             constructor(private _eventBus: VInternalEventbus,
                         private _activatedRoute: VActivatedRoute,
                         private _darkModeService: VDarkMode,
-                        private _web: VWeb) {
+                        private _web: VWeb,
+                        private _pipes: VInternalCustomPipes) {
                 this._mainRenderer = new VInternalRenderer({
                     selector: VInternalApplicationSelectors.V_APP_RENDERER,
                     eventBus: this._eventBus,
@@ -41,6 +47,7 @@ export function VApplication(config: VApplicationConfig) {
                     this._eventBus.publish(VInternalEventName.NAVIGATION_ENDED, route);
                 });
 
+                this.initializePipes();
                 this.initializePlugins();
                 this.initializeDarkMode();
                 this.initializeActivatedRoute();
@@ -108,12 +115,26 @@ export function VApplication(config: VApplicationConfig) {
                 }
             }
 
+            private initializePipes(): void {
+                if (config.pipes) {
+                    const pipes = config.pipes.map<VPipe>(pipeType => VInjector.resolve(pipeType));
+                    const pipeNames = pipes.map(p => p.name());
+                    const uniquePipeNames = pincet.unique<string>(pipeNames);
+                    if (uniquePipeNames.length === pipes.length) {
+                        this._pipes.register(pipes);
+                    } else {
+                        const pipeNames = pipes.map(p => p.name()).toString();
+                        throw new VDuplicatePipeException(`Duplicate pipe names found: ${pipeNames}. Vienna only accepts unique pipe names!`);
+                    }
+                }
+            }
+
             private initializePlugins(): void {
                 if (config.plugins) {
                     const logger = config.plugins.logger;
                     if (logger) {
                         const logSender = VInjector.resolve<VInternalLogSender>(VInternalLogSender);
-                        logSender.registerSettings({ process: logger.process });
+                        logSender.registerSettings({process: logger.process});
                     }
                 }
             }
@@ -127,7 +148,8 @@ export function VApplication(config: VApplicationConfig) {
                 const activatedRoute = VInjector.resolve<VActivatedRoute>(VActivatedRoute);
                 const darkMode = VInjector.resolve<VDarkMode>(VDarkMode);
                 const web = VInjector.resolve<VWeb>(VWeb);
-                new InternalVApplication(eventBus, activatedRoute, darkMode, web);
+                const pipes = VInjector.resolve<VInternalCustomPipes>(VInternalCustomPipes);
+                new InternalVApplication(eventBus, activatedRoute, darkMode, web, pipes);
             }
         };
     }

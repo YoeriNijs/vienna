@@ -18,6 +18,9 @@ import {PipeComponent} from "./components/pipe.component";
 import {TemplateComponent} from "./components/template.component";
 import {StyleComponent} from "./components/style.component";
 import {RerenderChildComponent, RerenderParentComponent} from "./components/rerender.component";
+import {CustomPipesComponent} from "./components/custom-pipes.component";
+import {GreetingPipe} from "./pipes/greeting.pipe";
+import {TranslatePipe} from "./pipes/translate.pipe";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -28,6 +31,7 @@ import {RerenderChildComponent, RerenderParentComponent} from "./components/rere
         AboutComponent,
         AboutMoreComponent,
         CounterComponent,
+        CustomPipesComponent,
         DarkModeComponent,
         DashboardComponent,
         DomParserComponent,
@@ -45,6 +49,10 @@ import {RerenderChildComponent, RerenderParentComponent} from "./components/rere
         SwitchComponent,
         TemplateComponent
     ],
+    pipes: [
+        GreetingPipe,
+        TranslatePipe
+    ],
     routes: [
         {path: '/', component: HomeComponent},
         {path: '/switch', component: SwitchComponent},
@@ -52,6 +60,7 @@ import {RerenderChildComponent, RerenderParentComponent} from "./components/rere
         {path: '/dom-parser', component: DomParserComponent},
         {path: '/input', component: InputComponent},
         {path: '/pipe', component: PipeComponent},
+        {path: '/custom-pipes', component: CustomPipesComponent},
         {path: '/template', component: TemplateComponent},
         {path: '/style', component: StyleComponent},
         {path: '/rerender', component: RerenderParentComponent},
