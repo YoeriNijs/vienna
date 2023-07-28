@@ -4,6 +4,9 @@ import {VInternalAntiXssPipe} from "./pipes/v-internal-anti-xss-pipe";
 import {VInternalTemplatePipe} from "./pipes/v-internal-template-pipe";
 import {VInternalBase64EncodePipe} from "./pipes/v-internal-base64-encode-pipe";
 import {VInternalBase64DecodePipe} from "./pipes/v-internal-base64-decode-pipe";
+import {VInjector} from "../injector/v-injector";
+import {VCustomPipes} from "./pipes/v-custom-pipes";
+import * as pincet from 'pincet';
 
 export class VInternalValueTransformer {
 
@@ -22,7 +25,8 @@ export class VInternalValueTransformer {
     }
 
     transform(value: string, templateRef: string): string {
-        return this._pipes
+        const customPipes: VInternalTemplatePipe[] = VInjector.resolve<VCustomPipes>(VCustomPipes).toTemplatePipes();
+        return pincet.union<VInternalTemplatePipe>(customPipes, this._pipes)
             .reduce((result, pipe) => {
                 const pipeName = pipe.name();
                 const isTransformationNeeded = pipe.accept((templateRef) => {
