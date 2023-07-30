@@ -6,6 +6,7 @@ import {VRouteNotFoundRedirect} from "../router/v-route-not-found-redirect";
 import {VGlobalStyles} from "./v-global-styles";
 import {VApplicationPlugins} from "./v-application-plugins";
 import {VPipe} from "./v-pipe";
+import {VI18nConfig} from "./v-i18n-config";
 
 export interface VApplicationConfig {
     declarations: Type<VComponentType>[];
@@ -17,4 +18,5 @@ export interface VApplicationConfig {
     darkModeClassOverride?: string;
     plugins?: VApplicationPlugins;
     pipes?: Type<VPipe>[];
+    i18n?: VI18nConfig;
 }

@@ -4,6 +4,9 @@ export * from './application/v-application-config';
 export * from './application/v-global-inline-style';
 export * from './application/v-global-style-link';
 export * from './application/v-global-styles';
+export * from './application/v-i18n-config';
+export * from './application/v-i18n-find-language-set';
+export * from './application/v-i18n-language-set';
 
 export * from './misc/audit/v-audit';
 export * from './misc/web';
