@@ -1287,7 +1287,7 @@ export class I18nComponent {
     }
 
     changeValue(): void {
-        this.translationFromComponent = this._i18n.findTranslation('greeting');
+        this.text = this._i18n.findTranslation('greeting');
     }
 }
 ```
