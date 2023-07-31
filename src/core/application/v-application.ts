@@ -18,6 +18,8 @@ import {VPipe} from "./v-pipe";
 import {VDuplicatePipeException} from "./v-duplicate-pipe-exception";
 
 import * as pincet from 'pincet';
+import {VI18n} from "../i18n/v-i18n";
+import {VI18nConfig} from "./v-i18n-config";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -26,6 +28,7 @@ export function VApplication(config: VApplicationConfig) {
             private readonly _declarationTypes: Type<VComponentType>[];
             private readonly _routes: VRoute[];
             private readonly _initialTags: VWebDocTags;
+            private readonly _i18n: VI18nConfig;
 
             constructor(private _eventBus: VInternalEventbus,
                         private _activatedRoute: VActivatedRoute,
@@ -41,6 +44,7 @@ export function VApplication(config: VApplicationConfig) {
                 this._declarationTypes = config.declarations;
                 this._routes = config.routes;
                 this._initialTags = getCurrentDocTags();
+                this._i18n = config.i18n;
 
                 this._eventBus.subscribe<VRoute>(VInternalEventName.NAVIGATED, (route: VRoute) => {
                     this.renderComponentForRoute(route);
@@ -52,6 +56,7 @@ export function VApplication(config: VApplicationConfig) {
                 this.initializeDarkMode();
                 this.initializeActivatedRoute();
                 this.initializeRouter();
+                this.initializeI18n();
             }
 
             private initializeActivatedRoute(): void {
@@ -136,6 +141,14 @@ export function VApplication(config: VApplicationConfig) {
                         const logSender = VInjector.resolve<VInternalLogSender>(VInternalLogSender);
                         logSender.registerSettings({process: logger.process});
                     }
+                }
+            }
+
+            private initializeI18n(): void {
+                const i18n = this._i18n;
+                if (i18n) {
+                    const i18nService = VInjector.resolve<VI18n>(VI18n);
+                    i18nService.setFindActiveSet(i18n.setActiveLanguageSet);
                 }
             }
         }

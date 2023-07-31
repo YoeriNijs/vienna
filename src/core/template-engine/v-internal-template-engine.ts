@@ -2,6 +2,8 @@ import {VInternalTemplate} from "./v-internal-template";
 import {getDefinedOrElseDefault, getNestedPropertyByStringPath} from "../util/v-internal-object-util";
 import {escapeBracketsInRegex} from "../util/v-internal-regex-util";
 import {VInternalValueTransformer} from "./v-internal-value-transformer";
+import {VInjector} from "../injector/v-injector";
+import {VI18n} from "../i18n/v-i18n";
 
 export class VInternalTemplateEngine {
 
@@ -16,6 +18,14 @@ export class VInternalTemplateEngine {
             const templateReference = match.split(regexRefWithoutBrackets)
                 .filter(v => v)[0]
                 .trim();
+
+            const firstReference = templateReference.replace(/ .*/, '');
+            if (firstReference.startsWith('%') && firstReference.endsWith('%')) {
+                const translatedReference = this.findTranslation(firstReference);
+                const replaced = templateReference.replace(firstReference, translatedReference);
+                return VInternalTemplateEngine.transformValueByPipes(replaced, templateReference);
+            }
+
             const rawValue = typeof data === 'object'
                 ? getNestedPropertyByStringPath(data, templateReference)
                 : data;
@@ -53,5 +63,10 @@ export class VInternalTemplateEngine {
     private static transformValueByPipes(value: string, templateReference: string): string {
         const transformer = new VInternalValueTransformer();
         return transformer.transform(value, templateReference);
+    }
+
+    private static findTranslation(translationKey: string): string {
+        const i18nService = VInjector.resolve<VI18n>(VI18n);
+        return i18nService.findTranslation(translationKey);
     }
 }

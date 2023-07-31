@@ -1,5 +1,9 @@
 import {VInternalTemplate} from "../v-internal-template";
 import {VInternalTemplateEngine} from "../v-internal-template-engine";
+import {VI18n} from "../../i18n/v-i18n";
+import {VI18nLanguageSet} from "../../application/v-i18n-language-set";
+import {VInjector} from "../../injector/v-injector";
+import {VInternalInjectableSingletons} from "../../injector/v-internal-injectable-singletons";
 
 describe('VInternalTemplateEngine', () => {
 
@@ -87,6 +91,46 @@ describe('VInternalTemplateEngine', () => {
             const evil = createTemplate('Normal text and {{ script }}');
             const result = VInternalTemplateEngine.render(evil, {script: '<script>alert(\'evil script\');</script>'});
             expect(result).toEqual('Normal text and &lt;script&gt;alert(\'evil script\');&lt;/script&gt;');
+        });
+    });
+
+    describe('I18n', () => {
+
+        beforeEach(() => {
+            const i18nService = VInjector.resolve<VI18n>(VI18n);
+            const languageSet: VI18nLanguageSet = {
+                name: 'name',
+                translations: {
+                    'key': 'value'
+                }
+            };
+            i18nService.setFindActiveSet(() => languageSet);
+        });
+
+        afterEach(() => VInternalInjectableSingletons.flush());
+
+        it('should get translated value', () => {
+            const template = createTemplate('{{ %key% }}');
+            const result = VInternalTemplateEngine.render(template, {});
+            expect(result).toEqual('value');
+        });
+
+        it('should get translated value and combine it with a pipe', () => {
+            const template = createTemplate('{{ %key% | encodeBase64 }}');
+            const result = VInternalTemplateEngine.render(template, {});
+            expect(result).toEqual('dmFsdWUgfCBlbmNvZGVCYXNlNjQ=');
+        });
+
+        it('should get original value when only first char is percent sign', () => {
+            const template = createTemplate('{{ %key }}');
+            const result = VInternalTemplateEngine.render(template, {});
+            expect(result).toEqual('{{ %key }}');
+        });
+
+        it('should get original value when only last char is percent sign', () => {
+            const template = createTemplate('{{ key% }}');
+            const result = VInternalTemplateEngine.render(template, {});
+            expect(result).toEqual('{{ key% }}');
         });
     });
 });

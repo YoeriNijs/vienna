@@ -21,6 +21,8 @@ import {RerenderChildComponent, RerenderParentComponent} from "./components/rere
 import {CustomPipesComponent} from "./components/custom-pipes.component";
 import {GreetingPipe} from "./pipes/greeting.pipe";
 import {TranslatePipe} from "./pipes/translate.pipe";
+import {I18nComponent} from "./components/i18n.component";
+import {determineLanguageSet} from "./i18n/determine_language_set";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -37,6 +39,7 @@ import {TranslatePipe} from "./pipes/translate.pipe";
         DomParserComponent,
         FooterComponent,
         HomeComponent,
+        I18nComponent,
         InputComponent,
         InputHostComponent,
         NavbarComponent,
@@ -64,6 +67,7 @@ import {TranslatePipe} from "./pipes/translate.pipe";
         {path: '/template', component: TemplateComponent},
         {path: '/style', component: StyleComponent},
         {path: '/rerender', component: RerenderParentComponent},
+        {path: '/i18n', component: I18nComponent},
         {
             path: '/about',
             component: AboutComponent,
@@ -105,7 +109,10 @@ import {TranslatePipe} from "./pipes/translate.pipe";
             crossOrigin: 'anonymous',
             integrity: 'sha384-HmYpsz2Aa9Gh3JlkCoh8kUJ2mUKJKTnkyC2Lzt8aLzpPOpnDe8KpFE2xNiBpMDou'
         }
-    ]
+    ],
+    i18n: {
+        setActiveLanguageSet: determineLanguageSet
+    }
 })
 export class DemoApplication {
 }

@@ -47,6 +47,9 @@ Check out the [demo application](https://github.com/YoeriNijs/vienna-demo-app).
     - [Set up dark mode](#set-up-dark-mode)
     - [Customize dark mode](#customize-dark-mode)
 - [Validator](#validator)
+- [I18n](#i18n)
+    - [Global i18n configuration](#global-i18n-configuration)
+    - [Dynamic i18n configuration](#dynamic-i18n-configuration)
 - [Miscellaneous](#miscellaneous)
     - [VAudit](#vaudit)
     - [VWeb](#vweb)
@@ -1204,6 +1207,93 @@ export class MyComponent implements VInit {
   }
 }
 ```
+
+## I18n
+
+### Global i18n configuration
+
+When you go international, you might want your app to be multilingual. For this, you can use the Vienna i18n support.
+
+First, create one or more `VI18nLanguageSet`, such as:
+
+```
+const ENGLISH_LANG: VI18nLanguageSet = {
+  name: 'en',
+  translations: {
+    'greeting': 'Hello, world!'
+  }
+};
+
+const DUTCH_LANG: VI18nLanguageSet = {
+  name: 'nl',
+  translations: {
+    'greeting': 'Hallo, wereld!'
+  }
+};
+```
+
+Then, set up a so-called i18n config in your application and implement the `setActiveLanguageSet` method. This method
+needs to return one `VI18nLanguageSet`. Of course, you are free to implement your own logic.
+
+`application.ts`
+
+```
+@VApplication({
+    ...
+    i18n: {
+      setActiveLanguageSet: () => {
+        // Just a simple implementation for demo purposes
+        if (window.location.href.endsWith('?lang=nl')) {
+            return DUTCH_LANG;
+        } else {
+            return ENGLISH_LANG;
+        }
+      }
+    }
+})
+export class Application {}
+```
+
+Then, implement the language key somewhere in your component. Mind the two %-signs at the beginning and the end, which
+are required for i18n values. For instance:
+
+```
+@VComponent({
+    selector: 'i18n-component',
+    styles: [],
+    html: `{{ %greeting% }}`
+})
+export class I18nComponent {}
+```
+
+In the example above, when the page is called with `?lang=nl`, the component will show 'Hallo, wereld!'. Otherwise, it
+will
+show 'Hello, world!'.
+
+### Dynamic i18n configuration
+
+Of course, you can also create an i18n value dynamically. Just implement the `VI18n` injectable. For example:
+
+```
+@VComponent({
+    selector: 'i18n-component',
+    styles: [],
+    html: `{{ text }}`
+})
+export class I18nComponent {
+    text = 'Some placeholder';
+
+    constructor(private _i18n: VI18n) {
+    }
+
+    changeValue(): void {
+        this.translationFromComponent = this._i18n.findTranslation('greeting');
+    }
+}
+```
+
+The VI18n calls the `setActiveLanguageSet` logic in your application config to determine which language set to use.
+Therefore, make sure you have implemented your logic, otherwise the value will not be translated.
 
 ## Miscellaneous
 
