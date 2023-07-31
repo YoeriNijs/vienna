@@ -6,16 +6,14 @@ import {replaceAll} from "../util/v-internal-regex-util";
 export class VI18n {
     private _findActiveSet: VI18nFindLanguageSet;
 
-    constructor() {
-        // Util class
-    }
-
-    register(findActiveSet: VI18nFindLanguageSet): void {
+    setFindActiveSet(findActiveSet: VI18nFindLanguageSet): void {
         this._findActiveSet = findActiveSet;
     }
-
+    
     findTranslation(key: string): string {
-        const activeSet = this._findActiveSet();
+        const activeSet = this._findActiveSet
+            ? this._findActiveSet()
+            : undefined;
         if (!activeSet) {
             return key;
         }
@@ -24,6 +22,4 @@ export class VI18n {
         const translation = activeSet.translations[key];
         return translation ? translation : key;
     }
-
-
 }

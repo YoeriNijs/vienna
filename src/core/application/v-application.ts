@@ -148,7 +148,7 @@ export function VApplication(config: VApplicationConfig) {
                 const i18n = this._i18n;
                 if (i18n) {
                     const i18nService = VInjector.resolve<VI18n>(VI18n);
-                    i18nService.register(i18n.setActiveLanguageSet);
+                    i18nService.setFindActiveSet(i18n.setActiveLanguageSet);
                 }
             }
         }

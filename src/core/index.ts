@@ -8,6 +8,12 @@ export * from './application/v-i18n-config';
 export * from './application/v-i18n-find-language-set';
 export * from './application/v-i18n-language-set';
 
+export * from './logger/v-log';
+export * from './logger/v-log-sender-settings';
+export * from './logger/v-logger';
+
+export * from './i18n/v-i18n';
+
 export * from './misc/audit/v-audit';
 export * from './misc/web';
 
@@ -22,10 +28,6 @@ export * from './component/v-component-type';
 
 export * from './injector/v-injectable-decorator';
 export * from './injector/v-injector';
-
-export * from './logger/v-log';
-export * from './logger/v-log-sender-settings';
-export * from './logger/v-logger';
 
 export * from './router/hooks/v-after-init';
 export * from './router/hooks/v-init';

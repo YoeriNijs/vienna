@@ -19,4 +19,8 @@ export class VInternalInjectableSingletons {
         const instanceProto = Object.getPrototypeOf(instance);
         return this._singletons.some(s => Object.getPrototypeOf(s) === instanceProto);
     }
+
+    public static flush(): void {
+        this._singletons = [];
+    }
 }
