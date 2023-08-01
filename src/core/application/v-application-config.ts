@@ -5,7 +5,7 @@ import {VRouteNotFoundStrategy} from '../router/v-route-not-found-strategy';
 import {VRouteNotFoundRedirect} from "../router/v-route-not-found-redirect";
 import {VGlobalStyles} from "./v-global-styles";
 import {VApplicationPlugins} from "./v-application-plugins";
-import {VPipe} from "./v-pipe";
+import {VPipeTransform} from "../pipe/v-pipe-transform";
 import {VI18nConfig} from "./v-i18n-config";
 
 export interface VApplicationConfig {
@@ -17,6 +17,6 @@ export interface VApplicationConfig {
     darkModeEnabled?: () => boolean;
     darkModeClassOverride?: string;
     plugins?: VApplicationPlugins;
-    pipes?: Type<VPipe>[];
+    pipes?: Type<VPipeTransform>[];
     i18n?: VI18nConfig;
 }
