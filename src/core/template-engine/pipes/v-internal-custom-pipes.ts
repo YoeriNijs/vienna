@@ -1,12 +1,13 @@
 import {VInjectable} from "../../injector/v-injectable-decorator";
-import {VPipe} from "../../application/v-pipe";
+import {VPipeTransform} from "../../pipe/v-pipe-transform";
 import {VInternalTemplatePipe} from "./v-internal-template-pipe";
+import {VPipeOptions} from "../../pipe/v-pipe-options";
 
 @VInjectable({singleton: true})
 export class VInternalCustomPipes {
-    private _pipes: VPipe[] = [];
+    private _pipes: VPipeTransform[] = [];
 
-    register(pipes: VPipe[]) {
+    register(pipes: VPipeTransform[]) {
         this._pipes.push(...pipes);
     }
 
@@ -17,7 +18,8 @@ export class VInternalCustomPipes {
                     return p.transform(value);
                 },
                 name(): string {
-                    return p.name();
+                    const options: VPipeOptions = (p as any).vPipeOptions;
+                    return options.name;
                 },
                 accept(segment: string, pipeName: string, _: string): boolean {
                     return segment === pipeName;

@@ -17,6 +17,10 @@ export * from './i18n/v-i18n';
 export * from './misc/audit/v-audit';
 export * from './misc/web';
 
+export * from './pipe/v-pipe';
+export * from './pipe/v-pipe-options';
+export * from './pipe/v-pipe-transform';
+
 export * from './binding/v-emit';
 export * from './binding/v-emitter';
 export * from './binding/v-prop';

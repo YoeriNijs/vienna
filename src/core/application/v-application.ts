@@ -14,12 +14,12 @@ import {VInternalLogSender} from "../logger/v-internal-log-sender";
 import {VWeb, VWebDocTags} from "../misc/web";
 import {getCurrentDocTags} from "../util/v-internal-document-util";
 import {VInternalCustomPipes} from "../template-engine/pipes/v-internal-custom-pipes";
-import {VPipe} from "./v-pipe";
 import {VDuplicatePipeException} from "./v-duplicate-pipe-exception";
 
 import * as pincet from 'pincet';
 import {VI18n} from "../i18n/v-i18n";
 import {VI18nConfig} from "./v-i18n-config";
+import {VInternalPipeTransform} from "../pipe/v-internal-pipe-transform";
 
 export function VApplication(config: VApplicationConfig) {
     function override<T extends new(...arg: any[]) => any>(target: T) {
@@ -122,13 +122,16 @@ export function VApplication(config: VApplicationConfig) {
 
             private initializePipes(): void {
                 if (config.pipes) {
-                    const pipes = config.pipes.map<VPipe>(pipeType => VInjector.resolve(pipeType));
-                    const pipeNames = pipes.map(p => p.name());
+                    const pipes = config.pipes.map<VInternalPipeTransform>(pipeType =>
+                        VInjector.resolve(pipeType) as VInternalPipeTransform);
+                    const pipeNames = pipes.map(p => p.vPipeOptions.name);
                     const uniquePipeNames = pincet.unique<string>(pipeNames);
                     if (uniquePipeNames.length === pipes.length) {
                         this._pipes.register(pipes);
                     } else {
-                        const pipeNames = pipes.map(p => p.name()).toString();
+                        const pipeNames = pipes
+                            .map(p => p.vPipeOptions.name)
+                            .toString();
                         throw new VDuplicatePipeException(`Duplicate pipe names found: ${pipeNames}. Vienna only accepts unique pipe names!`);
                     }
                 }

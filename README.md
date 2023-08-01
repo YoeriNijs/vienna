@@ -577,16 +577,14 @@ export class PipeComponent {
 
 ### Create custom pipes
 
-Vienna supports custom pipes. In order to create a custom pipe, implement the `VPipe` interface accordingly.
+Vienna supports custom pipes. In order to create a custom pipe, add the `VPipe` decorator accordingly. Also, implement
+the `VPipeTransform` interface.
 
 For example:
 
 ```
+@VPipe({ name: 'greeting' })
 export class GreetingPipe implements VPipe {
-    name(): string {
-        return "greeting";
-    }
-
     transform(value: string): string {
         return `${value}, world!`;
     }
