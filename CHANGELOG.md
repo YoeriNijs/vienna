@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.73](https://github.com/YoeriNijs/vienna/compare/0.2.72...0.2.73)
+## [0.2.74](https://github.com/YoeriNijs/vienna/compare/0.2.73...0.2.74)
+
+### Merged
+
+- refactor(dark mode): change global dark mode implementation [`#73`](https://github.com/YoeriNijs/vienna/pull/73)
+
+## [0.2.73](https://github.com/YoeriNijs/vienna/compare/0.2.72...0.2.73) - 2023-08-01
 
 ### Merged
 
 - refactor(vpipe): refactor VPipe so pipe name is in decorator instead [`#72`](https://github.com/YoeriNijs/vienna/pull/72)
+
+### Commits
+
+- feat(package.json): release '0.2.73' [`282b753`](https://github.com/YoeriNijs/vienna/commit/282b753f5c306d2f78e1cc5a3783f55c1ab8673a)
 
 ## [0.2.72](https://github.com/YoeriNijs/vienna/compare/0.2.71...0.2.72) - 2023-07-31
 
