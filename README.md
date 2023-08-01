@@ -120,7 +120,7 @@ following:
     - `style`: just plain css.
     - `href`: a link to a remote stylesheet. Thus, a href should start with 'http'. Also, it is possible to pass
       integrity and crossorigin values  (see below).
-- `darkModeEnabled` (optional): global method to initialize app-wide dark mode (see [dark mode](#dark-mode)).
+- `darkMode` (optional): global config object to initialize app-wide dark mode (see [dark mode](#dark-mode)).
 - `pipes` (optional): custom pipes (see [create custom pipes](#create-custom-pipes))
 
 For instance, if you want to use [Bulma](https://bulma.io), just add the following:
@@ -1025,7 +1025,7 @@ dark apps more than light apps, and for some it is even a necessity to use an ap
 ### Set up dark mode
 
 Luckily, Vienna comes with dark mode out of the box. There are two ways to enable dark mode. The easiest way is to set
-up dark mode in your application config by using the so-called `darkModeEnabled` hook. It is just a method that should
+up dark mode in your application config by using the so-called `isDarkModeEnabled` hook. It is just a method that should
 return true or false. If it returns true, dark mode will be enabled for the whole application. For instance:
 
 `application.ts`
@@ -1034,9 +1034,11 @@ return true or false. If it returns true, dark mode will be enabled for the whol
 @VApplication({
     declarations: [],
     routes: [],
-    darkModeEnabled: () => {
-      // ... Some custom logic here. 
-      return true; 
+    darkMode: {
+      isDarkModeEnabled: () => {
+        // ... Some custom logic here. 
+        return true; 
+      }
     }
 })
 export class Application {}
@@ -1106,8 +1108,10 @@ config:
 @VApplication({
     declarations: [],
     routes: [],
-    darkModeEnabled: () => {...},
-    darkModeClassOverride: 'my-custom-dark-mode-class'
+    darkMode: {
+      isDarkModeEnabled: () => {...},
+      darkModeClassOverride: 'my-custom-dark-mode-class'
+    }
 })
 export class Application {}
 ```

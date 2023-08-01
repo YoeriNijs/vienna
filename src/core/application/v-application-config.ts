@@ -7,6 +7,7 @@ import {VGlobalStyles} from "./v-global-styles";
 import {VApplicationPlugins} from "./v-application-plugins";
 import {VPipeTransform} from "../pipe/v-pipe-transform";
 import {VI18nConfig} from "./v-i18n-config";
+import {VDarkModeOptions} from "./v-dark-mode-options";
 
 export interface VApplicationConfig {
     declarations: Type<VComponentType>[];
@@ -14,8 +15,7 @@ export interface VApplicationConfig {
     routeNotFoundStrategy?: VRouteNotFoundStrategy | VRouteNotFoundRedirect;
     rootElementSelector?: string;
     globalStyles?: VGlobalStyles;
-    darkModeEnabled?: () => boolean;
-    darkModeClassOverride?: string;
+    darkMode?: VDarkModeOptions;
     plugins?: VApplicationPlugins;
     pipes?: Type<VPipeTransform>[];
     i18n?: VI18nConfig;
