@@ -107,14 +107,20 @@ export function VApplication(config: VApplicationConfig) {
             }
 
             private initializeDarkMode(): void {
-                const isDarkModeEnabledInConfig = config.darkModeEnabled ? config.darkModeEnabled() : false;
+                if (!config.darkMode) {
+                    return;
+                }
+
+                const isDarkModeEnabledInConfig = config.darkMode.isDarkModeEnabled
+                    ? config.darkMode.isDarkModeEnabled()
+                    : false;
                 if (isDarkModeEnabledInConfig) {
                     this._darkModeService.enableDarkMode();
                 } else {
                     this._darkModeService.disableDarkMode();
                 }
 
-                const darkModeClassOverride = config.darkModeClassOverride;
+                const darkModeClassOverride = config.darkMode.darkModeClassOverride;
                 if (darkModeClassOverride) {
                     this._darkModeService.overrideGlobalDarkModeClass(darkModeClassOverride);
                 }

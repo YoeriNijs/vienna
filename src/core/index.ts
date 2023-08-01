@@ -1,6 +1,7 @@
 // Public Vienna framework api
 export * from './application/v-application';
 export * from './application/v-application-config';
+export * from './application/v-dark-mode-options';
 export * from './application/v-global-inline-style';
 export * from './application/v-global-style-link';
 export * from './application/v-global-styles';
