@@ -1280,7 +1280,10 @@ Of course, you can also create an i18n value dynamically. Just implement the `VI
 @VComponent({
     selector: 'i18n-component',
     styles: [],
-    html: `{{ text }}`
+    html: `
+        <p>{{ text }}</p>
+        <button @click="changeValue()">Replace text</button>
+    `
 })
 export class I18nComponent {
     text = 'Some placeholder';
