@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.75](https://github.com/YoeriNijs/vienna/compare/0.2.74...0.2.75)
+## [0.2.76](https://github.com/YoeriNijs/vienna/compare/0.2.75...0.2.76)
 
 ### Commits
 
+- Wrong interface for pipes [`f72b422`](https://github.com/YoeriNijs/vienna/commit/f72b422a8e4b252b37d1c69cf6cd0ce3e6d98ef9)
+
+## [0.2.75](https://github.com/YoeriNijs/vienna/compare/0.2.74...0.2.75) - 2023-08-02
+
+### Commits
+
+- feat(package.json): release '0.2.75' [`e278e8f`](https://github.com/YoeriNijs/vienna/commit/e278e8fcc5350f6faad82061531e33b5bed36f6e)
 - Update documentation [`4e726e5`](https://github.com/YoeriNijs/vienna/commit/4e726e54516c9b83860f285e1cefe6339ee8805c)
 
 ## [0.2.74](https://github.com/YoeriNijs/vienna/compare/0.2.73...0.2.74) - 2023-08-01
