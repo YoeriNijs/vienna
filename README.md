@@ -584,7 +584,7 @@ For example:
 
 ```
 @VPipe({ name: 'greeting' })
-export class GreetingPipe implements VPipe {
+export class GreetingPipe implements VPipeTransform {
     transform(value: string): string {
         return `${value}, world!`;
     }
