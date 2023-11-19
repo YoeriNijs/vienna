@@ -1509,6 +1509,7 @@ describe('VComponentFactory', () => {
 
 # Known issues
 
+- Rerender repeat, repeat and switch elements while they hold a counter that is in another element.
 - Event listener (such as click) may stop intervals and timeouts in same component.
 - VProp is leaking state when routing to subcomponent that has input binding.
 - VInit does not work without callback yet.
