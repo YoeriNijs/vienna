@@ -23,6 +23,8 @@ import {GreetingPipe} from "./pipes/greeting.pipe";
 import {TranslatePipe} from "./pipes/translate.pipe";
 import {I18nComponent} from "./components/i18n.component";
 import {determineLanguageSet} from "./i18n/determine_language_set";
+import {CounterInCheckComponent} from "./components/counter-in-check.component";
+import {StyleInnerComponent} from "./components/style-inner.component";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -33,6 +35,7 @@ import {determineLanguageSet} from "./i18n/determine_language_set";
         AboutComponent,
         AboutMoreComponent,
         CounterComponent,
+        CounterInCheckComponent,
         CustomPipesComponent,
         DarkModeComponent,
         DashboardComponent,
@@ -49,6 +52,7 @@ import {determineLanguageSet} from "./i18n/determine_language_set";
         PipeComponent,
         SettingsComponent,
         StyleComponent,
+        StyleInnerComponent,
         SwitchComponent,
         TemplateComponent
     ],
@@ -66,6 +70,7 @@ import {determineLanguageSet} from "./i18n/determine_language_set";
         {path: '/custom-pipes', component: CustomPipesComponent},
         {path: '/template', component: TemplateComponent},
         {path: '/style', component: StyleComponent},
+        {path: '/style-inner', component: StyleInnerComponent},
         {path: '/rerender', component: RerenderParentComponent},
         {path: '/i18n', component: I18nComponent},
         {
@@ -84,6 +89,7 @@ import {determineLanguageSet} from "./i18n/determine_language_set";
             ]
         },
         {path: '/counter', component: CounterComponent},
+        {path: '/counter-in-check', component: CounterInCheckComponent},
         {
             path: '/settings',
             component: SettingsComponent,
