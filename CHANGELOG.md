@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.78](https://github.com/YoeriNijs/vienna/compare/0.2.77...0.2.78)
+## [0.2.79](https://github.com/YoeriNijs/vienna/compare/0.2.78...0.2.79)
+
+### Commits
+
+- Update style-inner.component.ts [`2448b53`](https://github.com/YoeriNijs/vienna/commit/2448b536ee7eb4ba370ae478c566f191bcb3c1e4)
+
+## [0.2.78](https://github.com/YoeriNijs/vienna/compare/0.2.77...0.2.78) - 2023-11-20
 
 ### Merged
 
@@ -13,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.78' [`3bbe5f7`](https://github.com/YoeriNijs/vienna/commit/3bbe5f7ef8355a685d3c9c81f8e765cdc798a155)
 - docs(removed fixed bug): removed fixed bug [`1c6dc38`](https://github.com/YoeriNijs/vienna/commit/1c6dc38dfe95b809e5c942421dd926ad98b98b5a)
 - feat(styles): single style implementation [`d3a7f11`](https://github.com/YoeriNijs/vienna/commit/d3a7f11eb36886f72f0a3640175091336c4bc283)
 
