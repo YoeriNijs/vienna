@@ -96,15 +96,8 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
 
             this.prependGlobalStyles(globalStyles, shadowRoot);
 
-            eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY, (data: VInternalEventRebuildData) => {
-                // Notify subscribers that we are currently rendering something
-                eventBus.publish(VInternalEventName.RENDERING_STARTED);
-
-                data.dirtyElementIds.forEach(id => this.rerenderPartialHtml(shadowRoot, data.component, id));
-
-                // Notify subscribers that we are done rendering
-                eventBus.publish(VInternalEventName.RENDERING_FINISHED);
-            });
+            eventBus.subscribe(VInternalEventName.REBUILD_PARTIALLY,
+                (data: VInternalEventRebuildData) => this.rebuildPartially(data, shadowRoot));
 
             eventBus.subscribe(VInternalEventName.NAVIGATION_ENDED, () => {
                 const vAfterInit = getAllMethods(componentType.prototype).find(m => m === 'vAfterInit');
@@ -134,7 +127,7 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 const intervalEnd = this._intervalRange.end;
                 let intervalIdToRemove = this._intervalRange.end;
                 while (intervalIdToRemove-- && intervalEnd >= intervalStart) {
-                    window.clearInterval(intervalIdToRemove)
+                    window.clearInterval(intervalIdToRemove);
                 }
             }
 
@@ -144,11 +137,25 @@ const createComponentClass = (componentType: Type<VComponentType>, eventBus: VIn
                 const timeoutEnd = this._timeoutRange.end;
                 let timeoutIdToRemove = this._timeoutRange.end;
                 while (timeoutIdToRemove-- && timeoutEnd >= timeoutStart) {
-                    window.clearTimeout(timeoutIdToRemove)
+                    window.clearTimeout(timeoutIdToRemove);
                 }
             }
 
             this._component = null;
+        }
+
+        private rebuildPartially(data: VInternalEventRebuildData, shadowRoot: ShadowRoot) {
+            // Notify subscribers that we are currently rendering something
+            eventBus.publish(VInternalEventName.RENDERING_STARTED);
+
+            // Rerender partial html
+            data.dirtyElementIds.forEach(id => this.rerenderPartialHtml(shadowRoot, data.component, id));
+
+            // Reattach bindings since previous bindings are possibly cleared at this point
+            this.attachBindings(data.component, shadowRoot);
+
+            // Notify subscribers that we are done rendering
+            eventBus.publish(VInternalEventName.RENDERING_FINISHED);
         }
 
         private createShadowRoot(component: VComponentType): ShadowRoot {

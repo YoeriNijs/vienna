@@ -17,6 +17,10 @@ import {LoginService} from "../services/login.service";
 			border-radius: 8px;
 			padding: 10px;
 		}
+		
+		.title {
+		    color: #fff;
+		}
 	`],
     html: `
         <div class="title">{{ title }}</div>
