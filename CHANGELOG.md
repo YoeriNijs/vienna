@@ -5,10 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.77](https://github.com/YoeriNijs/vienna/compare/0.2.76...0.2.77)
+## [0.2.78](https://github.com/YoeriNijs/vienna/compare/0.2.77...0.2.78)
+
+### Merged
+
+- Fix event handling bug + add single style implementation [`#74`](https://github.com/YoeriNijs/vienna/pull/74)
 
 ### Commits
 
+- docs(removed fixed bug): removed fixed bug [`1c6dc38`](https://github.com/YoeriNijs/vienna/commit/1c6dc38dfe95b809e5c942421dd926ad98b98b5a)
+- feat(styles): single style implementation [`d3a7f11`](https://github.com/YoeriNijs/vienna/commit/d3a7f11eb36886f72f0a3640175091336c4bc283)
+
+## [0.2.77](https://github.com/YoeriNijs/vienna/compare/0.2.76...0.2.77) - 2023-11-19
+
+### Commits
+
+- feat(package.json): release '0.2.77' [`3ce9f21`](https://github.com/YoeriNijs/vienna/commit/3ce9f211d2395adda0b9a5a568de7ca043dadc2e)
 - Update README.md [`850bc68`](https://github.com/YoeriNijs/vienna/commit/850bc68d2116ef2fc2db899cab76ea485bfa5911)
 
 ## [0.2.76](https://github.com/YoeriNijs/vienna/compare/0.2.75...0.2.76) - 2023-09-05
