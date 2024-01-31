@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.79](https://github.com/YoeriNijs/vienna/compare/0.2.78...0.2.79)
+## [0.2.80](https://github.com/YoeriNijs/vienna/compare/0.2.79...0.2.80)
+
+### Merged
+
+- feat(vinternalrouter): implement VCustomRouteRedirect [`#75`](https://github.com/YoeriNijs/vienna/pull/75)
+
+## [0.2.79](https://github.com/YoeriNijs/vienna/compare/0.2.78...0.2.79) - 2023-11-20
 
 ### Commits
 
+- feat(package.json): release '0.2.79' [`c7aa216`](https://github.com/YoeriNijs/vienna/commit/c7aa2169bed301ca89de944d1051a189e5230fb8)
 - Update style-inner.component.ts [`2448b53`](https://github.com/YoeriNijs/vienna/commit/2448b536ee7eb4ba370ae478c566f191bcb3c1e4)
 
 ## [0.2.78](https://github.com/YoeriNijs/vienna/compare/0.2.77...0.2.78) - 2023-11-20
