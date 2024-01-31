@@ -71,6 +71,12 @@ describe('VInternalRouter', () => {
                 .catch(e => fail(e));
         });
 
+        it('should navigate to configured path if route is invalid and strategy is redirectTo', async () => {
+            setup('/invalid-route', { routeNotFoundStrategy: { redirectTo: () => '/not-found' } })
+                .then(() => expect(window.location.href).toEqual('#/not-found'))
+                .catch(e => fail(e));
+        });
+
         it('should throw error if path if route is invalid and strategy is invalid path', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: { path: 'not-found' } })
                 .then(e => fail(e))

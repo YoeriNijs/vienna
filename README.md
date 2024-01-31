@@ -112,6 +112,7 @@ following:
     - `Root`: enum. If configured, the user will be navigated back to the root route the Vienna application.
     - `VRouteNotFoundRedirect`: object that holds a path field. The router will send the user to the configured path.
       The path should start with '/'. Example object: `{ path: '/not-found' }`.
+    - `VCustomRouteRedirect`: object that needs to have a method called `redirectTo` that does not take any arguments, and just returns a route string, such as `/my-path`. Of course, you need to have an implementation for this route.
 - `rootElementSelector` (optional): can be used to specify which root element should be used by Vienna as application
   root. Default: 'body'.
 - `globalStyles` (optional): can be used to inject global styles in every webcomponent. This might be handy if you want

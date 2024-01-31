@@ -1,4 +1,4 @@
-import {VApplication, VRouteNotFoundStrategy} from '../src';
+import {VApplication} from '../src';
 import {DashboardComponent} from './components/dashboard.component';
 import {HomeComponent} from './components/home.component';
 import {FooterComponent} from "./components/footer.component";
@@ -25,6 +25,7 @@ import {I18nComponent} from "./components/i18n.component";
 import {determineLanguageSet} from "./i18n/determine_language_set";
 import {CounterInCheckComponent} from "./components/counter-in-check.component";
 import {StyleInnerComponent} from "./components/style-inner.component";
+import {handleRouteNotFound} from "./routing/handle-route-not-found";
 
 /**
  * This demo app is for <b>development purposes only</b>, needed to test some edge cases.
@@ -102,7 +103,9 @@ import {StyleInnerComponent} from "./components/style-inner.component";
             guards: [CanActivatePersonalGuard]
         }
     ],
-    routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT,
+    routeNotFoundStrategy: {
+        redirectTo: handleRouteNotFound
+    },
     rootElementSelector: '#vienna-root',
     plugins: {
         logger: {

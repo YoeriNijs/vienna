@@ -1,10 +1,9 @@
-import {VRouteNotFoundStrategy} from "./v-route-not-found-strategy";
 import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VRoute} from "./v-route";
-import {VRouteNotFoundRedirect} from "./v-route-not-found-redirect";
+import {VRouteStrategy} from "./v-route-strategy";
 
 export interface VInternalRouterOptions {
     eventBus: VInternalEventbus;
     routes: VRoute[];
-    routeNotFoundStrategy?: VRouteNotFoundStrategy | VRouteNotFoundRedirect;
+    routeNotFoundStrategy?: VRouteStrategy;
 }
