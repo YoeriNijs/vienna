@@ -40,7 +40,8 @@ export class DashboardComponent {
     menuItems = [
         {name: 'personal', link: '#/personal'},
         {name: 'settings', link: '#/settings?message=Settings with param from navigation'},
-        {name: 'counter', link: '#/counter'}
+        {name: 'counter', link: '#/counter'},
+        {name: 'does not exist', link: '#/does-not-exist'}
     ];
 
     changeTitle(title: string): void {

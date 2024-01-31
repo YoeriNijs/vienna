@@ -8,14 +8,22 @@ import {VInternalEventbus} from "../eventbus/v-internal-eventbus";
 import {VInternalEventName} from "../eventbus/v-internal-event-name";
 import {VRouteNotFoundRedirect} from "./v-route-not-found-redirect";
 import {VInvalidRouteStrategyException} from "./v-invalid-route-strategy-exception";
+import {VCustomRouteRedirect} from "./v-custom-route-redirect";
+import {VRouteStrategy} from "./v-route-strategy";
+import {ViennaStandardRoutes} from "./v-route-home";
 
 export class VInternalRouter {
 
     constructor(private options: VInternalRouterOptions) {}
 
-    private static isRouteNotFoundRedirectStrategy(strategy: VRouteNotFoundStrategy | VRouteNotFoundRedirect): strategy is VRouteNotFoundRedirect {
+    private static isRouteNotFoundRedirectStrategy(strategy: VRouteStrategy): strategy is VRouteNotFoundRedirect {
         const s = strategy as any;
         return s && s.path && s.path.startsWith('/');
+    }
+
+    private static isCustomRouteRedirect(strategy: VRouteStrategy): strategy is VCustomRouteRedirect {
+        const s = strategy as any;
+        return s && s.redirectTo && typeof s.redirectTo === 'function';
     }
 
     start(): Promise<void> {
@@ -34,10 +42,15 @@ export class VInternalRouter {
         const strategy = this.options.routeNotFoundStrategy;
         if (VInternalRouter.isRouteNotFoundRedirectStrategy(strategy)) {
             window.location.href = `#${strategy.path}`;
+        } else if (VInternalRouter.isCustomRouteRedirect(strategy)) {
+            const redirect = strategy.redirectTo();
+            window.location.href = redirect === ViennaStandardRoutes.HOME
+                ? ViennaStandardRoutes.HOME
+                : `#${redirect}`;
         } else if (strategy === VRouteNotFoundStrategy.IGNORE) {
             throw new VNoRouteException(`No route found for url '${url}'`);
         } else if (strategy === VRouteNotFoundStrategy.ROOT) {
-            window.location.href = '#/';
+            window.location.href = ViennaStandardRoutes.HOME;
         } else {
             const invalidStrategy = strategy ? JSON.stringify(strategy) : 'none';
             throw new VInvalidRouteStrategyException(`Invalid route strategy: '${invalidStrategy}'`);
