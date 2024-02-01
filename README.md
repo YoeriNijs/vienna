@@ -107,7 +107,7 @@ following:
 - `declarations` (mandatory): holds all Vienna components that you want to use in your application.
 - `routes` (mandatory): holds all Vienna routes for your application.
 - `routeNotFoundStrategy` (optional): can be used to specify another strategy if a route is not found. Currently, Vienna
-  accepts three strategies:
+  accepts the following strategies:
     - `Ignore`: enum. If configured, the invalid route will be ignored and the user stays on the current page.
     - `Root`: enum. If configured, the user will be navigated back to the root route the Vienna application.
     - `VRouteNotFoundRedirect`: object that holds a path field. The router will send the user to the configured path.
