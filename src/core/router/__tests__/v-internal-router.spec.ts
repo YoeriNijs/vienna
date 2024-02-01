@@ -71,15 +71,15 @@ describe('VInternalRouter', () => {
                 .catch(e => fail(e));
         });
 
-        it('should navigate to home path if route is invalid and strategy is path', async () => {
-            setup('/invalid-route', { routeNotFoundStrategy: { path: '/#' } })
-                .then(() => expect(window.location.href).toEqual('#/'))
-                .catch(e => fail(e));
-        });
-
         it('should navigate to configured path if route is invalid and strategy is redirectTo', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: { redirectTo: () => '/not-found' } })
                 .then(() => expect(window.location.href).toEqual('#/not-found'))
+                .catch(e => fail(e));
+        });
+
+        it('should navigate to home path if route is invalid and strategy is path', async () => {
+            setup('/invalid-route', { routeNotFoundStrategy: { redirectTo: () => '/#' } })
+                .then(() => expect(window.location.href).toEqual('#/'))
                 .catch(e => fail(e));
         });
 
