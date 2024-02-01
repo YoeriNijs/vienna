@@ -5,11 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.80](https://github.com/YoeriNijs/vienna/compare/0.2.79...0.2.80)
+## [0.2.81](https://github.com/YoeriNijs/vienna/compare/0.2.80...0.2.81)
+
+### Merged
+
+- ci(jest): fix Jest runner by adding fake timers [`#77`](https://github.com/YoeriNijs/vienna/pull/77)
+- Version bumps + minor fixes [`#76`](https://github.com/YoeriNijs/vienna/pull/76)
+
+### Commits
+
+- ci(husky): do not run prepare commit in ci [`78c7ad7`](https://github.com/YoeriNijs/vienna/commit/78c7ad7c84ee320bf2bec09aaf655496e278b080)
+- ci(release): back to Node 18 [`d0133ad`](https://github.com/YoeriNijs/vienna/commit/d0133ad7929695f7c3006e66e0253e4661beee3c)
+- ci(husky): revert Husky upgrade [`e1649ff`](https://github.com/YoeriNijs/vienna/commit/e1649ff2a1bb2b435217b95bb67cb72aa1f42f07)
+- ci(husky): set permissions [`18c2739`](https://github.com/YoeriNijs/vienna/commit/18c2739648ef2043ee603b9cad0dff372c74830d)
+- chore(gitignore): ignore Husky again [`b00ac10`](https://github.com/YoeriNijs/vienna/commit/b00ac10095de529c62a11ac1e611d4b13a046ab7)
+- fix(husky): try to fix Husky hook [`8ae4a15`](https://github.com/YoeriNijs/vienna/commit/8ae4a157e142c6a791892046203f84aa957173e2)
+- Deleted [`56e5fd4`](https://github.com/YoeriNijs/vienna/commit/56e5fd4d7048577c577564a8d80ce21638c76363)
+- chore(husky): try to fix Husky hook [`1d386c3`](https://github.com/YoeriNijs/vienna/commit/1d386c3bd6199d7152c09bc05e335db20aff842f)
+- Update release.yml [`377dad4`](https://github.com/YoeriNijs/vienna/commit/377dad42a2a98113c2b545bc82190e7b8e399235)
+- ci(package.json): remove detect open handles [`23e1439`](https://github.com/YoeriNijs/vienna/commit/23e143948e5df344f8e1b7c8b5e03a36c15c9f91)
+- ci(jest config): revert Jest config for fake timers [`6d0c079`](https://github.com/YoeriNijs/vienna/commit/6d0c079a6cf882f830416a231eec1bf785b2eaa4)
+- refactor(package.json + vinternalrouterspec + readme.md): mostly version bumps [`c777ee1`](https://github.com/YoeriNijs/vienna/commit/c777ee12f3cee10b3fdbcc5667dfd2a9bd06b285)
+- test(vinternalrouterspec): fix test [`9a297fb`](https://github.com/YoeriNijs/vienna/commit/9a297fbde3a29475649c02bed83bd1b4938cca23)
+- test(vinternalrouterspec): add test scenario [`b019da7`](https://github.com/YoeriNijs/vienna/commit/b019da778bd8c2c7b76730430a34ea17421a69b7)
+
+## [0.2.80](https://github.com/YoeriNijs/vienna/compare/0.2.79...0.2.80) - 2024-01-31
 
 ### Merged
 
 - feat(vinternalrouter): implement VCustomRouteRedirect [`#75`](https://github.com/YoeriNijs/vienna/pull/75)
+
+### Commits
+
+- feat(package.json): release '0.2.80' [`c7f1cc3`](https://github.com/YoeriNijs/vienna/commit/c7f1cc31a72b615c640ae83403f21b69addf1988)
 
 ## [0.2.79](https://github.com/YoeriNijs/vienna/compare/0.2.78...0.2.79) - 2023-11-20
 
