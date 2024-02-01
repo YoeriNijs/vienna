@@ -1,5 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-tty=$(readlink /proc/$$/fd/2)
-exec < $tty && git cz --hook || true
