@@ -12,4 +12,4 @@ coverage
 lib
 
 # Husky
-#.husky
+.husky
