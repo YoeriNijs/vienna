@@ -55,37 +55,31 @@ describe('VInternalRouter', () => {
     describe('Route not found strategies', () => {
         it('should navigate to root if route is invalid and strategy is root', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: VRouteNotFoundStrategy.ROOT })
-                .then(() => expect(window.location.href).toEqual('#/'))
-                .catch(e => fail(e));
+                .then(() => expect(window.location.href).toEqual('#/'));
         });
 
         it('should ignore if route is invalid and strategy is ignore', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: VRouteNotFoundStrategy.IGNORE })
-                .then(e => fail(e))
                 .catch(e => expect(e).toEqual(new VNoRouteException('No route found for url \'/invalid-route\'')));
         });
 
         it('should navigate to configured path if route is invalid and strategy is path', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: { path: '/not-found' } })
                 .then(() => expect(window.location.href).toEqual('#/not-found'))
-                .catch(e => fail(e));
         });
 
         it('should navigate to configured path if route is invalid and strategy is redirectTo', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: { redirectTo: () => '/not-found' } })
                 .then(() => expect(window.location.href).toEqual('#/not-found'))
-                .catch(e => fail(e));
         });
 
         it('should navigate to home path if route is invalid and strategy is path', async () => {
-            setup('/invalid-route', { routeNotFoundStrategy: { redirectTo: () => '/#' } })
-                .then(() => expect(window.location.href).toEqual('#/'))
-                .catch(e => fail(e));
+            setup('/invalid-route', { routeNotFoundStrategy: { redirectTo: () => '#/' } })
+                .then(() => expect(window.location.href).toEqual('#/'));
         });
 
         it('should throw error if path if route is invalid and strategy is invalid path', async () => {
             setup('/invalid-route', { routeNotFoundStrategy: { path: 'not-found' } })
-                .then(e => fail(e))
                 .catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'{"path":"not-found"}\'')))
         });
 
@@ -93,7 +87,6 @@ describe('VInternalRouter', () => {
             [undefined, null]
         )('should throw error if path if route is invalid and strategy is %s', async (strategy) => {
             setup('/invalid-route', { routeNotFoundStrategy: strategy })
-                .then(e => fail(e))
                 .catch(e => expect(e).toEqual(new VInvalidRouteStrategyException('Invalid route strategy: \'none\'')))
         });
     });
@@ -106,7 +99,7 @@ describe('VInternalRouter', () => {
             });
             setup('/custom-component', {
                 routes: [ { path: '/custom-component', component: jest.fn() }]
-            }).catch(e => fail(e));
+            });
         });
 
         it('should navigate if route is configured and guard is true', done => {
@@ -122,7 +115,7 @@ describe('VInternalRouter', () => {
                         guards: [TrueGuard]
                     }
                 ]
-            }).catch(e => fail(e));
+            });
         });
 
         it('should fire VInvalidRouteStrategyException if guard is false', async () => {
@@ -164,7 +157,7 @@ describe('VInternalRouter', () => {
                         guards: [TruePromiseGuard]
                     }
                 ]
-            }).catch(e => fail(e));
+            });
         });
 
         it('should fire VInvalidRouteStrategyException if promise guard is false', async () => {
@@ -206,7 +199,7 @@ describe('VInternalRouter', () => {
                         guards: [TruePromiseGuard, TrueGuard, TruePromiseGuard]
                     }
                 ]
-            }).catch(e => fail(e));
+            });
         });
     });
 

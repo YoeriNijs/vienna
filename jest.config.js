@@ -11,5 +11,8 @@ module.exports = {
     setupFiles: [
         "<rootDir>/src/testing/util/v-internal-setup-document.ts"
     ],
-    timers: "fake"
+    fakeTimers: {
+        doNotFake: [],
+        timerLimit: 1000,
+    },
 };
