@@ -15,6 +15,10 @@ describe('VComponentFactory', () => {
 
     let component: VTestComponent<AppComponent>;
 
+    beforeAll(() => jest.useFakeTimers());
+
+    afterAll(() => jest.useRealTimers());
+
     beforeEach(() => {
         const createComponent = vComponentFactory<AppComponent>({
             component: AppComponent

@@ -15,7 +15,12 @@ describe('VInternalPropTransformer', () => {
 
     const transformer: VInternalPropTransformer = new VInternalPropTransformer();
 
-    beforeAll(() => window.customElements.define('html-element', HTMLElement));
+    beforeAll(() => {
+        window.customElements.define('html-element', HTMLElement);
+        jest.useFakeTimers()
+    });
+
+    afterAll(() => jest.useRealTimers());
 
     const createAttribute = (attributeName: string, attributeValue: string = null): NamedNodeMap => {
         const element = new HTMLElement();

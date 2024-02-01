@@ -89,6 +89,10 @@ export class ExternalStyleComponent {
 
 describe('VInternalRenderer', () => {
 
+    beforeAll(() => jest.useFakeTimers());
+
+    afterAll(() => jest.useRealTimers());
+
     describe('Conditions', () => {
         it('should render true value while false is undefined', () => {
             const createComponent = vComponentFactory<CheckComponent>({
