@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: setup
@@ -32,6 +32,7 @@ jobs:
 
       - name: commit
         run: |
+          export VIENNA_CI_MODE=true
           NEW_FRAMEWORK_VERSION=$(cat package.json \
             | grep version \
             | head -1 \
