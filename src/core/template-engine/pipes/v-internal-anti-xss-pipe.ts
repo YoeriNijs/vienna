@@ -4,7 +4,7 @@ import {filterXSS} from "xss";
 export class VInternalAntiXssPipe extends VInternalDefaultPipeImpl {
 
     name(): string {
-        return "raw";
+        return "safe";
     }
 
     transform(value: string): string {
