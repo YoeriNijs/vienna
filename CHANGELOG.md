@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.81](https://github.com/YoeriNijs/vienna/compare/0.2.80...0.2.81)
+## [0.2.82](https://github.com/YoeriNijs/vienna/compare/0.2.81...0.2.82)
+
+### Merged
+
+- fix(antixsspipe): rename AntiXssPipe internally [`#78`](https://github.com/YoeriNijs/vienna/pull/78)
+
+## [0.2.81](https://github.com/YoeriNijs/vienna/compare/0.2.80...0.2.81) - 2024-02-01
 
 ### Merged
 
@@ -14,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
+- feat(package.json): release '0.2.81' [`aec7fbe`](https://github.com/YoeriNijs/vienna/commit/aec7fbe91253352daacdbba288206b49990398f9)
 - ci(husky): do not run prepare commit in ci [`78c7ad7`](https://github.com/YoeriNijs/vienna/commit/78c7ad7c84ee320bf2bec09aaf655496e278b080)
 - ci(release): back to Node 18 [`d0133ad`](https://github.com/YoeriNijs/vienna/commit/d0133ad7929695f7c3006e66e0253e4661beee3c)
 - ci(husky): revert Husky upgrade [`e1649ff`](https://github.com/YoeriNijs/vienna/commit/e1649ff2a1bb2b435217b95bb67cb72aa1f42f07)
