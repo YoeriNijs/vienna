@@ -127,7 +127,7 @@ export class HomeComponent implements VInit, VAfterInit {
             return;
         }
         const email = this.emailRegister.value;
-        if (this._audit.isValidEmail(email)) {
+        if (!this._audit.isValidEmail(email)) {
             alert('Fill in a valid email!');
             return;
         }
