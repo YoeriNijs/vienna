@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.82](https://github.com/YoeriNijs/vienna/compare/0.2.81...0.2.82)
+## [0.2.83](https://github.com/YoeriNijs/vienna/compare/0.2.82...0.2.83)
+
+### Commits
+
+- fix(demo app): fix email check [`a65ec16`](https://github.com/YoeriNijs/vienna/commit/a65ec16a93a05f68eccb5c988baaf2dc61cb83b1)
+
+## [0.2.82](https://github.com/YoeriNijs/vienna/compare/0.2.81...0.2.82) - 2024-07-05
 
 ### Merged
 
 - fix(antixsspipe): rename AntiXssPipe internally [`#78`](https://github.com/YoeriNijs/vienna/pull/78)
+
+### Commits
+
+- feat(package.json): release '0.2.82' [`f7629c5`](https://github.com/YoeriNijs/vienna/commit/f7629c59c8336474cdbb4110fc50f38a3ac277a2)
 
 ## [0.2.81](https://github.com/YoeriNijs/vienna/compare/0.2.80...0.2.81) - 2024-02-01
 
