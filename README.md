@@ -1316,6 +1316,7 @@ methods are supported:
 - `isValidIp6`
 - `isBlank`
 - `isUserAgentBot`
+- `isUserAgentAi` (currently detecting gpt, claude, mistral, oai, google-extended, perplexity and others)
 
 The Vienna data validator is called `VAudit`, and is an injectable. Hence, just inject it in your code:
 
