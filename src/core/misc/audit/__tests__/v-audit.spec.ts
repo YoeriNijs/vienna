@@ -125,7 +125,7 @@ describe('VAudit', () => {
            'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
            'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36 some crawler value',
-       ])('should know is user agent %s is a bot', (ua) => {
+       ])('should know is user agent \'%s\' is a bot', (ua) => {
           expect(audit.isUserAgentBot(ua)).toBe(true);
        });
 
@@ -139,7 +139,7 @@ describe('VAudit', () => {
             undefined,
             null,
             ''
-        ])('should know is user agent %s is not a bot', (ua) => {
+        ])('should know is user agent \'%s\' is not a bot', (ua) => {
             expect(audit.isUserAgentBot(ua)).toBe(false);
         });
     });
@@ -157,8 +157,9 @@ describe('VAudit', () => {
             'amazonbot',
             'bingbot',
             'something-with-ai-and-dashes',
-            'something with ai in it'
-        ])('should know is user agent %s is a bot', (ua) => {
+            'something with -ai in it',
+            'something with ai- in it'
+        ])('should know is user agent \'%s\' is a bot', (ua) => {
             expect(audit.isUserAgentAi(ua)).toBe(true);
         });
 
@@ -169,10 +170,11 @@ describe('VAudit', () => {
             'Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko',
             'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
             'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G570Y Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/4.0 Chrome/44.0.2403.133 Mobile Safari/537.36',
+            'something with ai in it',
             undefined,
             null,
             ''
-        ])('should know is user agent %s is not a bot', (ua) => {
+        ])('should know is user agent \'%s\' is not a bot', (ua) => {
             expect(audit.isUserAgentAi(ua)).toBe(false);
         });
     });
