@@ -5,10 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.83](https://github.com/YoeriNijs/vienna/compare/0.2.82...0.2.83)
+## [0.2.84](https://github.com/YoeriNijs/vienna/compare/0.2.83...0.2.84)
+
+### Merged
+
+- Detect ai bots [`#79`](https://github.com/YoeriNijs/vienna/pull/79)
 
 ### Commits
 
+- fix(vaudit): detect bots and ai bots in the entire user agent string [`6fcd4a4`](https://github.com/YoeriNijs/vienna/commit/6fcd4a4db8192e5c3493a63118309a0815c8e0e0)
+- feat(vaudit): detect ai bots [`c8eacba`](https://github.com/YoeriNijs/vienna/commit/c8eacba4664d6eb6f0c4253608e03414c7126e40)
+
+## [0.2.83](https://github.com/YoeriNijs/vienna/compare/0.2.82...0.2.83) - 2024-12-11
+
+### Commits
+
+- feat(package.json): release '0.2.83' [`224ce1e`](https://github.com/YoeriNijs/vienna/commit/224ce1e3e8640c5e576468b69b9cb0754625c514)
 - fix(demo app): fix email check [`a65ec16`](https://github.com/YoeriNijs/vienna/commit/a65ec16a93a05f68eccb5c988baaf2dc61cb83b1)
 
 ## [0.2.82](https://github.com/YoeriNijs/vienna/compare/0.2.81...0.2.82) - 2024-07-05
