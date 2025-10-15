@@ -5,6 +5,7 @@ const EMAIL_REGEX = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+
 const IPV4_REGEX = new RegExp(/\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)(?::\d{0,4})?\b/);
 const IPV6_REGEX = new RegExp(/^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7}$/);
 const BOT_REGEX = new RegExp(/bot|crawl|slurp|spider$/);
+const AI_BOT_REGEX = new RegExp(/gpt|claude|mistral|oai|google-extended|perplexity|anthropic|cohere|duckassist|amazonbot|bingbot|-ai|ai-$/);
 
 @VInjectable({ singleton: false })
 export class VAudit {
@@ -47,5 +48,9 @@ export class VAudit {
 
     isUserAgentBot(userAgent: string = window.navigator.userAgent): boolean {
         return !!userAgent && BOT_REGEX.test(userAgent.toLowerCase());
+    }
+
+    isUserAgentAi(userAgent: string = window.navigator.userAgent): boolean {
+        return !!userAgent && AI_BOT_REGEX.test(userAgent.toLowerCase());
     }
 }
